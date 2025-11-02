@@ -5,6 +5,8 @@ export function renderTemplate(config: BrandConfig): { html: string; css?: strin
   const subheadline = config.copy?.subheadline || 'WIN UP TO $100,000!'
   const cta = config.copy?.cta || 'CLAIM NOW'
   const ctaUrl = config.ctaUrl || '#'
+  const backgroundColor = config.backgroundColor || '#b30000'
+  const backgroundImage = config.backgroundImage || ''
 
   const html = `
 <!DOCTYPE html>
@@ -24,7 +26,9 @@ export function renderTemplate(config: BrandConfig): { html: string; css?: strin
       width: 100%;
       min-height: 100vh;
       overflow-x: hidden;
-      background: linear-gradient(135deg, #b30000 0%, #ff0000 50%, #b30000 100%);
+      background: ${backgroundImage 
+        ? `url('${backgroundImage}') center/cover no-repeat, linear-gradient(135deg, ${backgroundColor} 0%, #ff0000 50%, ${backgroundColor} 100%)` 
+        : `linear-gradient(135deg, ${backgroundColor} 0%, #ff0000 50%, ${backgroundColor} 100%)`};
       position: relative;
       font-family: 'Impact', 'Arial Black', sans-serif;
     }

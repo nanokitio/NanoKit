@@ -9,10 +9,11 @@
 export interface TemplateField {
   id: string
   label: string
-  type: 'text' | 'number' | 'url' | 'textarea'
+  type: 'text' | 'number' | 'url' | 'textarea' | 'color' | 'image'
   placeholder?: string
   description?: string
   required?: boolean
+  isPremium?: boolean
 }
 
 export interface TemplateConfig {
@@ -40,6 +41,10 @@ export interface TemplateConfig {
     popupTitle?: TemplateField
     popupMessage?: TemplateField
     popupPrize?: TemplateField
+    
+    // Background customization
+    backgroundColor?: TemplateField
+    backgroundImage?: TemplateField
   }
 }
 
@@ -518,6 +523,24 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         placeholder: 'https://your-casino.com/claim',
         description: 'Where users go when they win and claim',
         required: true
+      },
+      backgroundColor: {
+        id: 'backgroundColor',
+        label: '🎨 Background Color',
+        type: 'color',
+        placeholder: '#1a1a2e',
+        description: 'Solid background color (hex code)',
+        required: false,
+        isPremium: false // Testing phase - will be true later
+      },
+      backgroundImage: {
+        id: 'backgroundImage',
+        label: '🖼️ Background Image URL',
+        type: 'url',
+        placeholder: 'https://example.com/background.jpg',
+        description: 'Custom background image (overrides color if set)',
+        required: false,
+        isPremium: false // Testing phase - will be true later
       }
     }
   }

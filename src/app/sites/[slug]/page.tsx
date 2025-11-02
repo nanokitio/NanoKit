@@ -30,6 +30,8 @@ interface SearchParams {
   gameBalance?: string
   customLogo?: string
   wheelValues?: string
+  backgroundColor?: string
+  backgroundImage?: string
   preview?: string  // Flag to disable protections in editor preview
 }
 
@@ -84,7 +86,9 @@ export default async function SitePage({
       popupPrize: query.popupPrize || site.popup_prize || '$1,000 + 50 FREE SPINS',
       gameBalance: query.gameBalance ? parseInt(query.gameBalance) : (site.game_balance || 1000),
       customLogo: query.customLogo || site.custom_logo || null,
-      wheelValues: query.wheelValues || site.wheel_values || '$100, $200, $500, $1000, $2000, $5000, $800, $1500'
+      wheelValues: query.wheelValues || site.wheel_values || '$100, $200, $500, $1000, $2000, $5000, $800, $1500',
+      backgroundColor: query.backgroundColor || site.background_color || '#1a1a2e',
+      backgroundImage: query.backgroundImage || site.background_image || ''
     } as any
 
     // Render based on template ID

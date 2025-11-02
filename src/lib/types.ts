@@ -69,6 +69,9 @@ export interface BrandConfig {
   heroImage?: string
   featureImage1?: string
   featureImage2?: string
+  // Background customization
+  backgroundColor?: string
+  backgroundImage?: string
   // Editable content sections
   sections?: {
     features?: {

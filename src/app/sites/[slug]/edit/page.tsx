@@ -69,6 +69,8 @@ export default function SiteEditorPage() {
   const [showWinPopupEditor, setShowWinPopupEditor] = useState(false)
   const [uploadingLogo, setUploadingLogo] = useState(false)
   const [vertical, setVertical] = useState('casino')
+  const [backgroundColor, setBackgroundColor] = useState('#1a1a2e')
+  const [backgroundImage, setBackgroundImage] = useState('')
   const [templateId, setTemplateId] = useState('t6')
   const [termsUrl, setTermsUrl] = useState('')
   const [privacyUrl, setPrivacyUrl] = useState('')
@@ -255,6 +257,8 @@ export default function SiteEditorPage() {
       setTermsUrl(data.terms_url || '')
       setPrivacyUrl(data.privacy_url || '')
       setResponsibleGamingUrl(data.responsible_gaming_url || '')
+      setBackgroundColor(data.background_color || '#1a1a2e')
+      setBackgroundImage(data.background_image || '')
     } catch (error) {
       console.error('Error loading site:', error)
       alert('Failed to load site')
@@ -375,6 +379,10 @@ export default function SiteEditorPage() {
         if (wheelValues && wheelValues.trim() !== '') {
           updateData.wheel_values = wheelValues
         }
+        
+        // Save background customization
+        updateData.background_color = backgroundColor
+        updateData.background_image = backgroundImage || null
       } catch (e) {
         console.warn('Some optional fields not available in schema:', e)
       }
@@ -903,6 +911,8 @@ export default function SiteEditorPage() {
       popupPrize,
       gameBalance: gameBalance.toString(),
       wheelValues: wheelValues || '',  // Wheel values for Fortune Wheel templates
+      backgroundColor,  // Background customization
+      backgroundImage: backgroundImage || '',
       preview: '1',  // Flag to disable blur in editor iframe
     })
     
@@ -1635,6 +1645,83 @@ export default function SiteEditorPage() {
                               />
                               {fields.popupPrize.description && (
                                 <p className="text-xs text-gray-500 mt-1.5">{fields.popupPrize.description}</p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Background Customization Section */}
+                    {(fields.backgroundColor || fields.backgroundImage) && (
+                      <div className="border-t border-gray-700 pt-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-2xl">🎨</span>
+                            <h4 className="text-sm font-bold text-white">Background</h4>
+                          </div>
+                          {fields.backgroundColor?.isPremium && (
+                            <span className="px-2 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs rounded-full font-bold">
+                              PREMIUM
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-400 mb-4 bg-blue-900/20 border border-blue-700/30 rounded-lg p-2">
+                          💡 Customize the background of your template
+                        </p>
+                        
+                        <div className="space-y-4">
+                          {/* Background Color */}
+                          {fields.backgroundColor && (
+                            <div>
+                              <label className="block text-sm font-medium text-white mb-2 flex items-center gap-2">
+                                {fields.backgroundColor.label}
+                              </label>
+                              <div className="flex gap-2">
+                                <input
+                                  type="color"
+                                  value={backgroundColor}
+                                  onChange={(e) => setBackgroundColor(e.target.value)}
+                                  className="w-16 h-12 rounded cursor-pointer border-2 border-gray-700"
+                                />
+                                <input
+                                  type="text"
+                                  value={backgroundColor}
+                                  onChange={(e) => setBackgroundColor(e.target.value)}
+                                  className="flex-1 px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white font-mono focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                                  placeholder={fields.backgroundColor.placeholder}
+                                />
+                              </div>
+                              {fields.backgroundColor.description && (
+                                <p className="text-xs text-gray-500 mt-1.5">{fields.backgroundColor.description}</p>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Background Image */}
+                          {fields.backgroundImage && (
+                            <div>
+                              <label className="block text-sm font-medium text-white mb-2 flex items-center gap-2">
+                                {fields.backgroundImage.label}
+                              </label>
+                              <input
+                                type="url"
+                                value={backgroundImage}
+                                onChange={(e) => setBackgroundImage(e.target.value)}
+                                className="w-full px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                                placeholder={fields.backgroundImage.placeholder}
+                              />
+                              {fields.backgroundImage.description && (
+                                <p className="text-xs text-gray-500 mt-1.5">{fields.backgroundImage.description}</p>
+                              )}
+                              {backgroundImage && (
+                                <div className="mt-2 p-2 bg-gray-900 border border-gray-700 rounded-lg">
+                                  <p className="text-xs text-gray-400 mb-2">Preview:</p>
+                                  <div 
+                                    className="w-full h-24 rounded bg-cover bg-center border border-gray-600"
+                                    style={{ backgroundImage: `url(${backgroundImage})` }}
+                                  />
+                                </div>
                               )}
                             </div>
                           )}
