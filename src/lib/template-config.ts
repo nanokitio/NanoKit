@@ -92,7 +92,7 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         placeholder: '#1a1a2e',
         description: 'Solid background color (hex code)',
         required: false,
-        isPremium: false
+        isPremium: true
       },
       backgroundImage: {
         id: 'backgroundImage',
@@ -101,7 +101,7 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         placeholder: 'https://example.com/background.jpg',
         description: 'Custom background image (overrides color if set)',
         required: false,
-        isPremium: false
+        isPremium: true
       }
     }
   },
@@ -148,7 +148,7 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         placeholder: '#1a1a2e',
         description: 'Solid background color (hex code)',
         required: false,
-        isPremium: false
+        isPremium: true
       },
       backgroundImage: {
         id: 'backgroundImage',
@@ -157,7 +157,7 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         placeholder: 'https://example.com/background.jpg',
         description: 'Custom background image (overrides color if set)',
         required: false,
-        isPremium: false
+        isPremium: true
       }
     }
   },
@@ -331,6 +331,24 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         placeholder: '$800',
         description: 'Prize shown in popup (overrides wheel value)',
         required: false
+      },
+      backgroundColor: {
+        id: 'backgroundColor',
+        label: '🎨 Background Color',
+        type: 'color',
+        placeholder: '#1a1a2e',
+        description: 'Solid background color (hex code)',
+        required: false,
+        isPremium: true
+      },
+      backgroundImage: {
+        id: 'backgroundImage',
+        label: '🖼️ Background Image URL',
+        type: 'url',
+        placeholder: 'https://example.com/background.jpg',
+        description: 'Custom background image (overrides color if set)',
+        required: false,
+        isPremium: true
       }
     }
   },
@@ -394,6 +412,24 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         placeholder: '$800',
         description: 'Prize shown in popup (overrides wheel value)',
         required: false
+      },
+      backgroundColor: {
+        id: 'backgroundColor',
+        label: '🎨 Background Color',
+        type: 'color',
+        placeholder: '#1a1a2e',
+        description: 'Solid background color (hex code)',
+        required: false,
+        isPremium: true
+      },
+      backgroundImage: {
+        id: 'backgroundImage',
+        label: '🖼️ Background Image URL',
+        type: 'url',
+        placeholder: 'https://example.com/background.jpg',
+        description: 'Custom background image (overrides color if set)',
+        required: false,
+        isPremium: true
       }
     }
   },
@@ -457,6 +493,24 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         placeholder: '$800',
         description: 'Prize shown in popup (overrides wheel value)',
         required: false
+      },
+      backgroundColor: {
+        id: 'backgroundColor',
+        label: '🎨 Background Color',
+        type: 'color',
+        placeholder: '#1a1a2e',
+        description: 'Solid background color (hex code)',
+        required: false,
+        isPremium: true
+      },
+      backgroundImage: {
+        id: 'backgroundImage',
+        label: '🖼️ Background Image URL',
+        type: 'url',
+        placeholder: 'https://example.com/background.jpg',
+        description: 'Custom background image (overrides color if set)',
+        required: false,
+        isPremium: true
       }
     }
   },
@@ -520,6 +574,24 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         placeholder: '$800',
         description: 'Prize shown in popup (overrides wheel value)',
         required: false
+      },
+      backgroundColor: {
+        id: 'backgroundColor',
+        label: '🎨 Background Color',
+        type: 'color',
+        placeholder: '#1a1a2e',
+        description: 'Solid background color (hex code)',
+        required: false,
+        isPremium: true
+      },
+      backgroundImage: {
+        id: 'backgroundImage',
+        label: '🖼️ Background Image URL',
+        type: 'url',
+        placeholder: 'https://example.com/background.jpg',
+        description: 'Custom background image (overrides color if set)',
+        required: false,
+        isPremium: true
       }
     }
   },
