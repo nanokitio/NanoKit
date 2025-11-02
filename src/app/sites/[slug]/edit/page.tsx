@@ -68,6 +68,7 @@ export default function SiteEditorPage() {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [showWinPopupEditor, setShowWinPopupEditor] = useState(false)
   const [uploadingLogo, setUploadingLogo] = useState(false)
+  const [uploadingBackground, setUploadingBackground] = useState(false)
   const [vertical, setVertical] = useState('casino')
   const [backgroundColor, setBackgroundColor] = useState('#1a1a2e')
   const [backgroundImage, setBackgroundImage] = useState('')
@@ -314,6 +315,56 @@ export default function SiteEditorPage() {
       alert(`Failed to upload logo: ${error.message}`)
     } finally {
       setUploadingLogo(false)
+    }
+  }
+
+  const handleBackgroundUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file')
+      return
+    }
+
+    // Validate file size (max 5MB for backgrounds)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size must be less than 5MB')
+      return
+    }
+
+    setUploadingBackground(true)
+    try {
+      const supabase = createClient()
+      
+      // Generate unique filename
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${slug}-background-${Date.now()}.${fileExt}`
+      const filePath = `backgrounds/${fileName}`
+
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('site-assets')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true
+        })
+
+      if (error) throw error
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('site-assets')
+        .getPublicUrl(filePath)
+
+      setBackgroundImage(publicUrl)
+      alert('Background image uploaded successfully!')
+    } catch (error: any) {
+      console.error('Upload error:', error)
+      alert(`Failed to upload background: ${error.message}`)
+    } finally {
+      setUploadingBackground(false)
     }
   }
 
@@ -1704,6 +1755,46 @@ export default function SiteEditorPage() {
                               <label className="block text-sm font-medium text-white mb-2 flex items-center gap-2">
                                 {fields.backgroundImage.label}
                               </label>
+                              
+                              {/* Upload Button */}
+                              <div className="mb-3">
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={handleBackgroundUpload}
+                                  className="hidden"
+                                  id="background-upload"
+                                  disabled={uploadingBackground}
+                                />
+                                <label
+                                  htmlFor="background-upload"
+                                  className={`flex items-center justify-center gap-2 w-full px-4 py-3 text-sm border border-gray-700 rounded-lg cursor-pointer transition-colors ${
+                                    uploadingBackground
+                                      ? 'bg-gray-800 text-gray-500 cursor-not-allowed'
+                                      : 'bg-gray-900 text-white hover:bg-gray-800 hover:border-blue-500'
+                                  }`}
+                                >
+                                  {uploadingBackground ? (
+                                    <>
+                                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                      </svg>
+                                      <span>Uploading...</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                      </svg>
+                                      <span>Upload Background Image</span>
+                                    </>
+                                  )}
+                                </label>
+                                <p className="text-xs text-gray-500 mt-1">Or paste URL below (max 5MB)</p>
+                              </div>
+
+                              {/* URL Input */}
                               <input
                                 type="url"
                                 value={backgroundImage}
