@@ -14,6 +14,8 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
   const headline = brand.copy?.headline || 'WIN BIG WITH BONANZA BILLION SLOTS!'
   const subheadline = brand.copy?.subheadline || 'Premium 3x3 slot machine with life-changing prizes'
   const cta = brand.copy?.cta || 'SPIN TO WIN'
+  const backgroundColor = brand.backgroundColor || '#1e1b4b'
+  const backgroundImage = brand.backgroundImage || ''
 
   const css = `
     :root {
@@ -32,13 +34,9 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
       font-family: 'Inter', sans-serif;
       line-height: 1.6;
       color: #ffffff;
-      background: linear-gradient(135deg, 
-        #1e1b4b 0%,     /* Indigo 950 */
-        #312e81 25%,    /* Indigo 900 */
-        #4c1d95 50%,    /* Purple 900 */
-        #581c87 75%,    /* Purple 900 */
-        #1e1b4b 100%    /* Indigo 950 */
-      );
+      background: ${backgroundImage 
+        ? `url('${backgroundImage}') center/cover no-repeat fixed, linear-gradient(135deg, ${backgroundColor} 0%, #312e81 25%, #4c1d95 50%, #581c87 75%, ${backgroundColor} 100%)` 
+        : `linear-gradient(135deg, ${backgroundColor} 0%, #312e81 25%, #4c1d95 50%, #581c87 75%, ${backgroundColor} 100%)`};
       background-attachment: fixed;
       min-height: 100vh;
       overflow-x: hidden;
@@ -52,9 +50,9 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
       left: 0;
       right: 0;
       bottom: 0;
-      background: radial-gradient(circle at 20% 50%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.15) 0%, transparent 50%),
-                  radial-gradient(circle at 40% 20%, rgba(251, 191, 36, 0.1) 0%, transparent 50%);
+      background: ${backgroundImage 
+        ? 'radial-gradient(circle at 20% 50%, rgba(236, 72, 153, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.08) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(251, 191, 36, 0.05) 0%, transparent 50%)' 
+        : 'radial-gradient(circle at 20% 50%, rgba(236, 72, 153, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.15) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(251, 191, 36, 0.1) 0%, transparent 50%)'};
       pointer-events: none;
       z-index: 1;
     }

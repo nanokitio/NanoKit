@@ -12,13 +12,15 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
   const subheadline = brand.copy?.subheadline || 'Enter the neon grid where digital fortunes await'
   const cta = brand.copy?.cta || 'ENTER THE GRID'
   const ctaUrl = brand.ctaUrl || 'https://your-casino-url.com'
+  const backgroundColor = brand.backgroundColor || '#000000'
+  const backgroundImage = brand.backgroundImage || ''
 
   const css = `
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body { 
       font-family: 'Orbitron', monospace; 
-      background: black;
+      background: ${backgroundColor};
       color: white; 
       min-height: 100vh; 
       overflow-x: hidden; 
@@ -27,7 +29,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
     .synth-container {
       font-family: 'Orbitron', monospace;
       min-height: 100vh;
-      background: black;
+      background: ${backgroundImage ? `url('${backgroundImage}') center/cover no-repeat` : backgroundColor};
       position: relative;
       overflow: hidden;
     }
@@ -36,7 +38,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(0, 0, 0, 1), rgba(0, 139, 139, 0.9));
+      background: ${backgroundImage ? 'linear-gradient(135deg, rgba(138, 43, 226, 0.5), rgba(0, 0, 0, 0.7), rgba(0, 139, 139, 0.5))' : 'linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(0, 0, 0, 1), rgba(0, 139, 139, 0.9))'};
       z-index: 0;
     }
     
