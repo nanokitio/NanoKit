@@ -431,17 +431,36 @@ export function renderTemplate(config: BrandConfig): { html: string; css?: strin
         canvas.style.height = rect.height + 'px';
         ctx.scale(2, 2);
         
-        // Draw golden scratch surface
+        // Draw golden scratch surface with realistic texture
         const gradient = ctx.createLinearGradient(0, 0, rect.width, rect.height);
         gradient.addColorStop(0, '#ffcc00');
-        gradient.addColorStop(0.5, '#ffdd44');
+        gradient.addColorStop(0.3, '#ffdd44');
+        gradient.addColorStop(0.6, '#ffd700');
         gradient.addColorStop(1, '#ffaa00');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, rect.width, rect.height);
         
-        // Add shine effect
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-        ctx.fillRect(0, 0, rect.width / 2, rect.height / 2);
+        // Add metallic texture with noise
+        for (let i = 0; i < 200; i++) {
+          ctx.fillStyle = \`rgba(255, 255, 255, \${Math.random() * 0.15})\`;
+          ctx.fillRect(
+            Math.random() * rect.width,
+            Math.random() * rect.height,
+            Math.random() * 3,
+            Math.random() * 3
+          );
+        }
+        
+        // Add multiple shine effects for metallic look
+        const radialGradient = ctx.createRadialGradient(
+          rect.width * 0.3, rect.height * 0.3, 0,
+          rect.width * 0.3, rect.height * 0.3, rect.width * 0.5
+        );
+        radialGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+        radialGradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.1)');
+        radialGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = radialGradient;
+        ctx.fillRect(0, 0, rect.width, rect.height);
       }
       
       initCanvas();
@@ -450,6 +469,8 @@ export function renderTemplate(config: BrandConfig): { html: string; css?: strin
       let isScratching = false;
       let scratchedPixels = 0;
       const totalPixels = canvas.width * canvas.height;
+      let lastX = null;
+      let lastY = null;
       
       function scratch(x, y) {
         const rect = canvas.getBoundingClientRect();
@@ -457,11 +478,47 @@ export function renderTemplate(config: BrandConfig): { html: string; css?: strin
         const scaleY = canvas.height / rect.height;
         
         ctx.globalCompositeOperation = 'destination-out';
+        
+        // Larger, more realistic brush size
+        const baseRadius = 35;
+        const radiusVariation = Math.random() * 15;
+        const currentRadius = baseRadius + radiusVariation;
+        
+        // Draw main brush stroke
         ctx.beginPath();
-        ctx.arc(x * scaleX / 2, y * scaleY / 2, 20, 0, Math.PI * 2);
+        ctx.arc(x * scaleX / 2, y * scaleY / 2, currentRadius, 0, Math.PI * 2);
         ctx.fill();
         
-        scratchedPixels += 400; // Approximate
+        // Add feathered edges for more realistic effect
+        for (let i = 0; i < 3; i++) {
+          const offset = (Math.random() - 0.5) * 10;
+          const smallRadius = currentRadius * (0.6 - i * 0.15);
+          ctx.beginPath();
+          ctx.arc(
+            (x + offset) * scaleX / 2,
+            (y + offset) * scaleY / 2,
+            smallRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+        }
+        
+        // Connect strokes for smooth scratching
+        if (lastX !== null && lastY !== null) {
+          ctx.lineWidth = currentRadius * 2;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.beginPath();
+          ctx.moveTo(lastX * scaleX / 2, lastY * scaleY / 2);
+          ctx.lineTo(x * scaleX / 2, y * scaleY / 2);
+          ctx.stroke();
+        }
+        
+        lastX = x;
+        lastY = y;
+        
+        scratchedPixels += 1500; // Approximate (larger brush)
         
         // Check if scratched enough
         if (scratchedPixels > totalPixels * 0.4 && revealedCount < 4) {
@@ -487,6 +544,8 @@ export function renderTemplate(config: BrandConfig): { html: string; css?: strin
       // Mouse events
       canvas.addEventListener('mousedown', (e) => {
         isScratching = true;
+        lastX = null;
+        lastY = null;
         const rect = canvas.getBoundingClientRect();
         scratch(e.clientX - rect.left, e.clientY - rect.top);
       });
@@ -500,16 +559,22 @@ export function renderTemplate(config: BrandConfig): { html: string; css?: strin
       
       canvas.addEventListener('mouseup', () => {
         isScratching = false;
+        lastX = null;
+        lastY = null;
       });
       
       canvas.addEventListener('mouseleave', () => {
         isScratching = false;
+        lastX = null;
+        lastY = null;
       });
       
       // Touch events
       canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
         isScratching = true;
+        lastX = null;
+        lastY = null;
         const rect = canvas.getBoundingClientRect();
         const touch = e.touches[0];
         scratch(touch.clientX - rect.left, touch.clientY - rect.top);
@@ -526,6 +591,8 @@ export function renderTemplate(config: BrandConfig): { html: string; css?: strin
       
       canvas.addEventListener('touchend', () => {
         isScratching = false;
+        lastX = null;
+        lastY = null;
       });
     });
     
