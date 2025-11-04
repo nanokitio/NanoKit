@@ -1,4 +1,5 @@
 'use client'
+// Password reset page - Force rebuild for Vercel deployment
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
