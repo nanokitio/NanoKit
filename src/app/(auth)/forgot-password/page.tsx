@@ -18,18 +18,43 @@ export default function ForgotPasswordPage() {
     setError('')
     setSuccess(false)
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address')
+      setLoading(false)
+      return
+    }
+
     try {
+      console.log('Requesting password reset for:', email)
+      
+      const redirectUrl = `${window.location.origin}/reset-password`
+      console.log('Redirect URL:', redirectUrl)
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: redirectUrl,
       })
 
       if (error) {
-        setError(error.message)
+        console.error('Reset password error:', error)
+        
+        // More helpful error messages
+        if (error.message.includes('User not found')) {
+          setError('If this email exists in our system, you will receive a reset link.')
+          setSuccess(true) // Show success anyway for security
+        } else if (error.message.includes('rate limit')) {
+          setError('Too many requests. Please wait a few minutes and try again.')
+        } else {
+          setError(error.message)
+        }
       } else {
+        console.log('Password reset email sent successfully')
         setSuccess(true)
       }
-    } catch (err) {
-      setError('Network error. Please check your connection and try again.')
+    } catch (err: any) {
+      console.error('Network/unexpected error:', err)
+      setError(`Error: ${err.message || 'Please check your connection and try again.'}`)
     } finally {
       setLoading(false)
     }
