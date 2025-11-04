@@ -134,6 +134,15 @@ export default function LoginPage() {
                 Join the forge →
               </Link>
             </p>
+            <p className="text-xs text-slate-500 mt-2">
+              Forgot your password?{' '}
+              <Link
+                href="/forgot-password"
+                className="text-cyan-400 hover:text-cyan-300 underline"
+              >
+                Reset it here
+              </Link>
+            </p>
           </div>
         </div>
 
