@@ -30,7 +30,8 @@ export default function ForgotPasswordPage() {
     try {
       console.log('Requesting password reset for:', email)
       
-      const redirectUrl = `${window.location.origin}/reset-password`
+      // Use auth callback route which will detect recovery type and redirect properly
+      const redirectUrl = `${window.location.origin}/auth/callback`
       console.log('Redirect URL:', redirectUrl)
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
