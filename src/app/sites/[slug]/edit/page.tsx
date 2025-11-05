@@ -338,14 +338,20 @@ export default function SiteEditorPage() {
     try {
       const supabase = createClient()
       
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        throw new Error('You must be logged in to upload files')
+      }
+      
       // Generate unique filename
       const fileExt = file.name.split('.').pop()
       const fileName = `${slug}-background-${Date.now()}.${fileExt}`
-      const filePath = `backgrounds/${fileName}`
+      const filePath = `${user.id}/${fileName}`
 
-      // Upload to Supabase Storage
+      // Upload to Supabase Storage - using 'backgrounds' bucket
       const { data, error } = await supabase.storage
-        .from('site-assets')
+        .from('backgrounds')
         .upload(filePath, file, {
           cacheControl: '3600',
           upsert: true
@@ -355,7 +361,7 @@ export default function SiteEditorPage() {
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
-        .from('site-assets')
+        .from('backgrounds')
         .getPublicUrl(filePath)
 
       setBackgroundImage(publicUrl)
