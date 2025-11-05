@@ -218,7 +218,7 @@ export default function Home() {
             <div className="hidden md:block absolute top-28 left-1/3 right-1/3 h-1 bg-gradient-to-r from-[#4FC3FF] via-[#B94AFF] to-[#4FC3FF] opacity-30" />
             
             {[
-              { step: '1', title: 'Forge', desc: 'Create with AI or choose a template', icon: '◆', color: '#B94AFF' },
+              { step: '1', title: 'Create', desc: 'Create with AI or choose a template', icon: '◆', color: '#B94AFF' },
               { step: '2', title: 'Edit', desc: 'Customize in real-time visual editor', icon: '▲', color: '#4FC3FF' },
               { step: '3', title: 'Export', desc: 'Download or host your page', icon: '●', color: '#B94AFF' },
             ].map((item, i) => (
