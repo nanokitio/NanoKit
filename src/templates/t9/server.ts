@@ -16,6 +16,8 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
   const gameCredit = (brand as any).gameCredit || 1000
   const gameTotalBet = (brand as any).gameTotalBet || 20
   const totalWin = (brand as any).totalWin || 0
+  const backgroundColor = (brand as any).backgroundColor || '#1a1a1a'
+  const backgroundImage = (brand as any).backgroundImage || ''
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -32,7 +34,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
     
     body {
       font-family: Arial, sans-serif;
-      background: #1a1a1a;
+      background: ${backgroundImage ? `url('${backgroundImage}') center/cover no-repeat, ${backgroundColor}` : backgroundColor};
       min-height: 100vh;
       width: 100vw;
       margin: 0;

@@ -9,6 +9,8 @@ export function renderTemplate(config: BrandConfig): { html: string; css?: strin
   const popupMessage = (config as any).popupMessage || 'Congratulations! You won'
   const popupPrize = (config as any).popupPrize || '$800'
   const wheelValues = (config as any).wheelValues || '$100, $200, $500, $1000, $2000, $5000, $800, $1500'
+  const backgroundColor = (config as any).backgroundColor || '#001a33'
+  const backgroundImage = (config as any).backgroundImage || ''
 
   const html = `
 <!DOCTYPE html>
@@ -28,7 +30,7 @@ export function renderTemplate(config: BrandConfig): { html: string; css?: strin
       width: 100%;
       height: 100vh;
       overflow: hidden;
-      background: transparent;
+      background: ${backgroundImage ? `url('${backgroundImage}') center/cover no-repeat, ${backgroundColor}` : backgroundColor};
       position: fixed;
       top: 0;
       left: 0;

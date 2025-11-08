@@ -13,6 +13,8 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
   const subheadline = brand.copy?.subheadline || 'Win amazing prizes and free spins!'
   const cta = brand.copy?.cta || 'Get the bonus'
   const ctaUrl = brand.ctaUrl || '#'
+  const backgroundColor = (brand as any).backgroundColor || '#0a0a2e'
+  const backgroundImage = (brand as any).backgroundImage || ''
 
   const css = `
     :root {
@@ -31,7 +33,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
       font-family: 'Montserrat', sans-serif;
       line-height: 1.6;
       color: #ffffff;
-      background: linear-gradient(135deg, #0a0a2e 0%, #16213e 50%, #0f3460 100%);
+      background: ${backgroundImage ? `url('${backgroundImage}') center/cover no-repeat, ${backgroundColor}` : `linear-gradient(135deg, ${backgroundColor} 0%, #16213e 50%, #0f3460 100%)`};
       min-height: 100vh;
       overflow-x: hidden;
     }
