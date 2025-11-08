@@ -100,38 +100,12 @@ export function Template1({ brand }: Template1Props) {
           <blockquote className="text-2xl font-medium text-gray-900 mb-6">
             &ldquo;{brand.brandName} transformed our business. Highly recommended!&rdquo;
           </blockquote>
-          <div className="flex items-center justify-center gap-8 flex-wrap">
-            {brand.featuredPlayer && (
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full mr-3 flex items-center justify-center text-white font-bold">
-                  ⚽
-                </div>
-                <div className="text-left">
-                  <p className="font-semibold text-gray-900">{brand.featuredPlayer}</p>
-                  <p className="text-gray-600 text-sm">Featured Player</p>
-                </div>
-              </div>
-            )}
-            {brand.sportDirector && (
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full mr-3 flex items-center justify-center text-white font-bold">
-                  🏆
-                </div>
-                <div className="text-left">
-                  <p className="font-semibold text-gray-900">{brand.sportDirector}</p>
-                  <p className="text-gray-600 text-sm">Sport Director</p>
-                </div>
-              </div>
-            )}
-            {!brand.featuredPlayer && !brand.sportDirector && (
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                <div>
-                  <p className="font-semibold text-gray-900">Sarah Johnson</p>
-                  <p className="text-gray-600">CEO, TechCorp</p>
-                </div>
-              </div>
-            )}
+          <div className="flex items-center justify-center">
+            <div className="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
+            <div>
+              <p className="font-semibold text-gray-900">Sarah Johnson</p>
+              <p className="text-gray-600">CEO, TechCorp</p>
+            </div>
           </div>
         </div>
       </section>
