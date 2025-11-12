@@ -420,7 +420,7 @@ export default function DashboardPage() {
                 >
                   <span className="flex items-center">
                     <span className="mr-2 text-xl">⚡</span>
-                    Forge New Site
+                    Create New Site
                   </span>
                 </Button>
               </div>
