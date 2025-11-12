@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { sendEmail } from '@/lib/sendgrid'
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,10 +11,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // Send email using Resend (you'll need to install and configure)
-    // For now, we'll use a simple approach
-    // In production, integrate with Resend, SendGrid, or use Supabase Edge Functions
-    
+    // Generate email content
     const emailHtml = `
 <!DOCTYPE html>
 <html>
@@ -89,29 +87,51 @@ export async function POST(request: NextRequest) {
 </html>
     `
 
-    // Log the email content for debugging
-    console.log('📧 EMAIL DEBUG INFO:')
-    console.log('To:', email)
-    console.log('Password:', password)
-    console.log('Site:', siteName)
-    console.log('Is Secure Package:', isSecurePackage)
+    // Send email via SendGrid
+    console.log('📧 Sending download password email to:', email)
     
-    // TODO: Integrate with actual email service
-    // For now, we'll simulate email sending and always include password in response for development
-    
-    // Simulate email delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    console.log('✅ Email simulation completed')
+    const emailResult = await sendEmail({
+      to: email,
+      subject: isSecurePackage ? '🛡️ Your Secure Package Password' : '🔐 Your Download Password',
+      html: emailHtml,
+    })
 
-    // Return success with password for development/testing
+    if (!emailResult.success) {
+      console.error('❌ Failed to send email:', emailResult.error)
+      
+      // Return password anyway for user convenience
+      return NextResponse.json({ 
+        success: false,
+        error: 'Failed to send email',
+        details: emailResult.error,
+        password: password, // Include password so user isn't blocked
+        note: 'Email failed to send, but here is your password'
+      }, { status: 500 })
+    }
+
+    console.log('✅ Email sent successfully via SendGrid')
+
+    // Log email to database
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (user) {
+      await supabase.from('email_logs').insert({
+        user_id: user.id,
+        email: email,
+        subject: isSecurePackage ? '🛡️ Your Secure Package Password' : '🔐 Your Download Password',
+        status: 'sent',
+        provider: 'sendgrid',
+        provider_message_id: emailResult.messageId,
+        sent_at: new Date().toISOString(),
+      })
+    }
+
     return NextResponse.json({ 
       success: true,
-      message: 'Password notification sent (simulated)',
-      // Always include password in development for testing
-      password: password,
-      emailSent: false, // Indicate this is simulated
-      note: 'Email service not configured - password included in response for testing'
+      message: 'Password notification sent successfully',
+      emailSent: true,
+      messageId: emailResult.messageId,
     })
 
   } catch (error) {

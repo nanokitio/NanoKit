@@ -8,8 +8,10 @@ import Image from 'next/image'
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0)
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    setIsMounted(true)
     const handleScroll = () => setScrollY(window.scrollY)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -19,22 +21,24 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-[#0C0A24] via-[#1A0F40] to-[#0C0A24] text-white overflow-x-hidden" style={{ fontFamily: 'Space Grotesk, system-ui, sans-serif' }}>
       
       {/* Animated Star Field with Parallax */}
-      <div className="fixed inset-0 z-0 overflow-hidden" style={{ transform: `translateY(${scrollY * 0.3}px)` }}>
-        {[...Array(100)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-white"
-            style={{
-              width: Math.random() * 2 + 0.5 + 'px',
-              height: Math.random() * 2 + 0.5 + 'px',
-              left: Math.random() * 100 + '%',
-              top: Math.random() * 100 + '%',
-              opacity: Math.random() * 0.7 + 0.3,
-              animation: `twinkle ${Math.random() * 3 + 2}s infinite ${Math.random() * 2}s`,
-            }}
-          />
-        ))}
-      </div>
+      {isMounted && (
+        <div className="fixed inset-0 z-0 overflow-hidden" style={{ transform: `translateY(${scrollY * 0.3}px)` }}>
+          {[...Array(100)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full bg-white"
+              style={{
+                width: Math.random() * 2 + 0.5 + 'px',
+                height: Math.random() * 2 + 0.5 + 'px',
+                left: Math.random() * 100 + '%',
+                top: Math.random() * 100 + '%',
+                opacity: Math.random() * 0.7 + 0.3,
+                animation: `twinkle ${Math.random() * 3 + 2}s infinite ${Math.random() * 2}s`,
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Header */}
       <header className="sticky top-0 z-[100] backdrop-blur-2xl bg-black/40 border-b border-[#B94AFF]/20">

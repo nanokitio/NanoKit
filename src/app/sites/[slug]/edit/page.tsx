@@ -84,6 +84,8 @@ export default function SiteEditorPage() {
   const [downloading, setDownloading] = useState(false)
   const [affiliateCode, setAffiliateCode] = useState('')
   const [domainLock, setDomainLock] = useState('')
+  const [featuredPlayer, setFeaturedPlayer] = useState('')
+  const [sportDirector, setSportDirector] = useState('')
 
   const toggleSection = (section: 'vertical' | 'template' | 'logo' | 'content' | 'colors' | 'legal') => {
     const isExpanding = !expandedSections[section]
@@ -260,6 +262,8 @@ export default function SiteEditorPage() {
       setResponsibleGamingUrl(data.responsible_gaming_url || '')
       setBackgroundColor(data.background_color || '#1a1a2e')
       setBackgroundImage(data.background_image || '')
+      setFeaturedPlayer(data.featured_player || '')
+      setSportDirector(data.sport_director || '')
     } catch (error) {
       console.error('Error loading site:', error)
       alert('Failed to load site')
@@ -440,6 +444,10 @@ export default function SiteEditorPage() {
         // Save background customization
         updateData.background_color = backgroundColor
         updateData.background_image = backgroundImage || null
+        
+        // Save team member names
+        updateData.featured_player = featuredPlayer || null
+        updateData.sport_director = sportDirector || null
       } catch (e) {
         console.warn('Some optional fields not available in schema:', e)
       }
@@ -970,6 +978,8 @@ export default function SiteEditorPage() {
       wheelValues: wheelValues || '',  // Wheel values for Fortune Wheel templates
       backgroundColor,  // Background customization
       backgroundImage: backgroundImage || '',
+      featuredPlayer: featuredPlayer || '',  // Team member names
+      sportDirector: sportDirector || '',
       preview: '1',  // Flag to disable blur in editor iframe
     })
     
@@ -1523,6 +1533,44 @@ export default function SiteEditorPage() {
                           )}
                         </div>
                       )}
+                    </div>
+
+                    {/* Team Members Section - Simple fields */}
+                    <div className="border-t border-gray-700 pt-6 space-y-4">
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="text-2xl">⚽</span>
+                        <h4 className="text-sm font-bold text-white">Team Members</h4>
+                      </div>
+                      
+                      {/* Featured Player */}
+                      <div>
+                        <label className="block text-sm font-medium text-white mb-2">
+                          Featured Player
+                        </label>
+                        <input
+                          type="text"
+                          value={featuredPlayer}
+                          onChange={(e) => setFeaturedPlayer(e.target.value)}
+                          className="w-full px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                          placeholder="e.g., Ale Miranda"
+                        />
+                        <p className="text-xs text-gray-500 mt-1.5">Name of featured player (optional)</p>
+                      </div>
+
+                      {/* Sport Director */}
+                      <div>
+                        <label className="block text-sm font-medium text-white mb-2">
+                          Sport Director
+                        </label>
+                        <input
+                          type="text"
+                          value={sportDirector}
+                          onChange={(e) => setSportDirector(e.target.value)}
+                          className="w-full px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                          placeholder="e.g., Nicolás Cantudo"
+                        />
+                        <p className="text-xs text-gray-500 mt-1.5">Name of sport director (optional)</p>
+                      </div>
                     </div>
 
                     {/* Custom Logo for Fortune Wheel */}

@@ -38,6 +38,8 @@ export interface Site {
   feature_image1?: string
   feature_image2?: string
   sections?: Record<string, unknown> // JSON field for section configuration
+  featured_player?: string  // Featured player name
+  sport_director?: string   // Sport director name
 }
 
 export interface Visit {
@@ -103,6 +105,9 @@ export interface BrandConfig {
       }>
     }
   }
+  // Team members - simple fields
+  featuredPlayer?: string  // e.g., "Ale Miranda"
+  sportDirector?: string   // e.g., "Nicolás Cantudo"
 }
 
 // Template render result

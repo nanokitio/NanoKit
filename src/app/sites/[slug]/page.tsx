@@ -32,6 +32,8 @@ interface SearchParams {
   wheelValues?: string
   backgroundColor?: string
   backgroundImage?: string
+  featuredPlayer?: string
+  sportDirector?: string
   preview?: string  // Flag to disable protections in editor preview
 }
 
@@ -88,7 +90,9 @@ export default async function SitePage({
       customLogo: query.customLogo || site.custom_logo || null,
       wheelValues: query.wheelValues || site.wheel_values || '$100, $200, $500, $1000, $2000, $5000, $800, $1500',
       backgroundColor: query.backgroundColor || site.background_color || '#1a1a2e',
-      backgroundImage: query.backgroundImage || site.background_image || ''
+      backgroundImage: query.backgroundImage || site.background_image || '',
+      featuredPlayer: query.featuredPlayer || site.featured_player || '',
+      sportDirector: query.sportDirector || site.sport_director || ''
     } as any
 
     // Render based on template ID
