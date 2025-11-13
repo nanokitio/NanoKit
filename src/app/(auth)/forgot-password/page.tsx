@@ -41,8 +41,9 @@ export default function ForgotPasswordPage() {
     try {
       console.log('Requesting password reset for:', email)
       
-      // Force use of correct domain without www
-      const redirectUrl = 'https://nanokit.io/auth/callback?type=recovery'
+      // Use the correct production URL
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://nanokit.io'
+      const redirectUrl = `${appUrl}/auth/callback?type=recovery`
       console.log('Redirect URL:', redirectUrl)
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
