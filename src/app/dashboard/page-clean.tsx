@@ -1,33 +1,65 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/utils'
 
-export default async function DashboardPage() {
-  const supabase = await createClient()
-  
-  const { data: { user }, error: authError } = await supabase.auth.getUser()
-  if (authError || !user) {
-    redirect('/login')
+export default function DashboardPage() {
+  const [user, setUser] = useState<any>(null)
+  const [sites, setSites] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
+  const supabase = createClient()
+
+  useEffect(() => {
+    loadData()
+  }, [])
+
+  const loadData = async () => {
+    try {
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      if (authError || !user) {
+        router.push('/login')
+        return
+      }
+      setUser(user)
+
+      const { data: org } = await supabase
+        .from('organizations')
+        .select('*')
+        .eq('owner_user_id', user.id)
+        .single()
+
+      const { data: sitesData } = await supabase
+        .from('sites')
+        .select('*')
+        .eq('organization_id', org?.id)
+        .order('created_at', { ascending: false })
+
+      setSites(sitesData || [])
+    } catch (error) {
+      console.error('Error loading data:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  // Get user's organization
-  const { data: org } = await supabase
-    .from('organizations')
-    .select('*')
-    .eq('owner_user_id', user.id)
-    .single()
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut()
+      router.push('/')
+    } catch (error) {
+      console.error('Error signing out:', error)
+      router.push('/')
+    }
+  }
 
-  // Get user's sites
-  const { data: sites } = await supabase
-    .from('sites')
-    .select(`
-      *,
-      visits(count)
-    `)
-    .eq('org_id', org?.id)
-    .order('created_at', { ascending: false })
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -43,11 +75,12 @@ export default async function DashboardPage() {
               <Link href="/dashboard/new">
                 <Button>Create New Site</Button>
               </Link>
-              <form action="/auth/signout" method="post">
-                <Button variant="outline" type="submit">
-                  Sign Out
-                </Button>
-              </form>
+              <Button 
+                variant="outline" 
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </Button>
             </div>
           </div>
         </div>

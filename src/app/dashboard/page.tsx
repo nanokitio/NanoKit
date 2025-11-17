@@ -115,6 +115,17 @@ export default function DashboardPage() {
     }
   }
 
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut()
+      router.push('/')
+    } catch (error) {
+      console.error('Error signing out:', error)
+      // Even if there's an error, try to redirect
+      router.push('/')
+    }
+  }
+
   const handleDeleteClick = (site: SiteWithVisits) => {
     setSiteToDelete(site)
     setShowDeleteModal(true)
@@ -359,11 +370,13 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <form action="/auth/signout" method="post">
-                <Button variant="outline" type="submit" className="border-neon-primary/50 bg-dark-surface/50 text-neon-primary hover:bg-neon-primary hover:text-black hover:border-neon-primary backdrop-blur-sm transition-all duration-300 font-inter">
-                  Sign Out
-                </Button>
-              </form>
+              <Button 
+                variant="outline" 
+                onClick={handleSignOut}
+                className="border-neon-primary/50 bg-dark-surface/50 text-neon-primary hover:bg-neon-primary hover:text-black hover:border-neon-primary backdrop-blur-sm transition-all duration-300 font-inter"
+              >
+                Sign Out
+              </Button>
             </div>
           </div>
         </div>
