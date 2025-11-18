@@ -130,9 +130,7 @@ export default function ForgotPasswordPage() {
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="text-center mb-8">
             <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 backdrop-blur-sm border border-cyan-400/30 rounded-full mb-8 hover:border-cyan-400/50 transition-all duration-300 group">
-              <span className="w-3 h-3 bg-cyan-400 rounded-full mr-3 animate-pulse group-hover:animate-ping"></span>
               <span className="text-sm font-medium text-cyan-300 tracking-wide">Password Recovery</span>
-              <span className="w-3 h-3 bg-purple-400 rounded-full ml-3 animate-pulse group-hover:animate-ping"></span>
             </div>
             
             <h2 className="text-5xl md:text-6xl font-black mb-6 leading-tight">

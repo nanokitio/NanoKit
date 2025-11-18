@@ -76,9 +76,7 @@ export default function Home() {
           </div>
 
           <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-[#B94AFF]/10 to-[#4FC3FF]/10 border border-[#4FC3FF]/30 mb-10 backdrop-blur-sm animate-fadeIn shadow-[0_0_20px_rgba(79,195,255,0.2)]">
-            <div className="w-2 h-2 rounded-full bg-[#4FC3FF] animate-pulse" />
             <span className="text-sm font-bold tracking-wider text-[#EAF1FF]">AI-POWERED LANDING PAGE BUILDER</span>
-            <div className="w-2 h-2 rounded-full bg-[#B94AFF] animate-pulse" />
           </div>
 
           <h1 className="text-7xl md:text-9xl font-black leading-[0.95] mb-10 animate-fadeInUp" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
@@ -250,8 +248,6 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="relative p-20 rounded-3xl bg-gradient-to-br from-[#4FC3FF]/20 via-[#B94AFF]/20 to-[#4FC3FF]/20 border border-[#4FC3FF]/30 backdrop-blur-2xl overflow-hidden shadow-[0_0_80px_rgba(79,195,255,0.3)]">
             <div className="absolute inset-0">
-              <div className="absolute top-1/3 left-1/3 w-40 h-40 bg-[#4FC3FF]/20 rounded-full blur-3xl animate-pulse" />
-              <div className="absolute bottom-1/3 right-1/3 w-48 h-48 bg-[#B94AFF]/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
 
             <div className="relative grid md:grid-cols-2 gap-16 items-center">
@@ -327,8 +323,6 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
           <div className="relative p-16 rounded-3xl bg-gradient-to-br from-[#B94AFF]/20 via-[#4FC3FF]/20 to-[#B94AFF]/20 border border-[#4FC3FF]/30 backdrop-blur-2xl overflow-hidden">
             <div className="absolute inset-0">
-              <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#B94AFF]/20 rounded-full blur-3xl animate-pulse" />
-              <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-[#4FC3FF]/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
             
             <div className="relative text-center">
