@@ -171,10 +171,6 @@ export function Template7({ brand }: TemplateProps) {
       `}</style>
       {/* Animated Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-yellow-400/20 rounded-full animate-pulse"></div>
-        <div className="absolute top-40 right-32 w-24 h-24 bg-pink-400/20 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-32 left-40 w-28 h-28 bg-blue-400/20 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-20 h-20 bg-green-400/20 rounded-full animate-pulse"></div>
       </div>
 
       {/* Header */}
