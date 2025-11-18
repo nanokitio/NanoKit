@@ -206,7 +206,6 @@ export function TemplatePreviewModal({ templateId, isOpen, onClose, onSelect }: 
         {/* Minimal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white/95 backdrop-blur-sm">
           <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
             <h2 className="text-lg font-medium text-gray-700">Template Preview</h2>
           </div>
           {onSelect && (
