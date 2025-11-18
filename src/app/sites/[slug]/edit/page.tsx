@@ -1014,8 +1014,6 @@ export default function SiteEditorPage() {
     <div className="min-h-screen bg-black flex flex-col font-inter">
         {/* NetFusion Neon Top Bar - Enhanced */}
         <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b-2 border-neon-primary/30 px-6 py-4 flex items-center justify-between shadow-lg shadow-neon-primary/20 relative">
-          {/* Animated background accent */}
-          <div className="absolute inset-0 bg-gradient-to-r from-neon-primary/5 via-transparent to-neon-secondary/5 animate-pulse"></div>
           
           <div className="flex items-center gap-4 relative z-10">
             <button
@@ -1072,8 +1070,6 @@ export default function SiteEditorPage() {
       <div className="flex-1 flex">
         {/* NetFusion Neon Left Panel - Enhanced */}
         <div className="w-80 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 border-r-2 border-neon-primary/30 overflow-y-auto shadow-xl shadow-neon-primary/10 relative">
-          {/* Animated side accent */}
-          <div className="absolute top-0 right-0 w-1 h-full bg-gradient-to-b from-neon-primary via-neon-secondary to-neon-primary animate-pulse"></div>
           <div className="p-6 space-y-4">
             
             {/* NetFusion Quick Actions */}
@@ -1438,7 +1434,6 @@ export default function SiteEditorPage() {
                     {/* Template-specific info */}
                     <div className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 border border-cyan-500/40 rounded-lg p-4">
                       <div className="flex items-center gap-2 mb-2">
-                        <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
                         <p className="text-sm text-cyan-300 font-bold">
                           {templateConfig.name}
                         </p>
@@ -2184,8 +2179,6 @@ export default function SiteEditorPage() {
       {showDownloadModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-300 p-4">
           <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-xl max-w-3xl w-full max-h-[90vh] border-2 border-neon-primary/30 shadow-2xl shadow-neon-primary/20 relative overflow-hidden flex flex-col">
-            {/* Animated background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-neon-primary/5 via-transparent to-neon-secondary/5 animate-pulse"></div>
             
             {/* Fixed Header */}
             <div className="relative z-10 p-4 pb-3 border-b border-neon-primary/20 flex-shrink-0">
