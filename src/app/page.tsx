@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import Image from 'next/image'
+import Script from 'next/script'
 
 export default function Home() {
 
@@ -35,7 +36,15 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative z-20 pt-32 pb-40 px-6">
-        <div className="max-w-6xl mx-auto text-center">
+        {/* Unicorn Studio Animation Background */}
+        <div className="absolute inset-0 flex items-center justify-center overflow-hidden opacity-30 pointer-events-none">
+          <div 
+            data-us-project="mCvfwr0lI3ODgz1dx7vY" 
+            style={{ width: '100%', height: '900px', maxWidth: '1440px' }}
+          />
+        </div>
+
+        <div className="max-w-6xl mx-auto text-center relative z-10">
           {/* Logo Principal */}
           <div className="mb-10 animate-fadeIn flex justify-center">
             <div style={{
@@ -399,6 +408,17 @@ export default function Home() {
           animation-fill-mode: both;
         }
       `}</style>
+
+      {/* Unicorn Studio Script */}
+      <Script
+        id="unicorn-studio"
+        strategy="lazyOnload"
+        dangerouslySetInnerHTML={{
+          __html: `
+            !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.35/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
+          `
+        }}
+      />
     </div>
   )
 }
