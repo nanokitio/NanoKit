@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import Image from 'next/image'
+import StellarBuddy from '@/components/StellarBuddy'
 
 export default function Home() {
 
@@ -35,7 +36,9 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative z-20 pt-32 pb-40 px-6">
-        <div className="max-w-6xl mx-auto text-center">
+        <StellarBuddy />
+        
+        <div className="max-w-6xl mx-auto text-center relative z-10">
           {/* Logo Principal */}
           <div className="mb-10 animate-fadeIn flex justify-center">
             <div style={{
