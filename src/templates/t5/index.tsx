@@ -9,22 +9,6 @@ interface Template5Props {
 export function Template5({ brand }: Template5Props) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black relative overflow-hidden">
-      {/* Floating Symbols */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-10 left-5 animate-bounce" style={{ animationDelay: '0s' }}>
-          <div className="w-8 h-8 bg-yellow-400 rounded-full opacity-60"></div>
-        </div>
-        <div className="absolute top-20 right-10 animate-bounce" style={{ animationDelay: '1s' }}>
-          <div className="w-6 h-6 bg-red-500 rounded-full opacity-60"></div>
-        </div>
-        <div className="absolute bottom-30 left-8 animate-bounce" style={{ animationDelay: '2s' }}>
-          <div className="w-10 h-10 bg-green-400 rounded-full opacity-60"></div>
-        </div>
-        <div className="absolute bottom-15 right-15 animate-bounce" style={{ animationDelay: '3s' }}>
-          <div className="w-7 h-7 bg-blue-400 rounded-full opacity-60"></div>
-        </div>
-      </div>
-
       {/* Header */}
       <header className="relative z-10 text-center py-8 px-4">
         <div className="flex items-center justify-center mb-4">
@@ -159,26 +143,6 @@ export function renderTemplate(brand: BrandConfig): TemplateRenderResult {
       background: linear-gradient(145deg, #1a0f08, #2c1810);
       position: relative;
       overflow: hidden;
-    }
-    
-    .floating-symbols {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
-    
-    .floating-symbol {
-      position: absolute;
-      animation: float 6s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(180deg); }
     }
     
     .casino-header {
@@ -405,22 +369,6 @@ export function renderTemplate(brand: BrandConfig): TemplateRenderResult {
     </head>
     <body>
       <div class="casino-container">
-        <!-- Floating Symbols -->
-        <div class="floating-symbols">
-          <div class="floating-symbol" style="top: 10%; left: 5%; animation-delay: 0s;">
-            <div style="width: 30px; height: 30px; background: #ffd700; border-radius: 50%; opacity: 0.7;"></div>
-          </div>
-          <div class="floating-symbol" style="top: 20%; right: 10%; animation-delay: 1s;">
-            <div style="width: 25px; height: 25px; background: #ff4444; border-radius: 50%; opacity: 0.7;"></div>
-          </div>
-          <div class="floating-symbol" style="bottom: 30%; left: 8%; animation-delay: 2s;">
-            <div style="width: 35px; height: 35px; background: #4ade80; border-radius: 50%; opacity: 0.7;"></div>
-          </div>
-          <div class="floating-symbol" style="bottom: 15%; right: 15%; animation-delay: 3s;">
-            <div style="width: 28px; height: 28px; background: #3b82f6; border-radius: 50%; opacity: 0.7;"></div>
-          </div>
-        </div>
-
         <!-- Header -->
         <header class="casino-header">
           <h1 class="casino-title">

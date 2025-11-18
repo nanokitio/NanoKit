@@ -48,16 +48,6 @@ export function Template6({ brand }: Template6Props) {
         <div className="scan-lines"></div>
       </div>
 
-      {/* Floating Geometric Shapes */}
-      <div className="floating-symbols absolute inset-0 pointer-events-none">
-        <div className="absolute top-[10%] left-[5%] text-4xl text-cyan-400 animate-float-1 neon-glow-cyan">◆</div>
-        <div className="absolute top-[20%] right-[10%] text-4xl text-pink-400 animate-float-2 neon-glow-pink">▲</div>
-        <div className="absolute bottom-[30%] left-[8%] text-4xl text-yellow-400 animate-float-3 neon-glow-yellow">●</div>
-        <div className="absolute bottom-[15%] right-[15%] text-4xl text-green-400 animate-float-4 neon-glow-green">★</div>
-        <div className="absolute top-[50%] left-[3%] text-4xl text-purple-400 animate-float-5 neon-glow-purple">◇</div>
-        <div className="absolute top-[70%] right-[5%] text-4xl text-orange-400 animate-float-6 neon-glow-orange">▼</div>
-      </div>
-
       {/* Main Container */}
       <div className="container relative z-10 min-h-screen flex flex-col justify-center items-center px-4 py-8">
         {/* Header */}
@@ -252,14 +242,6 @@ export function Template6({ brand }: Template6Props) {
         .neon-glow-purple { text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2, 0 0 30px #8a2be2; }
         .neon-glow-orange { text-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500, 0 0 30px #ff4500; }
         
-        /* Floating Animations */
-        .animate-float-1 { animation: float-1 6s ease-in-out infinite; }
-        .animate-float-2 { animation: float-2 8s ease-in-out infinite; }
-        .animate-float-3 { animation: float-3 7s ease-in-out infinite; }
-        .animate-float-4 { animation: float-4 9s ease-in-out infinite; }
-        .animate-float-5 { animation: float-5 5s ease-in-out infinite; }
-        .animate-float-6 { animation: float-6 10s ease-in-out infinite; }
-        
         /* Synth Animations */
         .animate-text-shimmer { animation: text-shimmer 3s ease-in-out infinite; }
         .animate-border-pulse { animation: border-pulse 2s ease-in-out infinite; }
@@ -394,36 +376,6 @@ export function Template6({ brand }: Template6Props) {
         @keyframes claim-glow {
           0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.4); }
           50% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.6); }
-        }
-        
-        @keyframes float-1 {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(180deg); }
-        }
-        
-        @keyframes float-2 {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-25px) rotate(-180deg); }
-        }
-        
-        @keyframes float-3 {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-15px) rotate(360deg); }
-        }
-        
-        @keyframes float-4 {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-30px) rotate(-360deg); }
-        }
-        
-        @keyframes float-5 {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-18px) rotate(180deg); }
-        }
-        
-        @keyframes float-6 {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-22px) rotate(-180deg); }
         }
         
         @keyframes fadeIn {
