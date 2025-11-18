@@ -1,7 +1,7 @@
 "use client";
 
 import Lottie from "lottie-react";
-import stellar from "@/public/lottie/Stellar IA Buddy (Remix)(2).json";
+import stellar from "@/assets/lottie/Stellar IA Buddy (Remix)(2).json";
 
 export default function StellarBuddy() {
   return (
