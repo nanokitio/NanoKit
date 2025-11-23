@@ -96,9 +96,8 @@ export default function LoginPage() {
       <header className="relative z-10 bg-slate-900/80 backdrop-blur-xl border-b border-slate-700/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <NanoKitLogo size="header" />
-            <Link href="/" className="text-sm text-slate-400 hover:text-cyan-400 transition-colors duration-300">
-              ← Back to Home
+            <Link href="/">
+              <NanoKitLogo size="header" />
             </Link>
           </div>
         </div>
@@ -108,38 +107,14 @@ export default function LoginPage() {
       <div className="relative z-10 flex flex-col justify-center py-12 sm:px-6 lg:px-8 min-h-[calc(100vh-88px)]">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 backdrop-blur-sm border border-cyan-400/30 rounded-full mb-8 hover:border-cyan-400/50 transition-all duration-300 group">
-              <span className="text-sm font-medium text-cyan-300 tracking-wide">Secure Access Portal</span>
-            </div>
-            
             <h2 className="text-5xl md:text-6xl font-black mb-6 leading-tight">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300 hover:from-cyan-400 hover:to-white transition-all duration-500">
-                Welcome Back
+                Ready to Build? Log In
               </span>
             </h2>
             
             <p className="text-xl text-slate-300 mb-8 leading-relaxed">
-              Access your <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-semibold">digital forge</span> and continue 
-              creating extraordinary experiences
-            </p>
-            
-            <p className="text-sm text-slate-400">
-              Don&apos;t have an account?{' '}
-              <Link
-                href="/signup"
-                className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 hover:from-pink-400 hover:to-cyan-400 transition-all duration-300"
-              >
-                Join the forge →
-              </Link>
-            </p>
-            <p className="text-xs text-slate-500 mt-2">
-              Forgot your password?{' '}
-              <Link
-                href="/forgot-password"
-                className="text-cyan-400 hover:text-cyan-300 underline"
-              >
-                Reset it here
-              </Link>
+              Access your account and keep creating extraordinary digital experiences
             </p>
           </div>
         </div>
@@ -210,15 +185,34 @@ export default function LoginPage() {
                   ) : (
                     <span className="flex items-center justify-center">
                       <span className="mr-2">⚡</span>
-                      Access Nexus Forge
+                      Log In to Nanokit
                     </span>
                   )}
                 </button>
               </div>
             </form>
+            
+            <p className="text-sm text-slate-400 text-center mt-6">
+              No account yet?{' '}
+              <Link
+                href="/signup"
+                className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 hover:from-pink-400 hover:to-cyan-400 transition-all duration-300"
+              >
+                Let&apos;s set you up.
+              </Link>
+            </p>
           </div>
         </div>
       </div>
+      
+      {/* Footer */}
+      <footer className="relative z-10 py-8 px-6 border-t border-slate-700/50 backdrop-blur-2xl bg-slate-900/80">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center text-slate-400 text-sm">
+            <p>2025 <a href="https://nanokit.io" className="hover:text-white transition-colors">Nanokit.io</a></p>
+          </div>
+        </div>
+      </footer>
       
       {/* CSS Animations */}
       <style jsx>{`

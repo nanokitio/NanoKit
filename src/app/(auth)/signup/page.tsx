@@ -96,7 +96,9 @@ export default function SignupPage() {
         <header className="relative z-10 bg-slate-900/80 backdrop-blur-xl border-b border-slate-700/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-4">
-              <NanoKitLogo size="header" />
+              <Link href="/">
+                <NanoKitLogo size="header" />
+              </Link>
             </div>
           </div>
         </header>
@@ -309,6 +311,15 @@ export default function SignupPage() {
           </div>
         </div>
       </div>
+      
+      {/* Footer */}
+      <footer className="relative z-10 py-8 px-6 border-t border-slate-700/50 backdrop-blur-2xl bg-slate-900/80">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center text-slate-400 text-sm">
+            <p>2025 <a href="https://nanokit.io" className="hover:text-white transition-colors">Nanokit.io</a></p>
+          </div>
+        </div>
+      </footer>
       
       {/* CSS Animations */}
       <style jsx>{`

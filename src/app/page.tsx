@@ -6,7 +6,7 @@ import { NanoKitLogo } from '@/components/NanoKitLogo'
 import Image from 'next/image'
 import Spline from '@splinetool/react-spline'
 import { useState, useEffect } from 'react'
-import { Menu, X, ArrowUp } from 'lucide-react'
+import { Menu, X, ArrowUp, Sparkles, Palette, Rocket } from 'lucide-react'
 
 export default function Home() {
   const [stars, setStars] = useState<Array<{size: number, brightness: number, top: number, left: number}>>([]);
@@ -152,7 +152,7 @@ export default function Home() {
       )}
 
       {/* Hero Section */}
-      <section id="home" className="relative z-10 min-h-screen pt-32 pb-60 px-6">
+      <section id="home" className="relative z-10 min-h-screen pt-32 pb-32 px-6">
         {/* Spline background - behind hero copy, above stars */}
         <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center -translate-x-[10px]">
           <Spline scene="https://prod.spline.design/Ki5g7f1gDlFXh-FW/scene.splinecode" />
@@ -228,39 +228,21 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-10">
             {[
               {
-                icon: (
-                  <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" fillOpacity="0.2" />
-                  </svg>
-                ),
+                icon: <Sparkles className="w-16 h-16" />,
                 title: 'Let AI Create It—or Pick a Template',
                 desc: 'Your Vision. Get Your Landing Page—Instantly',
                 gradient: 'from-[#B94AFF] to-[#B94AFF]/50',
                 glow: 'rgba(185,74,255,0.4)',
               },
               {
-                icon: (
-                  <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 20H21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M16.5 3.50001C16.8978 3.10219 17.4374 2.87869 18 2.87869C18.2786 2.87869 18.5544 2.93356 18.8118 3.04017C19.0692 3.14678 19.303 3.30303 19.5 3.50001C19.697 3.69698 19.8532 3.93083 19.9598 4.18819C20.0665 4.44556 20.1213 4.72141 20.1213 5.00001C20.1213 5.27861 20.0665 5.55446 19.9598 5.81183C19.8532 6.06919 19.697 6.30304 19.5 6.50001L7 19L3 20L4 16L16.5 3.50001Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="white" fillOpacity="0.1" />
-                  </svg>
-                ),
+                icon: <Palette className="w-16 h-16" />,
                 title: 'Live Customization',
                 desc: 'Design and Edit in Real Time, Exactly How You Want',
                 gradient: 'from-[#4FC3FF] to-[#4FC3FF]/50',
                 glow: 'rgba(79,195,255,0.4)',
               },
               {
-                icon: (
-                  <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="2" y="3" width="20" height="14" rx="2" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M8 21H16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12 17V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M7 10L10 13L7 16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12 13H17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                ),
+                icon: <Rocket className="w-16 h-16" />,
                 title: 'Go Live or Export Code',
                 desc: 'Launch Your Page or Export Clean HTML/CSS Code',
                 gradient: 'from-[#FF76FF] to-[#FF76FF]/50',
@@ -374,7 +356,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 py-16 px-6 border-t border-white/10 backdrop-blur-2xl bg-black/20">
+      <footer className="relative z-10 py-32 px-6 border-t border-white/10 backdrop-blur-2xl bg-black/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center text-white/40 text-sm">
             <p>2025 <a href="https://nanokit.io" className="hover:text-white transition-colors">Nanokit.io</a></p>
