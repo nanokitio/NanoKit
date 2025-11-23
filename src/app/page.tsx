@@ -4,14 +4,61 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import Image from 'next/image'
+import Spline from '@splinetool/react-spline'
+import { useState, useEffect } from 'react'
+import { Menu, X, ArrowUp } from 'lucide-react'
 
 export default function Home() {
+  const [stars, setStars] = useState<Array<{size: number, brightness: number, top: number, left: number}>>([]);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    // Generate stars only on client side to avoid hydration mismatch
+    const starArray = [...Array(150)].map(() => ({
+      size: Math.random() * 2.5 + 0.5,
+      brightness: Math.random() * 0.7 + 0.3,
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+    }));
+    setStars(starArray);
+
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+      setShowBackToTop(window.scrollY > 400);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0C0A24] via-[#1A0F40] to-[#0C0A24] text-white overflow-x-hidden" style={{ fontFamily: 'Space Grotesk, system-ui, sans-serif' }}>
-      
+    <div className="min-h-screen bg-black text-white overflow-x-hidden relative" style={{ fontFamily: 'Space Grotesk, system-ui, sans-serif' }}>
+      {/* Starfield background - static stars */}
+      <div className="absolute inset-0 overflow-hidden" style={{ zIndex: -1 }}>
+        {stars.map((star, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: star.size + 'px',
+              height: star.size + 'px',
+              top: star.top + '%',
+              left: star.left + '%',
+              backgroundColor: `rgba(255, 255, 255, ${star.brightness})`,
+              boxShadow: `0 0 ${star.size * 3}px rgba(255, 255, 255, ${star.brightness * 0.8})`,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Header */}
-      <header className="sticky top-0 z-[100] backdrop-blur-2xl bg-black/40 border-b border-[#B94AFF]/20">
+      <header className="sticky top-0 z-[100]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <NanoKitLogo size="header" href="/" />
@@ -28,42 +75,109 @@ export default function Home() {
                   <span className="relative text-white">Get Started</span>
                 </Button>
               </Link>
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="text-white hover:text-[#4FC3FF] transition-colors p-2 hover:bg-white/10 rounded-lg"
+                aria-label="Toggle menu"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
             </div>
           </div>
         </div>
       </header>
 
+      {/* Burger Menu Sidebar */}
+      <div
+        className={`fixed top-0 right-0 h-screen w-80 bg-black/95 border-l border-[#4FC3FF]/30 z-[150] transform transition-transform duration-300 ease-in-out overflow-y-auto ${
+          menuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+        style={{
+          boxShadow: '-10px 0 50px rgba(79, 195, 255, 0.3)'
+        }}
+      >
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-12">
+            <h2 className="text-2xl font-black text-white">Menu</h2>
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="text-white hover:text-[#4FC3FF] transition-colors p-2"
+              aria-label="Close menu"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          <nav className="space-y-4">
+            {[
+              { name: 'Home', href: '#home' },
+              { name: 'Video', href: '#video' },
+              { name: 'Features', href: '#features' },
+              { name: 'Pricing', href: '#pricing' },
+            ].map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                className="block text-lg font-semibold text-white/80 hover:text-white hover:translate-x-2 transition-all duration-200 py-3 px-4 rounded-xl hover:bg-[#4FC3FF]/10"
+              >
+                {item.name}
+              </a>
+            ))}
+          </nav>
+
+          <div className="mt-12 pt-12 border-t border-[#4FC3FF]/30 flex flex-col gap-6">
+            <Link href="/login" onClick={() => setMenuOpen(false)}>
+              <Button variant="ghost" className="w-full text-white hover:text-[#4FC3FF] border border-[#4FC3FF]/30 hover:border-[#4FC3FF] transition-all px-5 py-3 rounded-xl">
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/signup" onClick={() => setMenuOpen(false)}>
+              <Button className="w-full relative group overflow-hidden px-6 py-3 rounded-xl text-base font-bold transition-all hover:scale-105 shadow-lg shadow-[#4FC3FF]/30">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF]" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#4FC3FF] to-[#B94AFF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <span className="relative text-white font-black">Get Started</span>
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Overlay */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-[140]"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
+
       {/* Hero Section */}
-      <section className="relative z-20 pt-32 pb-40 px-6">
-        <div className="max-w-6xl mx-auto text-center">
-          {/* Logo Principal */}
-          <div className="mb-10 animate-fadeIn flex justify-center">
-            <div style={{
-              filter: 'drop-shadow(0 0 40px rgba(79, 195, 255, 0.6)) brightness(1.2)',
-            }}>
-              <NanoKitLogo size="lg" />
-            </div>
-          </div>
-
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-[#B94AFF]/10 to-[#4FC3FF]/10 border border-[#4FC3FF]/30 mb-10 backdrop-blur-sm animate-fadeIn shadow-[0_0_20px_rgba(79,195,255,0.2)]">
-            <span className="text-sm font-bold tracking-wider text-[#EAF1FF]">AI-POWERED LANDING PAGE BUILDER</span>
-          </div>
-
+      <section id="home" className="relative z-10 min-h-screen pt-32 pb-60 px-6">
+        {/* Spline background - behind hero copy, above stars */}
+        <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center -translate-x-[10px]">
+          <Spline scene="https://prod.spline.design/Ki5g7f1gDlFXh-FW/scene.splinecode" />
+        </div>
+        
+        {/* Gradient overlay to fade bottom to black */}
+        <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-transparent via-transparent to-black"></div>
+        
+        <div className="relative max-w-6xl mx-auto text-center z-10">
           <h1 className="text-7xl md:text-9xl font-black leading-[0.95] mb-10 animate-fadeInUp" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-            <span className="block text-[#EAF1FF] drop-shadow-[0_0_40px_rgba(234,241,255,0.4)]">
-              Create Any Style
+            <span className="block text-white drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
+              Where AI-crafted
             </span>
-            <span className="block bg-gradient-to-r from-[#B94AFF] via-[#4FC3FF] to-[#FF76FF] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient drop-shadow-[0_0_60px_rgba(185,74,255,0.6)]">
-              Landing Page
+            <span className="block bg-gradient-to-r from-[#FF6B35] via-[#F72585] to-[#7209B7] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient" style={{
+              filter: 'drop-shadow(0 0 20px rgba(247, 37, 133, 0.6))'
+            }}>
+              visions
             </span>
-            <span className="block text-[#EAF1FF] drop-shadow-[0_0_40px_rgba(234,241,255,0.4)]">
-              — Instantly.
+            <span className="block text-white drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
+              go live effortlessly
             </span>
           </h1>
 
           <p className="text-2xl md:text-3xl text-[#EAF1FF]/80 max-w-4xl mx-auto mb-14 leading-relaxed animate-fadeInUp" style={{ animationDelay: '0.2s', fontFamily: 'Inter, sans-serif' }}>
-            From minimal corporate to bold lifestyle, <span className="text-[#4FC3FF] font-semibold text-shadow-glow">NANO KIT adapts to your aesthetic</span>.{' '}
-            <span className="text-[#EAF1FF] font-semibold">No coding. Pure creativity.</span>
+            From Idea to Live Page in 60 Seconds
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-20 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
@@ -84,73 +198,71 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-8 text-sm text-white/50 animate-fadeInUp" style={{ animationDelay: '0.6s' }}>
-            {[
-              { label: '12+ Template Styles', icon: '✦' },
-              { label: 'AI-Powered Generation', icon: '⚡' },
-              { label: 'Real-Time Editor', icon: '⟡' },
-            ].map((stat, i) => (
-              <div key={i} className="flex items-center gap-2 group hover:text-white transition-colors">
-                <span className="text-[#4FC3FF]">{stat.icon}</span>
-                <span>{stat.label}</span>
-              </div>
-            ))}
+        </div>
+      </section>
+
+      {/* Video Section - From Idea to Live Page in 60 Seconds */}
+      <section id="video" className="relative z-10 py-32 px-6 bg-transparent">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-5xl md:text-6xl font-black mb-16 text-center" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            <span className="block bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent" style={{
+              filter: 'drop-shadow(0 0 20px rgba(168, 85, 247, 0.5))'
+            }}>
+              From Idea to Live Page in 60 Seconds
+            </span>
+          </h2>
+          
+          <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl" style={{
+            boxShadow: '0 0 60px rgba(79, 195, 255, 0.3)'
+          }}>
+            <div className="aspect-video flex items-center justify-center text-white/50 text-2xl">
+              60 sec video tutorial
+            </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="relative z-10 py-32 px-6 bg-gradient-to-b from-transparent via-[#B94AFF]/5 to-transparent">
+      <section id="features" className="relative z-10 py-32 px-6 bg-transparent">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24">
-            <h2 className="text-6xl md:text-7xl font-black mb-6" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              <span className="bg-gradient-to-r from-[#B94AFF] via-[#4FC3FF] to-[#FF76FF] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(185,74,255,0.4)]">
-                Creative Engine
-              </span>
-            </h2>
-            <p className="text-2xl text-[#EAF1FF]/70 max-w-3xl mx-auto leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-              AI that understands design, aesthetics, and conversion
-            </p>
-          </div>
-
           <div className="grid md:grid-cols-3 gap-10">
             {[
               {
                 icon: (
-                  <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" fillOpacity="0.2"/>
+                  <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" fillOpacity="0.2" />
                   </svg>
                 ),
-                title: 'AI Generate',
-                desc: 'Describe your idea and get a full landing page instantly.',
+                title: 'Let AI Create It—or Pick a Template',
+                desc: 'Your Vision. Get Your Landing Page—Instantly',
                 gradient: 'from-[#B94AFF] to-[#B94AFF]/50',
                 glow: 'rgba(185,74,255,0.4)',
               },
               {
                 icon: (
-                  <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 20H21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M16.5 3.50001C16.8978 3.10219 17.4374 2.87869 18 2.87869C18.2786 2.87869 18.5544 2.93356 18.8118 3.04017C19.0692 3.14678 19.303 3.30303 19.5 3.50001C19.697 3.69698 19.8532 3.93083 19.9598 4.18819C20.0665 4.44556 20.1213 4.72141 20.1213 5.00001C20.1213 5.27861 20.0665 5.55446 19.9598 5.81183C19.8532 6.06919 19.697 6.30304 19.5 6.50001L7 19L3 20L4 16L16.5 3.50001Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="white" fillOpacity="0.1"/>
+                  <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 20H21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M16.5 3.50001C16.8978 3.10219 17.4374 2.87869 18 2.87869C18.2786 2.87869 18.5544 2.93356 18.8118 3.04017C19.0692 3.14678 19.303 3.30303 19.5 3.50001C19.697 3.69698 19.8532 3.93083 19.9598 4.18819C20.0665 4.44556 20.1213 4.72141 20.1213 5.00001C20.1213 5.27861 20.0665 5.55446 19.9598 5.81183C19.8532 6.06919 19.697 6.30304 19.5 6.50001L7 19L3 20L4 16L16.5 3.50001Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="white" fillOpacity="0.1" />
                   </svg>
                 ),
-                title: 'Live Edit',
-                desc: 'See every change in real time. Edit anything, anywhere.',
+                title: 'Live Customization',
+                desc: 'Design and Edit in Real Time, Exactly How You Want',
                 gradient: 'from-[#4FC3FF] to-[#4FC3FF]/50',
                 glow: 'rgba(79,195,255,0.4)',
               },
               {
                 icon: (
-                  <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="2" y="3" width="20" height="14" rx="2" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M8 21H16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M12 17V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M7 10L10 13L7 16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M12 13H17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="3" width="20" height="14" rx="2" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M8 21H16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M12 17V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M7 10L10 13L7 16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M12 13H17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 ),
-                title: 'Export Clean Code',
-                desc: 'Download production-ready HTML/CSS. Zero dependencies.',
+                title: 'Go Live or Export Code',
+                desc: 'Launch Your Page or Export Clean HTML/CSS Code',
                 gradient: 'from-[#FF76FF] to-[#FF76FF]/50',
                 glow: 'rgba(255,118,255,0.4)',
               },
@@ -174,150 +286,87 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section id="how-it-works" className="relative z-10 py-32 px-6">
-        <div className="max-w-6xl mx-auto">
+      {/* Pricing Section */}
+      <section id="pricing" className="relative z-10 py-32 px-6 bg-transparent">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
             <h2 className="text-6xl md:text-7xl font-black mb-6" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              <span className="bg-gradient-to-r from-[#4FC3FF] via-[#B94AFF] to-[#FF76FF] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(79,195,255,0.4)]">
-                From Idea to Live Page
+              <span className="block bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent" style={{
+                filter: 'drop-shadow(0 0 20px rgba(168, 85, 247, 0.5))'
+              }}>
+                Choose Your Package
               </span>
             </h2>
-            <p className="text-2xl text-[#EAF1FF]/70" style={{ fontFamily: 'Inter, sans-serif' }}>In minutes, not hours</p>
+            <p className="text-2xl text-[#EAF1FF]/70 max-w-3xl mx-auto" style={{ fontFamily: 'Inter, sans-serif' }}>
+              Unlock the right tools for your next launch.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-12 relative">
-            <div className="hidden md:block absolute top-28 left-1/3 right-1/3 h-1 bg-gradient-to-r from-[#4FC3FF] via-[#B94AFF] to-[#4FC3FF] opacity-30" />
-            
-            {[
-              { step: '1', title: 'Create', desc: 'Create with AI or choose a template', icon: '◆', color: '#B94AFF' },
-              { step: '2', title: 'Edit', desc: 'Customize in real-time visual editor', icon: '▲', color: '#4FC3FF' },
-              { step: '3', title: 'Export', desc: 'Download or host your page', icon: '●', color: '#B94AFF' },
-            ].map((item, i) => (
-              <div key={i} className="text-center relative group">
-                <div 
-                  className="w-32 h-32 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-[#B94AFF] to-[#4FC3FF] flex items-center justify-center text-5xl font-black text-white shadow-[0_0_60px_rgba(185,74,255,0.4)] hover:scale-110 transition-transform duration-300 cursor-pointer"
-                  style={{ boxShadow: `0 0 80px ${item.color}80` }}
-                >
-                  {item.icon}
-                </div>
-                <div className="inline-block px-4 py-1 rounded-full bg-white/10 text-white/50 text-sm font-bold mb-3">
-                  STEP {item.step}
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-3">{item.title}</h3>
-                <p className="text-white/60 text-lg">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-      {/* Host With Us */}
-      <section className="relative z-10 py-32 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="relative p-20 rounded-3xl bg-gradient-to-br from-[#4FC3FF]/20 via-[#B94AFF]/20 to-[#4FC3FF]/20 border border-[#4FC3FF]/30 backdrop-blur-2xl overflow-hidden shadow-[0_0_80px_rgba(79,195,255,0.3)]">
-            <div className="absolute inset-0">
-            </div>
-
-            <div className="relative grid md:grid-cols-2 gap-16 items-center">
-              <div>
-                <div className="inline-block px-5 py-2 rounded-full bg-[#4FC3FF]/20 border border-[#4FC3FF]/50 text-[#4FC3FF] text-sm font-black mb-8 shadow-[0_0_20px_rgba(79,195,255,0.3)]">
-                  ⚡ INSTANT HOSTING
-                </div>
-                <h2 className="text-5xl md:text-6xl font-black mb-8" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                  <span className="bg-gradient-to-r from-[#4FC3FF] via-[#B94AFF] to-[#FF76FF] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(79,195,255,0.5)]">
-                    Instant Hosting.<br/>Global Reach.
-                  </span>
-                </h2>
-                <p className="text-2xl text-[#EAF1FF]/80 mb-10 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Host your page instantly with our global CDN. <span className="text-[#EAF1FF] font-bold">No setup. Just one click.</span>
-                </p>
-                <div className="space-y-4">
-                  {[
-                    { icon: '🚀', text: 'One-click deployment to AWS S3' },
-                    { icon: '⚡', text: 'Global CDN for instant loading' },
-                    { icon: '🔒', text: 'SSL certificate included' },
-                    { icon: '📊', text: 'Built-in analytics dashboard' },
-                  ].map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3 text-white/80">
-                      <span className="text-2xl">{feature.icon}</span>
-                      <span className="text-lg">{feature.text}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="relative">
-                <div className="p-8 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/20">
-                  <div className="text-center mb-6">
-                    <div className="text-6xl font-black bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF] bg-clip-text text-transparent mb-2">
-                      FREE
-                    </div>
-                    <div className="text-white/60">Forever hosting included</div>
-                  </div>
-                  <div className="space-y-3 mb-6">
-                    <div className="flex justify-between text-white/70">
-                      <span>Bandwidth</span>
-                      <span className="font-bold text-white">Unlimited</span>
-                    </div>
-                    <div className="flex justify-between text-white/70">
-                      <span>SSL Certificate</span>
-                      <span className="font-bold text-white">✓ Included</span>
-                    </div>
-                    <div className="flex justify-between text-white/70">
-                      <span>Custom Domain</span>
-                      <span className="font-bold text-white">✓ Supported</span>
-                    </div>
-                    <div className="flex justify-between text-white/70">
-                      <span>Uptime</span>
-                      <span className="font-bold text-[#4FC3FF]">99.9%</span>
-                    </div>
-                  </div>
-                  <Link href="/try-editor">
-                    <Button className="w-full relative group overflow-hidden py-4 rounded-xl text-lg font-bold transition-all hover:scale-105">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF]" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#4FC3FF] to-[#B94AFF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <span className="relative text-white">Try Editor Free →</span>
-                    </Button>
-                  </Link>
-                </div>
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* LiteWave - Free */}
+            <div className="relative p-8 rounded-3xl bg-gradient-to-br from-purple-900/30 via-cyan-900/20 to-transparent backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 border border-purple-500/30" style={{
+              boxShadow: '0 10px 40px rgba(168, 85, 247, 0.3)'
+            }}>
+              <div className="text-center">
+                <h3 className="text-3xl font-black mb-4 text-white" style={{ 
+                  fontFamily: 'Space Grotesk, sans-serif'
+                }}>
+                  LiteWave - Free
+                </h3>
+                <p className="text-[#EAF1FF]/60 mb-8">Subtitle:</p>
+                <Link href="/signup">
+                  <Button className="w-full relative group overflow-hidden py-4 rounded-xl text-lg font-bold transition-all hover:scale-105 mb-6">
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF]" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#4FC3FF] to-[#B94AFF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <span className="relative text-white">Get Started</span>
+                  </Button>
+                </Link>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Final CTA */}
-      <section className="relative z-10 py-32 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="relative p-16 rounded-3xl bg-gradient-to-br from-[#B94AFF]/20 via-[#4FC3FF]/20 to-[#B94AFF]/20 border border-[#4FC3FF]/30 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0">
-            </div>
-            
-            <div className="relative text-center">
-              <h2 className="text-5xl md:text-6xl font-black mb-6">
-                <span className="bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF] bg-clip-text text-transparent">
-                  Start Creating Today
+            {/* Turbo Mode */}
+            <div className="relative p-8 rounded-3xl bg-gradient-to-br from-pink-600/40 via-purple-600/40 to-cyan-600/40 backdrop-blur-xl transform scale-105 transition-all duration-300 hover:-translate-y-2 border-2 border-pink-500/50" style={{
+              boxShadow: '0 15px 60px rgba(247, 37, 133, 0.5)'
+            }}>
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <span className="bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF] px-6 py-2 rounded-full text-sm font-bold shadow-lg text-white">
+                  Most Popular
                 </span>
-              </h2>
-              <p className="text-2xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-                From minimal to maximal. Corporate to creative. Your style, powered by AI.
-              </p>
-              <Link href="/signup">
-                <Button className="relative group overflow-hidden px-16 py-8 rounded-2xl text-xl font-black transition-all hover:scale-105 shadow-[0_0_80px_rgba(185,74,255,0.5)]">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF]" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#4FC3FF] to-[#B94AFF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <span className="relative text-white flex items-center gap-3">
-                    CREATE YOUR FIRST PAGE
-                    <span className="text-3xl group-hover:translate-x-2 transition-transform">→</span>
-                  </span>
-                </Button>
-              </Link>
-              <div className="flex flex-wrap justify-center gap-6 mt-8 text-sm text-white/50">
-                <span>✓ No Credit Card Required</span>
-                <span>✓ 12+ Template Styles</span>
-                <span>✓ AI-Powered Generation</span>
+              </div>
+              
+              <div className="text-center">
+                <h3 className="text-3xl font-black mb-4 text-white" style={{ 
+                  fontFamily: 'Space Grotesk, sans-serif'
+                }}>
+                  Turbo Mode
+                </h3>
+                <p className="text-white/80 mb-8">Subtitle:</p>
+                <Link href="/signup">
+                  <Button className="w-full bg-white text-[#B94AFF] py-4 rounded-xl text-lg font-bold hover:bg-gray-100 transition-colors mb-6">
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Pixel Pro */}
+            <div className="relative p-8 rounded-3xl bg-gradient-to-br from-purple-900/30 via-pink-900/20 to-transparent backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 border border-purple-500/30" style={{
+              boxShadow: '0 10px 40px rgba(168, 85, 247, 0.3)'
+            }}>
+              <div className="text-center">
+                <h3 className="text-3xl font-black mb-4 text-white" style={{ 
+                  fontFamily: 'Space Grotesk, sans-serif'
+                }}>
+                  Pixel Pro
+                </h3>
+                <p className="text-[#EAF1FF]/60 mb-8">Subtitle:</p>
+                <Link href="/signup">
+                  <Button className="w-full relative group overflow-hidden py-4 rounded-xl text-lg font-bold transition-all hover:scale-105 mb-6">
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF]" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#4FC3FF] to-[#B94AFF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <span className="relative text-white">Get Started</span>
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -325,55 +374,24 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 py-16 px-6 border-t border-white/10 backdrop-blur-2xl bg-black/40">
+      <footer className="relative z-10 py-16 px-6 border-t border-white/10 backdrop-blur-2xl bg-black/20">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="flex flex-col items-center md:items-start gap-4">
-              <NanoKitLogo size="sm" />
-              <p className="text-white/40 text-sm text-center md:text-left max-w-xs">
-                AI-powered landing page builder for every style and industry
-              </p>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
-              <div>
-                <h4 className="font-bold text-white mb-3">Product</h4>
-                <div className="flex flex-col gap-2 text-white/50">
-                  <a href="#features" className="hover:text-white transition-colors">Features</a>
-                  <a href="#templates" className="hover:text-white transition-colors">Templates</a>
-                  <a href="#" className="hover:text-white transition-colors">Pricing</a>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-bold text-white mb-3">Company</h4>
-                <div className="flex flex-col gap-2 text-white/50">
-                  <a href="#" className="hover:text-white transition-colors">About</a>
-                  <a href="#" className="hover:text-white transition-colors">Blog</a>
-                  <a href="#" className="hover:text-white transition-colors">Careers</a>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-bold text-white mb-3">Resources</h4>
-                <div className="flex flex-col gap-2 text-white/50">
-                  <a href="#" className="hover:text-white transition-colors">Help Center</a>
-                  <a href="#" className="hover:text-white transition-colors">Community</a>
-                  <a href="#" className="hover:text-white transition-colors">Status</a>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-bold text-white mb-3">Legal</h4>
-                <div className="flex flex-col gap-2 text-white/50">
-                  <a href="#" className="hover:text-white transition-colors">Privacy</a>
-                  <a href="#" className="hover:text-white transition-colors">Terms</a>
-                  <a href="#" className="hover:text-white transition-colors">Security</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 border-t border-white/10 text-center text-white/40 text-sm">
-            <p>© 2025 Nano Kit. Built with passion for creators worldwide.</p>
+          <div className="text-center text-white/40 text-sm">
+            <p>2025 <a href="https://nanokit.io" className="hover:text-white transition-colors">Nanokit.io</a></p>
           </div>
         </div>
       </footer>
+
+      {/* Back to Top Button */}
+      <button
+        onClick={scrollToTop}
+        className={`fixed bottom-8 right-8 z-[90] p-4 rounded-full bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF] text-white shadow-2xl shadow-[#4FC3FF]/50 transition-all duration-300 hover:scale-110 hover:shadow-[#4FC3FF]/70 ${
+          showBackToTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
+        }`}
+        aria-label="Back to top"
+      >
+        <ArrowUp className="w-6 h-6" />
+      </button>
 
       <style jsx>{`
         @keyframes gradient {

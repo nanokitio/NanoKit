@@ -33,7 +33,6 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
         </ThemeProvider>
-        <Script src="/js/neon-effects.js" strategy="lazyOnload" />
       </body>
     </html>
   );
