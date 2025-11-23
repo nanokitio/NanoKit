@@ -181,7 +181,9 @@ export default function SignupPage() {
       <header className="relative z-10 bg-slate-900/80 backdrop-blur-xl border-b border-slate-700/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <NanoKitLogo size="header" />
+            <Link href="/">
+              <NanoKitLogo size="header" />
+            </Link>
             <Link href="/login" className="text-sm text-slate-400 hover:text-cyan-400 transition-colors duration-300">
               Already have an account? →
             </Link>
@@ -193,19 +195,14 @@ export default function SignupPage() {
       <div className="relative z-10 flex flex-col justify-center py-12 sm:px-6 lg:px-8 min-h-[calc(100vh-88px)]">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 backdrop-blur-sm border border-purple-400/30 rounded-full mb-8 hover:border-purple-400/50 transition-all duration-300 group">
-              <span className="text-sm font-medium text-purple-300 tracking-wide">Join the Digital Revolution</span>
-            </div>
-            
             <h2 className="text-5xl md:text-6xl font-black mb-6 leading-tight">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300 hover:from-purple-400 hover:to-white transition-all duration-500">
-                Join the Forge
+                Ready to Join? Let&apos;s Do This
               </span>
             </h2>
             
             <p className="text-xl text-slate-300 mb-8 leading-relaxed">
-              Start forging <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 font-semibold">extraordinary digital experiences</span> with 
-              cutting-edge AI technology
+              Power up your creativity and build extraordinary digital experiences with advanced AI
             </p>
           </div>
         </div>
@@ -297,16 +294,27 @@ export default function SignupPage() {
                   {loading ? (
                     <span className="flex items-center justify-center">
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-                      Initializing forge...
+                      Activating...
                     </span>
                   ) : (
                     <span className="flex items-center justify-center">
                       <span className="mr-2">⚡</span>
-                      Initialize Your Forge
+                      Activate Your Kit
                     </span>
                   )}
                 </button>
               </div>
+              
+              <p className="text-xs text-slate-400 text-center mt-4">
+                By continuing with an account, you agree to our{' '}
+                <a href="/terms" className="text-cyan-400 hover:text-cyan-300 underline">
+                  Terms & Conditions
+                </a>{' '}
+                and acknowledge that you have read our{' '}
+                <a href="/privacy" className="text-cyan-400 hover:text-cyan-300 underline">
+                  Privacy Policy
+                </a>.
+              </p>
             </form>
           </div>
         </div>
