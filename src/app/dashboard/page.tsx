@@ -357,40 +357,9 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-neon-accent to-black text-white overflow-hidden relative font-inter">
-      {/* NetFusion Neon Dashboard Background */}
+      {/* Clean Dashboard Background */}
       <div className="fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-neon-accent/30 to-black"></div>
-        
-        {/* Floating geometric shapes with neon colors */}
-        <div className="absolute inset-0">
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute opacity-20"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: `float ${4 + Math.random() * 3}s ease-in-out infinite`,
-                animationDelay: `${Math.random() * 2}s`
-              }}
-            >
-              {i % 3 === 0 && <div className="w-8 h-8 border border-neon-primary/30 rotate-45"></div>}
-              {i % 3 === 1 && <div className="w-6 h-6 border border-neon-secondary/30 rounded-full"></div>}
-              {i % 3 === 2 && <div className="w-12 h-2 bg-gradient-to-r from-neon-primary/20 to-neon-secondary/20"></div>}
-            </div>
-          ))}
-        </div>
-        
-        {/* Subtle grid pattern with neon colors */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="w-full h-full" style={{
-            backgroundImage: `
-              linear-gradient(rgba(2, 193, 115, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(2, 193, 115, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px'
-          }}></div>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-slate-950 to-black"></div>
       </div>
 
       {/* Header */}
@@ -547,7 +516,11 @@ export default function DashboardPage() {
                   {/* Archive Toggle */}
                   <button
                     onClick={() => setShowArchived(!showArchived)}
-                    className="px-6 py-3 rounded-xl font-semibold bg-slate-800/50 border-2 border-slate-700/50 text-slate-300 hover:border-slate-600 hover:bg-slate-700/50 transition-all duration-300"
+                    className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                      showArchived
+                        ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 text-white shadow-lg shadow-cyan-500/20'
+                        : 'bg-slate-800/50 border-2 border-slate-700/50 text-slate-300 hover:border-slate-600 hover:bg-slate-700/50'
+                    }`}
                   >
                     <span className="flex items-center space-x-2">
                       <span className="text-lg">{showArchived ? '📂' : '🗄️'}</span>
