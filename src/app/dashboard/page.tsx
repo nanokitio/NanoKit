@@ -29,12 +29,40 @@ export default function DashboardPage() {
   const [siteToDelete, setSiteToDelete] = useState<SiteWithVisits | null>(null)
   const [showArchived, setShowArchived] = useState(false)
   const [viewMode, setViewMode] = useState<'all' | 'published' | 'downloaded'>('all')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [showColumnMenu, setShowColumnMenu] = useState(false)
+  const [visibleColumns, setVisibleColumns] = useState({
+    template: true,
+    status: true,
+    downloads: true,
+    creationDate: true
+  })
+  const sitesPerPage = 6
   const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
     loadData()
   }, [])
+  
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [viewMode, showArchived])
+  
+  // Close column menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      if (showColumnMenu && !target.closest('.column-menu-container')) {
+        setShowColumnMenu(false)
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showColumnMenu])
 
   const loadData = async () => {
     try {
@@ -271,17 +299,38 @@ export default function DashboardPage() {
   }
 
   const getFilteredSites = () => {
-    const filtered = sites.filter(site => showArchived ? site.status === 'draft' : site.status === 'published')
+    let filtered = sites.filter(site => showArchived ? site.status === 'draft' : site.status === 'published')
     
+    // Apply view mode filter
     switch (viewMode) {
       case 'published':
-        // Consider a site published if status is 'published' OR is_published is true
-        return filtered.filter(site => site.status === 'published' || site.is_published)
+        filtered = filtered.filter(site => site.status === 'published' || site.is_published)
+        break
       case 'downloaded':
-        return filtered.filter(site => site.is_downloaded)
-      default:
-        return filtered
+        filtered = filtered.filter(site => site.is_downloaded)
+        break
     }
+    
+    // Apply search filter
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(site => 
+        site.brand_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        site.slug?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+    
+    return filtered
+  }
+  
+  const getPaginatedSites = () => {
+    const filtered = getFilteredSites()
+    const startIndex = (currentPage - 1) * sitesPerPage
+    const endIndex = startIndex + sitesPerPage
+    return filtered.slice(startIndex, endIndex)
+  }
+  
+  const getTotalPages = () => {
+    return Math.ceil(getFilteredSites().length / sitesPerPage)
   }
 
   const getViewModeStats = () => {
@@ -295,12 +344,12 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-neon-accent to-black text-white flex items-center justify-center font-inter">
+      <div className="min-h-screen bg-gradient-to-br from-black via-purple-950/30 to-black text-white flex items-center justify-center font-inter">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-neon-primary via-neon-secondary to-neon-primary rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-neon animate-glow">
-            <div className="text-black font-black text-2xl">⚡</div>
+          <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-2xl shadow-purple-500/50 animate-pulse">
+            <div className="text-white font-black text-3xl">⚡</div>
           </div>
-          <p className="text-text-muted font-inter">Loading your forge...</p>
+          <p className="text-xl text-slate-300 font-inter">Setting Up Your Nano Kit</p>
         </div>
       </div>
     )
@@ -354,29 +403,21 @@ export default function DashboardPage() {
                 <h2 className="text-2xl font-bold text-white font-inter">
                   Dashboard
                 </h2>
-                <div className="flex items-center gap-4">
-                  <p className="text-sm text-text-muted font-inter">
-                    Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-semibold">
-                      {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'Creator'}
-                    </span>! 👋
-                  </p>
-                  {organization?.user_code && (
-                    <div className="flex items-center gap-2 px-3 py-1 bg-neon-primary/20 border border-neon-primary/40 rounded-lg backdrop-blur-sm">
-                      <span className="text-xs text-neon-primary font-medium">User Code:</span>
-                      <span className="text-sm font-bold text-neon-primary font-mono">{organization.user_code}</span>
-                    </div>
-                  )}
-                </div>
+                <p className="text-sm text-text-muted font-inter mt-1">
+                  Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-semibold">
+                    {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'Creator'}
+                  </span> — Powering Up...
+                </p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Button 
-                variant="outline" 
+              <button
                 onClick={handleSignOut}
-                className="border-neon-primary/50 bg-dark-surface/50 text-neon-primary hover:bg-neon-primary hover:text-black hover:border-neon-primary backdrop-blur-sm transition-all duration-300 font-inter"
+                className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg hover:scale-110 transition-transform duration-200 shadow-lg shadow-purple-500/30"
+                title="Sign Out"
               >
-                Sign Out
-              </Button>
+                {(user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'U')[0].toUpperCase()}
+              </button>
             </div>
           </div>
         </div>
@@ -422,20 +463,39 @@ export default function DashboardPage() {
             <div className="mb-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Your Forge</h2>
+                  <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Your Launch Center</h2>
                   <p className="mt-2 text-lg text-slate-300">
-                    Manage your forged digital experiences
+                    manage your digital assets here
                   </p>
                 </div>
                 <Button 
                   onClick={handleQuickCreate}
-                  className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 font-semibold px-8 py-6 text-lg"
+                  className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 font-semibold px-6 py-4 text-base"
                 >
                   <span className="flex items-center">
-                    <span className="mr-2 text-xl">⚡</span>
+                    <span className="mr-2">⚡</span>
                     Create New Site
                   </span>
                 </Button>
+              </div>
+              
+              {/* Search Bar */}
+              <div className="mb-4">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search by name..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value)
+                      setCurrentPage(1) // Reset to first page on search
+                    }}
+                    className="w-full px-4 py-3 pl-12 bg-slate-900/60 border border-slate-700/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 backdrop-blur-sm transition-all duration-300"
+                  />
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400">
+                    🔍
+                  </div>
+                </div>
               </div>
               
               {/* Filter Pills - Horizontal Layout */}
@@ -500,6 +560,41 @@ export default function DashboardPage() {
 
             <div className="mt-8 flow-root">
               <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/10">
+                {/* Column Menu */}
+                <div className="flex justify-end p-4 border-b border-slate-700/50">
+                  <div className="relative column-menu-container">
+                    <button
+                      onClick={() => setShowColumnMenu(!showColumnMenu)}
+                      className="p-2 rounded-xl bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:border-slate-600 hover:bg-slate-700/50 transition-all duration-300"
+                      title="Manage columns"
+                    >
+                      ⋮
+                    </button>
+                    
+                    {showColumnMenu && (
+                      <div className="absolute right-0 mt-2 w-56 bg-slate-800/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl z-10 p-3">
+                        <div className="text-xs font-bold text-cyan-300 uppercase mb-3">Show/Hide Columns</div>
+                        {Object.entries({
+                          template: 'Template',
+                          status: 'Status',
+                          downloads: 'Downloads',
+                          creationDate: 'Creation Date'
+                        }).map(([key, label]) => (
+                          <label key={key} className="flex items-center gap-2 py-2 px-2 hover:bg-slate-700/50 rounded-lg cursor-pointer transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={visibleColumns[key as keyof typeof visibleColumns]}
+                              onChange={(e) => setVisibleColumns(prev => ({ ...prev, [key]: e.target.checked }))}
+                              className="w-4 h-4 rounded border-slate-600 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-slate-800"
+                            />
+                            <span className="text-sm text-slate-300">{label}</span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-slate-700/50">
                     <thead className="bg-gradient-to-r from-slate-800/50 to-slate-700/50">
@@ -507,31 +602,33 @@ export default function DashboardPage() {
                         <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
                           Site
                         </th>
-                        <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
-                          Template
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
-                          Status
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
-                          Published
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
-                          Downloads
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
-                          Visits
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
-                          Created
-                        </th>
-                        <th className="relative px-6 py-4">
-                          <span className="sr-only">Actions</span>
+                        {visibleColumns.template && (
+                          <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                            Template
+                          </th>
+                        )}
+                        {visibleColumns.status && (
+                          <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                            Status
+                          </th>
+                        )}
+                        {visibleColumns.downloads && (
+                          <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                            Downloads
+                          </th>
+                        )}
+                        {visibleColumns.creationDate && (
+                          <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                            Creation Date
+                          </th>
+                        )}
+                        <th className="px-6 py-4 text-center text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                          Quick Actions
                         </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-700/30">
-                      {getFilteredSites().map((site) => (
+                      {getPaginatedSites().map((site) => (
                         <tr key={site.id} className="hover:bg-slate-800/30 transition-colors duration-200">
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
@@ -552,50 +649,44 @@ export default function DashboardPage() {
                               </div>
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-                              Template {site.template_id.toUpperCase()}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
-                                site.status === 'published'
-                                  ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 border-green-500/30'
-                                  : 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 border-yellow-500/30'
-                              }`}
-                            >
-                              {site.status}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {site.is_published ? (
-                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 border border-green-500/30">
-                                🚀 Yes
+                          {visibleColumns.template && (
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                                Template {site.template_id.toUpperCase()}
                               </span>
-                            ) : (
-                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-gray-500/20 to-slate-500/20 text-gray-300 border border-gray-500/30">
-                                📝 Draft
+                            </td>
+                          )}
+                          {visibleColumns.status && (
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span
+                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
+                                  site.status === 'published'
+                                    ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 border-green-500/30'
+                                    : 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 border-yellow-500/30'
+                                }`}
+                              >
+                                {site.status}
                               </span>
-                            )}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-                            {site.is_downloaded ? (
-                              <span className="flex items-center gap-1">
-                                📥 {site.download_count || 1}
-                              </span>
-                            ) : (
-                              <span className="text-gray-500">-</span>
-                            )}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-                            {site.visits?.[0]?.count || 0}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
-                            {formatDate(site.created_at)}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div className="flex items-center justify-end space-x-3">
+                            </td>
+                          )}
+                          {visibleColumns.downloads && (
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                              {site.is_downloaded ? (
+                                <span className="flex items-center gap-1">
+                                  📥 {site.download_count || 1}
+                                </span>
+                              ) : (
+                                <span className="text-gray-500">-</span>
+                              )}
+                            </td>
+                          )}
+                          {visibleColumns.creationDate && (
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
+                              {formatDate(site.created_at)}
+                            </td>
+                          )}
+                          <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                            <div className="flex items-center justify-center space-x-3">
                               <Link
                                 href={`/sites/${site.slug}`}
                                 className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors duration-200"
@@ -616,15 +707,13 @@ export default function DashboardPage() {
                               >
                                 {archivingId === site.id ? 'Processing...' : (site.status === 'draft' ? '📂 Activate' : '🗄️ Archive')}
                               </button>
-                              {site.status === 'draft' && (
-                                <button
-                                  onClick={() => handleDeleteClick(site)}
-                                  disabled={deletingId === site.id}
-                                  className="text-red-400 hover:text-red-300 font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                  {deletingId === site.id ? 'Deleting...' : '🗑️ Delete'}
-                                </button>
-                              )}
+                              <button
+                                onClick={() => handleDeleteClick(site)}
+                                disabled={deletingId === site.id}
+                                className="text-red-400 hover:text-red-300 font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {deletingId === site.id ? 'Deleting...' : '🗑️ Delete'}
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -633,6 +722,43 @@ export default function DashboardPage() {
                   </table>
                 </div>
               </div>
+              
+              {/* Pagination Controls */}
+              {getTotalPages() > 1 && (
+                <div className="mt-6 flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 rounded-xl bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:border-slate-600 hover:bg-slate-700/50 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    ← Previous
+                  </button>
+                  
+                  <div className="flex items-center gap-2">
+                    {Array.from({ length: getTotalPages() }, (_, i) => i + 1).map(page => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-10 h-10 rounded-xl font-semibold transition-all duration-300 ${
+                          currentPage === page
+                            ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 text-white'
+                            : 'bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:border-slate-600'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                  
+                  <button
+                    onClick={() => setCurrentPage(Math.min(getTotalPages(), currentPage + 1))}
+                    disabled={currentPage === getTotalPages()}
+                    className="px-4 py-2 rounded-xl bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:border-slate-600 hover:bg-slate-700/50 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    Next →
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
