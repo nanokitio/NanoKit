@@ -166,9 +166,7 @@ export default function Home() {
             <span className="block text-white drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
               Where AI-crafted
             </span>
-            <span className="block bg-gradient-to-r from-[#FF6B35] via-[#F72585] to-[#7209B7] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient" style={{
-              filter: 'drop-shadow(0 0 20px rgba(247, 37, 133, 0.6))'
-            }}>
+            <span className="block text-white drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
               visions
             </span>
             <span className="block text-white drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
