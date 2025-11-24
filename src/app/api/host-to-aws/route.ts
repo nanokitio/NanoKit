@@ -125,9 +125,12 @@ let html = rawHtml
       : `https://${bucketName}.s3.${awsRegion}.amazonaws.com`
     
     // Fix iframe and resource paths to point to production (now publicly accessible)
-    const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nanokit.io'
+    const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.nanokit.io'
     html = html.replace(/src="\/templates\//g, `src="${productionUrl}/templates/`)
     html = html.replace(/href="\/templates\//g, `href="${productionUrl}/templates/`)
+    
+    // Also handle FisherMan Slot game path (t9 template)
+    html = html.replace(/src="\/FisherMan\s+Slot\//g, `src="${productionUrl}/FisherMan%20Slot/`)
 
     // Upload HTML to S3 (bucket policy makes it public)
     await s3Client.send(
