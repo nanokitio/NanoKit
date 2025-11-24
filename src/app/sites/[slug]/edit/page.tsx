@@ -989,7 +989,11 @@ export default function SiteEditorPage() {
       setDownloadEmail('')
       setDomainLock('')
       
-      alert(`🚀 Prelander Hosted on AWS!\n\n🔗 LIVE URL:\n${data.hostedUrl}\n\nYour prelander is now live and accessible worldwide!\n\nFEATURES:\n✅ Hosted on Amazon S3\n✅ Code obfuscation & protection\n✅ Affiliate fingerprinting\n✅ Anti-screenshot protection\n${domainLock ? `✅ Domain locked to: ${domainLock}\n` : ''}✅ CDN delivery (fast loading)\n\nNEXT STEPS:\n1. Check your email for the live URL\n2. Test your prelander\n3. Share with your audience\n4. Monitor performance in dashboard\n\n📧 Confirmation email sent to ${downloadEmail}\n\n🎉 Your prelander is ready to convert!`)
+      // Show success message
+      alert(`🚀 Prelander Hosted Successfully!\n\n✅ Your prelander is now live on AWS S3\n📧 Confirmation email sent to ${downloadEmail}\n\n🌐 Opening your live prelander in a new tab...`)
+      
+      // Open the hosted URL in a new tab
+      window.open(data.hostedUrl, '_blank')
       
     } catch (error: any) {
       console.error('AWS hosting error:', error)
