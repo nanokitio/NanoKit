@@ -79,20 +79,50 @@ export async function POST(request: NextRequest) {
     const s3Key = `${user.id}/${slug}-${timestamp}/index.html`
     const s3KeyCSS = `${user.id}/${slug}-${timestamp}/style.css`
 
-    // Use the saved HTML from database (the exact template the user sees)
-    let html = site.generated_html
-    let css = site.generated_css || ''
+    // Check if we need to regenerate HTML
+    // If currentData has a different templateId than saved, or no HTML saved, regenerate
+    const needsRegeneration = !site.generated_html || 
+                              (currentData?.templateId && currentData.templateId !== site.template_id)
     
-    // If no HTML saved, generate it
-    if (!html) {
-      const { html: generatedHtml, css: generatedCss } = await generateSecurePrelanderWithFingerprint(
-        site,
-        user.id,
-        domainLock,
-        currentData
-      )
+    let html: string
+    let css: string
+    
+    if (needsRegeneration) {
+      // Regenerate HTML with current editor data
+      console.log('Regenerating HTML for template:', currentData?.templateId || site.template_id)
+      
+      const templateData = {
+        templateId: currentData?.templateId || site.template_id || 't17',
+        headline: currentData?.headline || site.headline,
+        subheadline: currentData?.subheadline || site.subheadline,
+        cta: currentData?.cta || site.cta,
+        ctaUrl: currentData?.ctaUrl || site.cta_url,
+        logo: currentData?.logoUrl || site.logo_url,
+        brandName: currentData?.brandName || site.brand_name,
+        colors: {
+          primary: currentData?.primaryColor || site.primary_color || '#667eea',
+          secondary: currentData?.secondaryColor || site.secondary_color || '#764ba2',
+          accent: currentData?.accentColor || site.accent_color || '#ffd700'
+        },
+        // Template-specific properties
+        popupTitle: currentData?.popupTitle || site.popup_title,
+        popupMessage: currentData?.popupMessage || site.popup_message,
+        popupPrize: currentData?.popupPrize || site.popup_prize,
+        wheelValues: currentData?.wheelValues || site.wheel_values,
+        backgroundColor: currentData?.backgroundColor || site.background_color,
+        backgroundImage: currentData?.backgroundImage || site.background_image,
+        gameBalance: currentData?.gameBalance || site.game_balance
+      }
+      
+      const generatedHtml = generateTemplateHTML(templateData)
+      const generatedCss = ''  // CSS is embedded in HTML for templates
       html = generatedHtml
-      css = generatedCss
+      css = generatedCss || ''
+    } else {
+      // Use saved HTML from database
+      console.log('Using saved HTML from database')
+      html = site.generated_html
+      css = site.generated_css || ''
     }
     
     // Fix iframe paths to point to production
