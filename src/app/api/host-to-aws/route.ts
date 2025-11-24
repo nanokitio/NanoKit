@@ -115,12 +115,19 @@ const config: any = {
 const { html: rawHtml } = renderFunction(config)
 let html = rawHtml
     
-    // Fix iframe paths to point to production
+    const bucketName = process.env.AWS_S3_BUCKET || 'landertag-hosting'
+    const awsRegion = process.env.AWS_REGION || 'us-east-1'
+    const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN
+    
+    // Base URL for S3 hosted files
+    const baseUrl = cloudFrontDomain 
+      ? `https://${cloudFrontDomain}` 
+      : `https://${bucketName}.s3.${awsRegion}.amazonaws.com`
+    
+    // Fix iframe and resource paths to point to production (now publicly accessible)
     const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nanokit.io'
     html = html.replace(/src="\/templates\//g, `src="${productionUrl}/templates/`)
     html = html.replace(/href="\/templates\//g, `href="${productionUrl}/templates/`)
-
-    const bucketName = process.env.AWS_S3_BUCKET || 'landertag-hosting'
 
     // Upload HTML to S3 with public read access
     await s3Client.send(
@@ -138,13 +145,6 @@ let html = rawHtml
     // (keeping this section for backward compatibility if needed in future)
 
     // Generate public URLs - use S3 regional endpoint (no SSL issues)
-    const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN
-    const awsRegion = process.env.AWS_REGION || 'us-east-1'
-    
-    // Use S3 regional endpoint which supports HTTPS correctly
-    const baseUrl = cloudFrontDomain 
-      ? `https://${cloudFrontDomain}` 
-      : `https://${bucketName}.s3.${awsRegion}.amazonaws.com`
     const hostedUrl = `${baseUrl}/${s3Key}`
 
     // Save deployment record to database

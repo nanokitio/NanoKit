@@ -2,6 +2,45 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
+  // Handle game files - allow public access without authentication
+  if (request.nextUrl.pathname.startsWith('/templates/game/')) {
+    const response = NextResponse.next()
+    const pathname = request.nextUrl.pathname
+    
+    // Set proper MIME types
+    if (pathname.endsWith('.html')) {
+      response.headers.set('Content-Type', 'text/html; charset=utf-8')
+    } else if (pathname.endsWith('.js')) {
+      response.headers.set('Content-Type', 'application/javascript')
+    } else if (pathname.endsWith('.json')) {
+      response.headers.set('Content-Type', 'application/json')
+    } else if (pathname.endsWith('.png')) {
+      response.headers.set('Content-Type', 'image/png')
+    } else if (pathname.endsWith('.jpg') || pathname.endsWith('.jpeg')) {
+      response.headers.set('Content-Type', 'image/jpeg')
+    } else if (pathname.endsWith('.webp')) {
+      response.headers.set('Content-Type', 'image/webp')
+    } else if (pathname.endsWith('.ogg')) {
+      response.headers.set('Content-Type', 'audio/ogg')
+    } else if (pathname.endsWith('.mp3')) {
+      response.headers.set('Content-Type', 'audio/mpeg')
+    } else if (pathname.endsWith('.mp4')) {
+      response.headers.set('Content-Type', 'video/mp4')
+    } else if (pathname.endsWith('.ttf') || pathname.endsWith('.woff') || pathname.endsWith('.woff2')) {
+      response.headers.set('Content-Type', 'font/' + pathname.split('.').pop())
+    }
+    
+    // Add CORS headers for cross-origin requests from S3
+    response.headers.set('Access-Control-Allow-Origin', '*')
+    response.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS')
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type')
+    
+    // Add cache headers
+    response.headers.set('Cache-Control', 'public, max-age=3600')
+    
+    return response
+  }
+  
   // Handle Construct 3 game files with proper MIME types
   if (request.nextUrl.pathname.startsWith('/CastleSlot/')) {
     const response = NextResponse.next()
