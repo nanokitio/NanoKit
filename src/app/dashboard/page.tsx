@@ -375,7 +375,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Header */}
-      <header className="relative z-10 bg-dark-surface/80 backdrop-blur-xl border-b border-neon-primary/20 shadow-neon">
+      <header className="relative z-50 bg-dark-surface/80 backdrop-blur-xl border-b border-neon-primary/20 shadow-neon">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center space-x-6">
@@ -455,7 +455,7 @@ export default function DashboardPage() {
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="relative z-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Debug info */}
         {process.env.NODE_ENV === 'development' && (
           <div className="mb-4 p-4 bg-gray-800 rounded-lg text-white text-sm">
