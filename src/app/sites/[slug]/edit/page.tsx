@@ -965,6 +965,7 @@ export default function SiteEditorPage() {
 
     setDownloading(true)
     try {
+      // Send current editor state to generate fresh HTML
       const response = await fetch('/api/host-to-aws', {
         method: 'POST',
         headers: {
@@ -973,7 +974,20 @@ export default function SiteEditorPage() {
         body: JSON.stringify({
           slug,
           email: downloadEmail,
-          domainLock: domainLock || undefined
+          domainLock: domainLock || undefined,
+          // Send current editor values
+          currentData: {
+            templateId,
+            headline,
+            subheadline,
+            cta,
+            ctaUrl,
+            primaryColor,
+            secondaryColor,
+            accentColor,
+            logoUrl,
+            brandName: site?.brand_name
+          }
         }),
       })
 

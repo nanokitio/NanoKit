@@ -15,7 +15,7 @@ const s3Client = new S3Client({
 
 export async function POST(request: NextRequest) {
   try {
-    const { slug, email, domainLock } = await request.json()
+    const { slug, email, domainLock, currentData } = await request.json()
 
     if (!slug || !email) {
       return NextResponse.json(
@@ -60,10 +60,12 @@ export async function POST(request: NextRequest) {
     const s3KeyCSS = `${user.id}/${slug}-${timestamp}/style.css`
 
     // Generate protected prelander with fingerprinting
+    // Use currentData from editor if available, otherwise fall back to site data
     const { html, css } = await generateSecurePrelanderWithFingerprint(
       site,
       user.id,
-      domainLock
+      domainLock,
+      currentData
     )
 
     const bucketName = process.env.AWS_S3_BUCKET || 'landertag'
@@ -157,20 +159,26 @@ export async function POST(request: NextRequest) {
 async function generateSecurePrelanderWithFingerprint(
   site: any,
   userId: string,
-  domainLock?: string
+  domainLock?: string,
+  currentData?: any
 ) {
+  // Use currentData from editor if available, otherwise use site data
+  const data = currentData || site
+  
   // Prepare content with user fingerprint
   const contentData = {
-    brandName: site.brand_name,
-    headline: site.headline,
-    cta: site.cta,
-    ctaUrl: site.cta_url,
+    brandName: data.brandName || site.brand_name,
+    headline: data.headline || site.headline,
+    subheadline: data.subheadline || site.subheadline,
+    cta: data.cta || site.cta,
+    ctaUrl: data.ctaUrl || site.cta_url,
+    templateId: data.templateId || site.template_id || '1',
     colors: {
-      primary: site.primary_color,
-      secondary: site.secondary_color,
-      accent: site.accent_color,
+      primary: data.primaryColor || site.primary_color,
+      secondary: data.secondaryColor || site.secondary_color,
+      accent: data.accentColor || site.accent_color,
     },
-    logo: site.logo_url,
+    logo: data.logoUrl || site.logo_url,
     html: site.generated_html || generateDefaultHTML(site),
     // Hidden fingerprint
     __aff: userId,
@@ -204,8 +212,8 @@ async function generateSecurePrelanderWithFingerprint(
   }).getObfuscatedCode()
 
   // Generate HTML with obfuscated JS
-  const html = generateSecureHTML(obfuscatedJS, site.brand_name)
-  const css = generateCSS()
+  const html = generateSecureHTML(obfuscatedJS, contentData)
+  const css = generateCSS(contentData.colors)
 
   return { html, css }
 }
@@ -374,7 +382,9 @@ function generateFingerprintedJS(
   `.trim()
 }
 
-function generateSecureHTML(obfuscatedJS: string, brandName: string): string {
+function generateSecureHTML(obfuscatedJS: string, contentData: any): string {
+  const isSpinTemplate = contentData.templateId === '3'
+  
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -382,7 +392,13 @@ function generateSecureHTML(obfuscatedJS: string, brandName: string): string {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="PrelanderAI">
     <meta name="robots" content="noindex, nofollow">
-    <title>${brandName}</title>
+    <title>${contentData.brandName}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
     <style>
         /* Loading screen styles */
@@ -437,13 +453,13 @@ ${obfuscatedJS}
 </html>`
 }
 
-function generateCSS(): string {
+function generateCSS(colors: any): string {
   return `
 /* Landing Page Styles - PrelanderAI */
 :root {
-    --primary-color: #4a90e2;
-    --secondary-color: #7b68ee;
-    --accent-color: #ffd700;
+    --primary-color: ${colors.primary || '#4a90e2'};
+    --secondary-color: ${colors.secondary || '#7b68ee'};
+    --accent-color: ${colors.accent || '#ffd700'};
 }
 
 * {
@@ -453,7 +469,7 @@ function generateCSS(): string {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
     color: #333;
     background: #f8f9fa;
@@ -472,10 +488,15 @@ body {
     text-align: center;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+}
+
 .hero h1 {
     font-size: 48px;
     font-weight: 700;
     margin-bottom: 20px;
+    font-family: 'Poppins', sans-serif;
 }
 
 .cta-button {
