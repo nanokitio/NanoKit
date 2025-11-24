@@ -986,7 +986,14 @@ export default function SiteEditorPage() {
             secondaryColor,
             accentColor,
             logoUrl,
-            brandName: site?.brand_name
+            brandName: site?.brand_name,
+            popupTitle,
+            popupMessage,
+            popupPrize,
+            wheelValues,
+            backgroundColor,
+            backgroundImage,
+            gameBalance
           }
         }),
       })

@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 // @ts-ignore - javascript-obfuscator doesn't have perfect types
 import JavaScriptObfuscator from 'javascript-obfuscator'
+import { templates } from '@/templates'
+import { BrandConfig } from '@/lib/types'
 
 // Initialize S3 Client
 const s3Client = new S3Client({
@@ -548,154 +550,55 @@ body {
 }
 
 function generateTemplateHTML(data: any): string {
-  const templateId = data.templateId || '1'
+  const templateId = data.templateId || 't17'
   
-  // Template 3: Spin to Win
-  if (templateId === '3') {
-    return `
-    <div style="min-height: 100vh; background: linear-gradient(135deg, ${data.colors.primary} 0%, ${data.colors.secondary} 100%); display: flex; align-items: center; justify-content: center; padding: 20px;">
-      <div style="background: white; border-radius: 20px; padding: 40px; max-width: 600px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-        ${data.logo ? `<img src="${data.logo}" alt="Logo" style="max-width: 150px; margin-bottom: 30px;">` : ''}
-        <h1 style="font-family: 'Poppins', sans-serif; font-size: 36px; font-weight: 700; color: #1a202c; margin-bottom: 15px;">${data.headline || 'Spin to Win!'}</h1>
-        ${data.subheadline ? `<p style="font-size: 18px; color: #4a5568; margin-bottom: 30px;">${data.subheadline}</p>` : ''}
-        
-        <div id="wheel-container" style="position: relative; width: 300px; height: 300px; margin: 30px auto;">
-          <canvas id="wheel" width="300" height="300" style="border-radius: 50%; box-shadow: 0 10px 30px rgba(0,0,0,0.2);"></canvas>
-          <div id="spin-button" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: 700; font-size: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 10; font-family: 'Poppins', sans-serif;">SPIN</div>
-        </div>
-        
-        <a href="${data.ctaUrl || '#'}" id="claim-button" style="display: inline-block; background: ${data.colors.accent}; color: #1a202c; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 18px; margin-top: 20px; opacity: 0; pointer-events: none; transition: all 0.3s ease; font-family: 'Poppins', sans-serif;">${data.cta || 'Claim Prize'}</a>
-      </div>
-    </div>
-    
-    <script>
-      (function() {
-        var canvas = document.getElementById('wheel');
-        var ctx = canvas.getContext('2d');
-        var prizes = ['10% OFF', '20% OFF', '30% OFF', 'FREE ITEM', '15% OFF', '5% OFF'];
-        var colors = ['${data.colors.primary}', '${data.colors.secondary}', '${data.colors.accent}', '${data.colors.primary}', '${data.colors.secondary}', '${data.colors.accent}'];
-        var startAngle = 0;
-        var arc = Math.PI / (prizes.length / 2);
-        var spinTimeout = null;
-        var spinAngleStart = Math.random() * 10 + 10;
-        var spinTime = 0;
-        var spinTimeTotal = Math.random() * 3 + 4 * 1000;
-        
-        function drawWheel() {
-          var outsideRadius = 140;
-          var insideRadius = 30;
-          ctx.clearRect(0, 0, 300, 300);
-          ctx.strokeStyle = 'white';
-          ctx.lineWidth = 2;
-          
-          for (var i = 0; i < prizes.length; i++) {
-            var angle = startAngle + i * arc;
-            ctx.fillStyle = colors[i % colors.length];
-            ctx.beginPath();
-            ctx.arc(150, 150, outsideRadius, angle, angle + arc, false);
-            ctx.arc(150, 150, insideRadius, angle + arc, angle, true);
-            ctx.fill();
-            ctx.stroke();
-            ctx.save();
-            
-            ctx.fillStyle = 'white';
-            ctx.font = 'bold 14px Poppins, sans-serif';
-            ctx.translate(150 + Math.cos(angle + arc / 2) * (outsideRadius + insideRadius) / 2, 150 + Math.sin(angle + arc / 2) * (outsideRadius + insideRadius) / 2);
-            ctx.rotate(angle + arc / 2 + Math.PI / 2);
-            var text = prizes[i];
-            ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
-            ctx.restore();
-          }
-          
-          // Draw arrow
-          ctx.fillStyle = '#1a202c';
-          ctx.beginPath();
-          ctx.moveTo(150 - 4, 10);
-          ctx.lineTo(150 + 4, 10);
-          ctx.lineTo(150 + 4, 25);
-          ctx.lineTo(150 + 9, 25);
-          ctx.lineTo(150 + 0, 35);
-          ctx.lineTo(150 - 9, 25);
-          ctx.lineTo(150 - 4, 25);
-          ctx.lineTo(150 - 4, 10);
-          ctx.fill();
-        }
-        
-        function spin() {
-          spinAngleStart = Math.random() * 10 + 10;
-          spinTime = 0;
-          spinTimeTotal = Math.random() * 3 + 4 * 1000;
-          rotateWheel();
-        }
-        
-        function rotateWheel() {
-          spinTime += 30;
-          if (spinTime >= spinTimeTotal) {
-            stopRotateWheel();
-            return;
-          }
-          var spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
-          startAngle += (spinAngle * Math.PI / 180);
-          drawWheel();
-          spinTimeout = setTimeout(rotateWheel, 30);
-        }
-        
-        function stopRotateWheel() {
-          clearTimeout(spinTimeout);
-          var degrees = startAngle * 180 / Math.PI + 90;
-          var arcd = arc * 180 / Math.PI;
-          var index = Math.floor((360 - degrees % 360) / arcd);
-          var prize = prizes[index];
-          
-          setTimeout(function() {
-            alert('🎉 Congratulations! You won: ' + prize);
-            document.getElementById('claim-button').style.opacity = '1';
-            document.getElementById('claim-button').style.pointerEvents = 'auto';
-          }, 500);
-        }
-        
-        function easeOut(t, b, c, d) {
-          var ts = (t /= d) * t;
-          var tc = ts * t;
-          return b + c * (tc + -3 * ts + 3 * t);
-        }
-        
-        document.getElementById('spin-button').addEventListener('click', function() {
-          this.style.pointerEvents = 'none';
-          spin();
-        });
-        
-        drawWheel();
-      })();
-    </script>
-    `.trim()
-  }
+  // Get the template renderer
+  const template = templates[templateId as keyof typeof templates]
   
-  // Template 2: Modern Gradient
-  if (templateId === '2') {
+  if (!template) {
+    // Fallback to simple HTML if template not found
     return `
-    <div style="min-height: 100vh; background: linear-gradient(135deg, ${data.colors.primary} 0%, ${data.colors.secondary} 100%); display: flex; align-items: center; justify-content: center; padding: 20px;">
-      <div style="text-align: center; max-width: 800px;">
-        ${data.logo ? `<img src="${data.logo}" alt="Logo" style="max-width: 200px; margin-bottom: 40px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));">` : ''}
-        <h1 style="font-family: 'Poppins', sans-serif; font-size: 56px; font-weight: 800; color: white; margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.3);">${data.headline || 'Welcome'}</h1>
-        ${data.subheadline ? `<p style="font-size: 22px; color: rgba(255,255,255,0.95); margin-bottom: 40px; text-shadow: 0 2px 5px rgba(0,0,0,0.2);">${data.subheadline}</p>` : ''}
-        <a href="${data.ctaUrl || '#'}" style="display: inline-block; background: ${data.colors.accent}; color: #1a202c; padding: 18px 50px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; font-family: 'Poppins', sans-serif;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 40px rgba(0,0,0,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.3)';">${data.cta || 'Get Started'}</a>
+    <div style="min-height: 100vh; background: ${data.colors.primary}; display: flex; align-items: center; justify-content: center; padding: 20px;">
+      <div style="text-align: center; max-width: 700px;">
+        ${data.logo ? `<img src="${data.logo}" alt="Logo" style="max-width: 180px; margin-bottom: 30px;">` : ''}
+        <h1 style="font-family: 'Poppins', sans-serif; font-size: 48px; font-weight: 700; color: white; margin-bottom: 15px;">${data.headline || data.brandName || 'Welcome'}</h1>
+        ${data.subheadline ? `<p style="font-size: 20px; color: rgba(255,255,255,0.9); margin-bottom: 35px;">${data.subheadline}</p>` : ''}
+        <a href="${data.ctaUrl || '#'}" style="display: inline-block; background: ${data.colors.accent}; color: #1a202c; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 18px;">${data.cta || 'Get Started'}</a>
       </div>
     </div>
     `.trim()
   }
   
-  // Template 1: Classic Hero (default)
-  return `
-  <div style="min-height: 100vh; background: ${data.colors.primary}; display: flex; align-items: center; justify-content: center; padding: 20px;">
-    <div style="text-align: center; max-width: 700px;">
-      ${data.logo ? `<img src="${data.logo}" alt="Logo" style="max-width: 180px; margin-bottom: 30px;">` : ''}
-      <h1 style="font-family: 'Poppins', sans-serif; font-size: 48px; font-weight: 700; color: white; margin-bottom: 15px;">${data.headline || data.brandName || 'Welcome'}</h1>
-      ${data.subheadline ? `<p style="font-size: 20px; color: rgba(255,255,255,0.9); margin-bottom: 35px;">${data.subheadline}</p>` : ''}
-      <a href="${data.ctaUrl || '#'}" style="display: inline-block; background: ${data.colors.accent}; color: #1a202c; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 18px; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-family: 'Poppins', sans-serif;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.2)';">${data.cta || 'Get Started'}</a>
-    </div>
-  </div>
-  `.trim()
+  // Build config for template
+  const config: any = {
+    brandName: data.brandName,
+    copy: {
+      headline: data.headline,
+      subheadline: data.subheadline,
+      cta: data.cta
+    },
+    ctaUrl: data.ctaUrl,
+    logoUrl: data.logo,
+    colors: data.colors,
+    popupTitle: data.popupTitle,
+    popupMessage: data.popupMessage,
+    popupPrize: data.popupPrize,
+    wheelValues: data.wheelValues,
+    backgroundColor: data.backgroundColor,
+    backgroundImage: data.backgroundImage
+  }
+  
+  // Render using real template
+  const { html } = template.renderTemplate(config)
+  
+  // Replace relative iframe URLs with absolute URLs pointing to nanokit.io
+  const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nanokit.io'
+  const updatedHtml = html.replace(
+    /src="\/templates\//g,
+    `src="${productionUrl}/templates/`
+  )
+  
+  return updatedHtml
 }
 
 function generateDefaultHTML(site: any): string {
