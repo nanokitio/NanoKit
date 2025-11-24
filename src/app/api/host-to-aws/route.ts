@@ -79,46 +79,53 @@ export async function POST(request: NextRequest) {
     const s3Key = `${user.id}/${slug}-${timestamp}/index.html`
     const s3KeyCSS = `${user.id}/${slug}-${timestamp}/style.css`
 
-    // Use the saved generated_html from database (the EXACT HTML from the editor)
-    let html = site.generated_html
+    // Check if template changed or no HTML exists
+    const templateChanged = currentData?.templateId && currentData.templateId !== site.template_id
+    let html: string
     
-    // If no HTML saved or template changed, we need to regenerate first
-    if (!html || (currentData?.templateId && currentData.templateId !== site.template_id)) {
-      console.log('No HTML or template changed, calling /api/regenerate first...')
+    if (templateChanged || !site.generated_html) {
+      // Template changed or no HTML - generate fresh HTML with correct template
+      console.log('Template changed or no HTML, generating with template:', currentData?.templateId || site.template_id)
       
-      // Call regenerate API to create the HTML properly
-      try {
-        const regenerateResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/regenerate`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ slug }),
-        })
-        
-        if (regenerateResponse.ok) {
-          // Re-fetch site data with new HTML
-          const { data: updatedSite } = await supabase
-            .from('sites')
-            .select('*')
-            .eq('slug', slug)
-            .single()
-          
-          if (updatedSite?.generated_html) {
-            html = updatedSite.generated_html
-          }
-        }
-      } catch (e) {
-        console.error('Failed to regenerate HTML:', e)
+      const activeTemplateId = currentData?.templateId || site.template_id || 't17'
+      const renderFunction = templateRenderers[activeTemplateId]
+      
+      if (!renderFunction) {
+        return NextResponse.json(
+          { error: `Template ${activeTemplateId} not found` },
+          { status: 400 }
+        )
       }
-    }
-    
-    // If still no HTML, return error
-    if (!html) {
-      return NextResponse.json(
-        { error: 'No HTML available. Please save the site first in the editor.' },
-        { status: 400 }
-      )
+      
+      // Build config for template
+      const config: any = {
+        brandName: currentData?.brandName || site.brand_name,
+        copy: {
+          headline: currentData?.headline || site.headline,
+          subheadline: currentData?.subheadline || site.subheadline,
+          cta: currentData?.cta || site.cta
+        },
+        ctaUrl: currentData?.ctaUrl || site.cta_url,
+        logoUrl: currentData?.logoUrl || site.logo_url,
+        colors: {
+          primary: currentData?.primaryColor || site.primary_color || '#667eea',
+          secondary: currentData?.secondaryColor || site.secondary_color || '#764ba2',
+          accent: currentData?.accentColor || site.accent_color || '#ffd700'
+        },
+        popupTitle: currentData?.popupTitle || site.popup_title,
+        popupMessage: currentData?.popupMessage || site.popup_message,
+        popupPrize: currentData?.popupPrize || site.popup_prize,
+        wheelValues: currentData?.wheelValues || site.wheel_values,
+        backgroundColor: currentData?.backgroundColor || site.background_color,
+        backgroundImage: currentData?.backgroundImage || site.background_image
+      }
+      
+      const result = renderFunction(config)
+      html = result.html
+    } else {
+      // Use saved HTML from database (template hasn't changed)
+      console.log('Using saved HTML from database for template:', site.template_id)
+      html = site.generated_html
     }
     
     // Fix iframe paths to point to production
