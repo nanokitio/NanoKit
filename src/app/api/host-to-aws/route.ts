@@ -90,11 +90,14 @@ export async function POST(request: NextRequest) {
       })
     )
 
-    // Generate public URLs using CloudFront if configured, otherwise S3 direct
+    // Generate public URLs - use S3 regional endpoint (no SSL issues)
     const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN
+    const awsRegion = process.env.AWS_REGION || 'us-east-1'
+    
+    // Use S3 regional endpoint which supports HTTPS correctly
     const baseUrl = cloudFrontDomain 
       ? `https://${cloudFrontDomain}` 
-      : `https://${bucketName}.s3.amazonaws.com`
+      : `https://${bucketName}.s3.${awsRegion}.amazonaws.com`
     const hostedUrl = `${baseUrl}/${s3Key}`
 
     // Save deployment record to database
