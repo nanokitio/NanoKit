@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/utils'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import { Site } from '@/lib/types'
+import { CreditCard, FileText, LogOut, Search, BarChart3, Rocket, Download, Archive, Eye, Edit, Trash2, Zap } from 'lucide-react'
 
 interface SiteWithVisits extends Site {
   visits?: { count: number }[]
@@ -401,8 +402,8 @@ export default function DashboardPage() {
                 </button>
                 
                 {showUserMenu && (
-                  <div className="absolute right-0 mt-2 w-56 bg-slate-800/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl z-50 overflow-hidden">
-                    <div className="p-3 border-b border-slate-700/50">
+                  <div className="absolute right-0 mt-2 w-64 bg-slate-800/95 backdrop-blur-xl border border-cyan-500/30 rounded-xl shadow-2xl shadow-cyan-500/20 z-[9999] overflow-hidden">
+                    <div className="p-4 border-b border-slate-700/50 bg-gradient-to-r from-slate-800 to-slate-700">
                       <p className="text-sm font-semibold text-white truncate">
                         {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'User'}
                       </p>
@@ -415,10 +416,10 @@ export default function DashboardPage() {
                           setShowUserMenu(false)
                           router.push('/subscription')
                         }}
-                        className="w-full px-4 py-2 text-left text-sm text-slate-300 hover:bg-slate-700/50 transition-colors flex items-center gap-3"
+                        className="w-full px-4 py-3 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-cyan-400 transition-all flex items-center gap-3 group"
                       >
-                        <span className="text-lg">📋</span>
-                        <span>My Plan & Subscription</span>
+                        <FileText className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300 transition-colors" style={{ filter: 'drop-shadow(0 0 8px rgba(34, 211, 238, 0.6))' }} />
+                        <span className="font-medium">My Plan & Subscription</span>
                       </button>
                       
                       <button
@@ -426,10 +427,10 @@ export default function DashboardPage() {
                           setShowUserMenu(false)
                           router.push('/payment-method')
                         }}
-                        className="w-full px-4 py-2 text-left text-sm text-slate-300 hover:bg-slate-700/50 transition-colors flex items-center gap-3"
+                        className="w-full px-4 py-3 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-purple-400 transition-all flex items-center gap-3 group"
                       >
-                        <span className="text-lg">💳</span>
-                        <span>Payment Method</span>
+                        <CreditCard className="w-5 h-5 text-purple-400 group-hover:text-purple-300 transition-colors" style={{ filter: 'drop-shadow(0 0 8px rgba(168, 85, 247, 0.6))' }} />
+                        <span className="font-medium">Payment Method</span>
                       </button>
                     </div>
                     
@@ -439,10 +440,10 @@ export default function DashboardPage() {
                           setShowUserMenu(false)
                           handleSignOut()
                         }}
-                        className="w-full px-4 py-3 text-left text-sm text-red-400 hover:bg-slate-700/50 transition-colors flex items-center gap-3"
+                        className="w-full px-4 py-3 text-left text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all flex items-center gap-3 group"
                       >
-                        <span className="text-lg">🚪</span>
-                        <span>Log Out</span>
+                        <LogOut className="w-5 h-5 text-red-400 group-hover:text-red-300 transition-colors" style={{ filter: 'drop-shadow(0 0 8px rgba(239, 68, 68, 0.6))' }} />
+                        <span className="font-medium">Log Out</span>
                       </button>
                     </div>
                   </div>
@@ -479,8 +480,8 @@ export default function DashboardPage() {
                 onClick={handleQuickCreate}
                 className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 text-lg px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105"
               >
-                <span className="flex items-center">
-                  <span className="mr-2">⚡</span>
+                <span className="flex items-center gap-2">
+                  <Zap className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))' }} />
                   Forge Your First Site
                 </span>
               </Button>
@@ -502,8 +503,8 @@ export default function DashboardPage() {
                   onClick={handleQuickCreate}
                   className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 font-semibold px-6 py-4 text-base"
                 >
-                  <span className="flex items-center">
-                    <span className="mr-2">⚡</span>
+                  <span className="flex items-center gap-2">
+                    <Zap className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))' }} />
                     Create New Site
                   </span>
                 </Button>
@@ -522,8 +523,8 @@ export default function DashboardPage() {
                     }}
                     className="w-full px-4 py-3 pl-12 bg-slate-900/60 border border-slate-700/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 backdrop-blur-sm transition-all duration-300"
                   />
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400">
-                    🔍
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-cyan-400">
+                    <Search className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 8px rgba(34, 211, 238, 0.6))' }} />
                   </div>
                 </div>
               </div>
@@ -537,9 +538,9 @@ export default function DashboardPage() {
                       const stats = getViewModeStats()
                       const count = stats[mode]
                       const icons = {
-                        all: '📊',
-                        published: '🚀',
-                        downloaded: '📥'
+                        all: <BarChart3 className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 211, 238, 0.5))' }} />,
+                        published: <Rocket className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 6px rgba(168, 85, 247, 0.5))' }} />,
+                        downloaded: <Download className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 211, 238, 0.5))' }} />
                       }
                       const labels = {
                         all: 'All Sites',
@@ -584,7 +585,7 @@ export default function DashboardPage() {
                     }`}
                   >
                     <span className="flex items-center space-x-2">
-                      <span className="text-lg">{showArchived ? '📂' : '🗄️'}</span>
+                      {showArchived ? <Archive className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 6px rgba(168, 85, 247, 0.5))' }} /> : <Archive className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 6px rgba(100, 116, 139, 0.5))' }} />}
                       <span>{showArchived ? 'Show Active' : 'Show Archived'}</span>
                     </span>
                   </button>
@@ -706,8 +707,9 @@ export default function DashboardPage() {
                           {visibleColumns.downloads && (
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
                               {site.is_downloaded ? (
-                                <span className="flex items-center gap-1">
-                                  📥 {site.download_count || 1}
+                                <span className="flex items-center gap-2">
+                                  <Download className="w-4 h-4 text-cyan-400" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.5))' }} />
+                                  {site.download_count || 1}
                                 </span>
                               ) : (
                                 <span className="text-gray-500">-</span>
@@ -726,27 +728,43 @@ export default function DashboardPage() {
                                 className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors duration-200"
                                 target="_blank"
                               >
-                                👁️ Preview
+                                <span className="flex items-center gap-1.5">
+                                  <Eye className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.5))' }} />
+                                  Preview
+                                </span>
                               </Link>
                               <Link
                                 href={`/sites/${site.slug}/edit`}
                                 className="text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200"
                               >
-                                ✏️ Edit
+                                <span className="flex items-center gap-1.5">
+                                  <Edit className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
+                                  Edit
+                                </span>
                               </Link>
                               <button
                                 onClick={() => handleArchiveToggle(site)}
                                 disabled={archivingId === site.id}
                                 className="text-yellow-400 hover:text-yellow-300 font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
-                                {archivingId === site.id ? 'Processing...' : (site.status === 'draft' ? '📂 Activate' : '🗄️ Archive')}
+                                {archivingId === site.id ? 'Processing...' : (
+                                  <span className="flex items-center gap-1.5">
+                                    <Archive className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(234, 179, 8, 0.5))' }} />
+                                    {site.status === 'draft' ? 'Activate' : 'Archive'}
+                                  </span>
+                                )}
                               </button>
                               <button
                                 onClick={() => handleDeleteClick(site)}
                                 disabled={deletingId === site.id}
                                 className="text-red-400 hover:text-red-300 font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
-                                {deletingId === site.id ? 'Deleting...' : '🗑️ Delete'}
+                                {deletingId === site.id ? 'Deleting...' : (
+                                  <span className="flex items-center gap-1.5">
+                                    <Trash2 className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(239, 68, 68, 0.5))' }} />
+                                    Delete
+                                  </span>
+                                )}
                               </button>
                             </div>
                           </td>
