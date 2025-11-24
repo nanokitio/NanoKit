@@ -90,8 +90,11 @@ export async function POST(request: NextRequest) {
       })
     )
 
-    // Generate public URLs
-    const baseUrl = `https://${bucketName}.s3.amazonaws.com`
+    // Generate public URLs using CloudFront if configured, otherwise S3 direct
+    const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN
+    const baseUrl = cloudFrontDomain 
+      ? `https://${cloudFrontDomain}` 
+      : `https://${bucketName}.s3.amazonaws.com`
     const hostedUrl = `${baseUrl}/${s3Key}`
 
     // Save deployment record to database
