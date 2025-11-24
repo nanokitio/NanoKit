@@ -1140,64 +1140,53 @@ export default function SiteEditorPage() {
           </div>
         </div>
 
-      <div className="flex-1 flex">
+      <div className="flex-1 flex relative">
+        {/* Sidebar Toggle Button */}
+        <button
+          onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-50 bg-slate-800 border border-cyan-500/30 rounded-r-lg p-2 hover:bg-slate-700 transition-all"
+          style={{ left: isSidebarCollapsed ? '0' : '320px' }}
+        >
+          {isSidebarCollapsed ? <ChevronRight size={16} className="text-cyan-400" /> : <ChevronLeft size={16} className="text-cyan-400" />}
+        </button>
+
         {/* NetFusion Neon Left Panel - Enhanced */}
-        <div className="w-80 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 border-r-2 border-neon-primary/30 overflow-y-auto shadow-xl shadow-neon-primary/10 relative">
-          <div className="p-6 space-y-4">
+        <div className={`${isSidebarCollapsed ? 'w-0' : 'w-80'} bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 border-r border-cyan-500/30 overflow-y-auto shadow-xl shadow-cyan-500/10 relative transition-all duration-300`}>
+          <div className={`${isSidebarCollapsed ? 'hidden' : 'block'} p-6 space-y-4`}>
             
-            {/* NetFusion Quick Actions */}
-            <div data-tour="quick-actions" className="bg-darker-surface rounded-lg p-3 border border-neon-primary/20">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-medium text-neon-primary font-inter">Quick Actions</span>
-                <span className="text-xs text-text-muted">
-                  {Object.values(expandedSections).filter(v => v).length}/6 open
-                </span>
-              </div>
-              <div className="flex gap-2">
-                <button 
-                  onClick={expandAll}
-                  disabled={areAllExpanded}
-                  className={`flex-1 px-3 py-1.5 text-xs rounded transition-all ${
-                    areAllExpanded 
-                      ? 'bg-gray-800 text-gray-500 cursor-not-allowed' 
-                      : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:from-cyan-500 hover:to-blue-500'
-                  }`}
-                >
-                  ▼ Expand All
-                </button>
-                <button 
-                  onClick={collapseAll}
-                  disabled={areAllCollapsed}
-                  className={`flex-1 px-3 py-1.5 text-xs rounded transition-all ${
-                    areAllCollapsed 
-                      ? 'bg-gray-800 text-gray-500 cursor-not-allowed' 
-                      : 'bg-gray-700 text-white hover:bg-gray-600'
-                  }`}
-                >
-                  ▲ Collapse All
-                </button>
-              </div>
-              
-              {/* Win Popup Editor for Fortune Wheel templates */}
-              {(templateId === 't14' || templateId === 't15' || templateId === 't16' || templateId === 't17') && (
+            {/* Quick Tutorial */}
+            {showTour && (
+              <div data-tour="quick-actions" className="bg-slate-900/60 rounded-lg p-4 border border-cyan-500/30 relative">
                 <button
-                  onClick={() => setShowWinPopupEditor(!showWinPopupEditor)}
-                  className="w-full mt-2 px-3 py-1.5 text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded hover:from-purple-500 hover:to-pink-500 transition-all flex items-center justify-center gap-2"
+                  onClick={handleTourSkip}
+                  className="absolute top-2 right-2 text-slate-400 hover:text-red-400 transition-colors"
                 >
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                  {showWinPopupEditor ? 'Hide' : 'Edit'} Win Popup
+                  <X size={18} />
                 </button>
-              )}
-              
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm font-semibold text-cyan-400 font-inter">Quick Tutorial</span>
+                </div>
+                <button
+                  onClick={() => setShowTour(true)}
+                  className="w-full px-4 py-2 text-sm bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg hover:from-orange-500 hover:to-red-500 transition-all font-medium"
+                >
+                  🎯 Start Tutorial
+                </button>
+              </div>
+            )}
+            
+            {/* Win Popup Editor for Fortune Wheel templates */}
+            {(templateId === 't14' || templateId === 't15' || templateId === 't16' || templateId === 't17') && (
               <button
-                onClick={() => setShowTour(true)}
-                className="w-full mt-2 px-3 py-1.5 text-xs bg-gradient-to-r from-orange-600 to-red-600 text-white rounded hover:from-orange-500 hover:to-red-500 transition-all"
+                onClick={() => setShowWinPopupEditor(!showWinPopupEditor)}
+                className="w-full px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-500 hover:to-pink-500 transition-all flex items-center justify-center gap-2 font-medium"
               >
-                🎯 Show Tour
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                {showWinPopupEditor ? 'Hide' : 'Edit'} Win Popup
               </button>
-            </div>
+            )}
             
             {/* Vertical Section */}
             <div className="bg-gray-800 rounded-lg overflow-hidden">
@@ -1214,16 +1203,13 @@ export default function SiteEditorPage() {
               
               {expandedSections.vertical && (
                 <div className="p-4 space-y-4 border-t border-gray-700">
-                  <div className="bg-gray-900 rounded-lg p-3">
-                    <p className="text-xs text-gray-400">
-                      Select the industry vertical for your campaign
+                  <div className="bg-slate-900/60 rounded-lg p-3 border border-cyan-500/20">
+                    <p className="text-sm text-slate-300 font-medium">
+                      Choose Your Vertical
                     </p>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-gray-300 mb-2">
-                      Industry Vertical
-                    </label>
                     <select
                       value={vertical}
                       onChange={(e) => setVertical(e.target.value)}
@@ -1259,9 +1245,9 @@ export default function SiteEditorPage() {
               
               {expandedSections.template && (
                 <div className="p-4 space-y-4 border-t border-gray-700">
-                  <div className="bg-gray-900 rounded-lg p-3">
-                    <p className="text-xs text-gray-400">
-                      Choose the template design for your landing page
+                  <div className="bg-slate-900/60 rounded-lg p-3 border border-cyan-500/20">
+                    <p className="text-sm text-slate-300 font-medium">
+                      Select a template for your lander / asset
                     </p>
                   </div>
 
@@ -1377,9 +1363,9 @@ export default function SiteEditorPage() {
               
               {expandedSections.logo && (
                 <div className="p-4 space-y-4 border-t border-gray-700">
-                  <div className="bg-gray-900 rounded-lg p-3">
-                    <p className="text-xs text-gray-400">
-                      🎰 <strong className="text-cyan-300">Perfect for iGaming Affiliates:</strong> Add your casino partner's logo to build trust and brand recognition. The logo appears prominently at the top with an "Official Partner" badge.
+                  <div className="bg-slate-900/60 rounded-lg p-3 border border-cyan-500/20">
+                    <p className="text-sm text-slate-300 font-medium">
+                      Upload your brand logo
                     </p>
                   </div>
 
@@ -2128,25 +2114,25 @@ export default function SiteEditorPage() {
             <div className="flex items-center justify-center gap-2 mb-4">
               <button
                 onClick={() => setViewMode('desktop')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                className={`p-3 rounded-lg transition-all ${
                   viewMode === 'desktop'
                     ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg'
                     : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                 }`}
+                title="Desktop View"
               >
-                <Monitor size={18} />
-                <span className="font-semibold">Desktop</span>
+                <Monitor size={20} />
               </button>
               <button
                 onClick={() => setViewMode('mobile')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                className={`p-3 rounded-lg transition-all ${
                   viewMode === 'mobile'
                     ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg'
                     : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                 }`}
+                title="Mobile View"
               >
-                <Smartphone size={18} />
-                <span className="font-semibold">Mobile</span>
+                <Smartphone size={20} />
               </button>
             </div>
 
@@ -2170,20 +2156,6 @@ export default function SiteEditorPage() {
             ) : (
               // Template Preview Mode
               <div className="space-y-4">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-white">Template Preview</h3>
-                    <p className="text-sm text-gray-400 mt-1">Customize in real-time</p>
-                  </div>
-                  <button
-                    onClick={() => window.open(getPreviewUrl(), '_blank')}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors flex items-center gap-2"
-                  >
-                    <Eye size={16} />
-                    Open Full Size
-                  </button>
-                </div>
-
                 {/* Large Template Preview - Live with customizations */}
                 <ScreenshotProtection>
                   <div className="bg-gray-900 rounded-lg p-3 border border-gray-700">
@@ -2202,37 +2174,6 @@ export default function SiteEditorPage() {
                     </div>
                   </div>
                 </ScreenshotProtection>
-
-                {/* Customization Info */}
-                <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-700/50 rounded-lg p-4">
-                  <h4 className="text-sm font-semibold text-white mb-2">💡 Real-time Customization</h4>
-                  <div className="grid grid-cols-2 gap-3 text-xs text-gray-300">
-                    <div className="flex items-start gap-2">
-                      <span className="text-blue-400">🎨</span>
-                      <div>
-                        <strong>Colors:</strong> Change colors in the Colors section to see updates
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <span className="text-green-400">🖼️</span>
-                      <div>
-                        <strong>Logo:</strong> Upload or paste logo URL in Logo section
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <span className="text-purple-400">📝</span>
-                      <div>
-                        <strong>Content:</strong> Edit text and messages in Content section
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <span className="text-yellow-400">💾</span>
-                      <div>
-                        <strong>Save:</strong> Click "Save Changes" to apply and publish
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             )}
           </div>
