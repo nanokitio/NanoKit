@@ -1825,8 +1825,8 @@ export default function SiteEditorPage() {
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-400 mb-4 bg-blue-900/20 border border-blue-700/30 rounded-lg p-2">
-                          💡 Customize the background of your template
+                        <p className="text-sm text-slate-300 font-medium mb-4 bg-slate-900/60 border border-cyan-500/20 rounded-lg p-3">
+                          Upload Your Custom Background Image
                         </p>
                         
                         <div className="space-y-4">
