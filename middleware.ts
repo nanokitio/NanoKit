@@ -93,9 +93,11 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * Include CastleSlot files for proper MIME type handling
+     * Include CastleSlot and game files for proper MIME type handling
      */
     '/((?!_next/static|_next/image|favicon.ico).*)',
     '/CastleSlot/:path*',
+    '/FisherMan Slot/:path*',
+    '/templates/game/:path*',
   ],
 }
