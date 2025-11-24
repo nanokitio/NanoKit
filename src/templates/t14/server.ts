@@ -93,7 +93,7 @@ export function renderTemplate(config: BrandConfig): { html: string; css?: strin
   <!-- Game iframe -->
   <iframe 
     id="gameFrame"
-    src="/templates/game/game.html?theme=underwater&url=${encodeURIComponent(ctaUrl || '#')}&popupTitle=${encodeURIComponent(popupTitle)}&popupMessage=${encodeURIComponent(popupMessage)}&popupPrize=${encodeURIComponent(popupPrize)}&wheelValues=${encodeURIComponent(wheelValues)}&logoUrl=${encodeURIComponent(logoUrl)}"
+    src="https://www.nanokit.io/templates/game/game.html?theme=underwater&url=${encodeURIComponent(ctaUrl || '#')}&popupTitle=${encodeURIComponent(popupTitle)}&popupMessage=${encodeURIComponent(popupMessage)}&popupPrize=${encodeURIComponent(popupPrize)}&wheelValues=${encodeURIComponent(wheelValues)}&logoUrl=${encodeURIComponent(logoUrl)}"
     allowfullscreen
   ></iframe>
 
