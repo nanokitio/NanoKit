@@ -78,10 +78,42 @@ export async function POST(request: NextRequest) {
     const timestamp = Date.now()
     const s3Key = `${user.id}/${slug}-${timestamp}/index.html`
     const s3KeyCSS = `${user.id}/${slug}-${timestamp}/style.css`
+// Siempre usar el template seleccionado (currentData.templateId si existe)
+const activeTemplateId = (currentData?.templateId || site.template_id || 't17') as string
+const renderFunction = templateRenderers[activeTemplateId]
 
-    // Check if template changed or no HTML exists
-    const templateChanged = currentData?.templateId && currentData.templateId !== site.template_id
-    let html: string
+if (!renderFunction) {
+  return NextResponse.json(
+    { error: `Template ${activeTemplateId} not found` },
+    { status: 400 }
+  )
+}
+
+// Build config con prioridad a currentData
+const config: any = {
+  brandName: currentData?.brandName || site.brand_name,
+  copy: {
+    headline: currentData?.headline || site.headline,
+    subheadline: currentData?.subheadline || site.subheadline,
+    cta: currentData?.cta || site.cta,
+  },
+  ctaUrl: currentData?.ctaUrl || site.cta_url,
+  logoUrl: currentData?.logoUrl || site.logo_url,
+  colors: {
+    primary: currentData?.primaryColor || site.primary_color || '#667eea',
+    secondary: currentData?.secondaryColor || site.secondary_color || '#764ba2',
+    accent: currentData?.accentColor || site.accent_color || '#ffd700',
+  },
+  popupTitle: currentData?.popupTitle || site.popup_title,
+  popupMessage: currentData?.popupMessage || site.popup_message,
+  popupPrize: currentData?.popupPrize || site.popup_prize,
+  wheelValues: currentData?.wheelValues || site.wheel_values,
+  backgroundColor: currentData?.backgroundColor || site.background_color,
+  backgroundImage: currentData?.backgroundImage || site.background_image,
+}
+
+const { html: rawHtml } = renderFunction(config)
+let html = rawHtml
     
     if (templateChanged || !site.generated_html) {
       // Template changed or no HTML - generate fresh HTML with correct template
