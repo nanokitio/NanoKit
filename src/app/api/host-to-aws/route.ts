@@ -76,7 +76,6 @@ export async function POST(request: NextRequest) {
         Body: html,
         ContentType: 'text/html',
         CacheControl: 'public, max-age=31536000',
-        ACL: 'public-read',
       })
     )
 
@@ -88,7 +87,6 @@ export async function POST(request: NextRequest) {
         Body: css,
         ContentType: 'text/css',
         CacheControl: 'public, max-age=31536000',
-        ACL: 'public-read',
       })
     )
 
