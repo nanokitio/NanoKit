@@ -3,6 +3,7 @@ import { updateSession } from '@/lib/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
   // Handle game files - allow public access without authentication
+  // Updated: 2025-11-24 - Force redeploy for FisherMan Slot fix
   if (request.nextUrl.pathname.startsWith('/templates/game/') || 
       request.nextUrl.pathname.startsWith('/FisherMan Slot/')) {
     const response = NextResponse.next()
