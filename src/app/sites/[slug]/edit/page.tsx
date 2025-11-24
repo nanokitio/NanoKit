@@ -1130,6 +1130,14 @@ export default function SiteEditorPage() {
             </button>
             
             <button
+              onClick={() => setShowDownloadModal(true)}
+              className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white rounded-lg transition-all duration-300 shadow-lg shadow-purple-500/30 font-medium"
+            >
+              <Download size={18} />
+              <span className="hidden sm:inline">Download / Host</span>
+            </button>
+            
+            <button
               onClick={handlePublish}
               disabled={publishing}
               className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white rounded-lg transition-all duration-300 shadow-lg shadow-purple-500/30 font-medium disabled:opacity-50"
