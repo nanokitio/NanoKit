@@ -79,51 +79,35 @@ export async function POST(request: NextRequest) {
     const s3Key = `${user.id}/${slug}-${timestamp}/index.html`
     const s3KeyCSS = `${user.id}/${slug}-${timestamp}/style.css`
 
-    // Check if we need to regenerate HTML
-    // If currentData has a different templateId than saved, or no HTML saved, regenerate
-    const needsRegeneration = !site.generated_html || 
-                              (currentData?.templateId && currentData.templateId !== site.template_id)
+    // ALWAYS regenerate HTML to ensure we get the correct template
+    // Never use database HTML as it may be stale or incorrect
+    console.log('Generating HTML for template:', currentData?.templateId || site.template_id)
     
-    let html: string
-    let css: string
-    
-    if (needsRegeneration) {
-      // Regenerate HTML with current editor data
-      console.log('Regenerating HTML for template:', currentData?.templateId || site.template_id)
-      
-      const templateData = {
-        templateId: currentData?.templateId || site.template_id || 't17',
-        headline: currentData?.headline || site.headline,
-        subheadline: currentData?.subheadline || site.subheadline,
-        cta: currentData?.cta || site.cta,
-        ctaUrl: currentData?.ctaUrl || site.cta_url,
-        logo: currentData?.logoUrl || site.logo_url,
-        brandName: currentData?.brandName || site.brand_name,
-        colors: {
-          primary: currentData?.primaryColor || site.primary_color || '#667eea',
-          secondary: currentData?.secondaryColor || site.secondary_color || '#764ba2',
-          accent: currentData?.accentColor || site.accent_color || '#ffd700'
-        },
-        // Template-specific properties
-        popupTitle: currentData?.popupTitle || site.popup_title,
-        popupMessage: currentData?.popupMessage || site.popup_message,
-        popupPrize: currentData?.popupPrize || site.popup_prize,
-        wheelValues: currentData?.wheelValues || site.wheel_values,
-        backgroundColor: currentData?.backgroundColor || site.background_color,
-        backgroundImage: currentData?.backgroundImage || site.background_image,
-        gameBalance: currentData?.gameBalance || site.game_balance
-      }
-      
-      const generatedHtml = generateTemplateHTML(templateData)
-      const generatedCss = ''  // CSS is embedded in HTML for templates
-      html = generatedHtml
-      css = generatedCss || ''
-    } else {
-      // Use saved HTML from database
-      console.log('Using saved HTML from database')
-      html = site.generated_html
-      css = site.generated_css || ''
+    const templateData = {
+      templateId: currentData?.templateId || site.template_id || 't17',
+      headline: currentData?.headline || site.headline,
+      subheadline: currentData?.subheadline || site.subheadline,
+      cta: currentData?.cta || site.cta,
+      ctaUrl: currentData?.ctaUrl || site.cta_url,
+      logo: currentData?.logoUrl || site.logo_url,
+      brandName: currentData?.brandName || site.brand_name,
+      colors: {
+        primary: currentData?.primaryColor || site.primary_color || '#667eea',
+        secondary: currentData?.secondaryColor || site.secondary_color || '#764ba2',
+        accent: currentData?.accentColor || site.accent_color || '#ffd700'
+      },
+      // Template-specific properties
+      popupTitle: currentData?.popupTitle || site.popup_title,
+      popupMessage: currentData?.popupMessage || site.popup_message,
+      popupPrize: currentData?.popupPrize || site.popup_prize,
+      wheelValues: currentData?.wheelValues || site.wheel_values,
+      backgroundColor: currentData?.backgroundColor || site.background_color,
+      backgroundImage: currentData?.backgroundImage || site.background_image,
+      gameBalance: currentData?.gameBalance || site.game_balance
     }
+    
+    let html = generateTemplateHTML(templateData)
+    const css = ''  // CSS is embedded in HTML for templates
     
     // Fix iframe paths to point to production
     const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nanokit.io'
@@ -143,18 +127,8 @@ export async function POST(request: NextRequest) {
       })
     )
 
-    // Upload CSS to S3 if exists
-    if (css && css.trim()) {
-      await s3Client.send(
-        new PutObjectCommand({
-          Bucket: bucketName,
-          Key: s3KeyCSS,
-          Body: css,
-          ContentType: 'text/css; charset=utf-8',
-          CacheControl: 'public, max-age=3600'
-        })
-      )
-    }
+    // CSS is embedded in HTML for these templates, so we don't upload separately
+    // (keeping this section for backward compatibility if needed in future)
 
     // Generate public URLs - use S3 regional endpoint (no SSL issues)
     const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN
