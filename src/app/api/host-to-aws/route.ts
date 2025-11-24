@@ -115,51 +115,6 @@ const config: any = {
 const { html: rawHtml } = renderFunction(config)
 let html = rawHtml
     
-    if (templateChanged || !site.generated_html) {
-      // Template changed or no HTML - generate fresh HTML with correct template
-      console.log('Template changed or no HTML, generating with template:', currentData?.templateId || site.template_id)
-      
-      const activeTemplateId = currentData?.templateId || site.template_id || 't17'
-      const renderFunction = templateRenderers[activeTemplateId]
-      
-      if (!renderFunction) {
-        return NextResponse.json(
-          { error: `Template ${activeTemplateId} not found` },
-          { status: 400 }
-        )
-      }
-      
-      // Build config for template
-      const config: any = {
-        brandName: currentData?.brandName || site.brand_name,
-        copy: {
-          headline: currentData?.headline || site.headline,
-          subheadline: currentData?.subheadline || site.subheadline,
-          cta: currentData?.cta || site.cta
-        },
-        ctaUrl: currentData?.ctaUrl || site.cta_url,
-        logoUrl: currentData?.logoUrl || site.logo_url,
-        colors: {
-          primary: currentData?.primaryColor || site.primary_color || '#667eea',
-          secondary: currentData?.secondaryColor || site.secondary_color || '#764ba2',
-          accent: currentData?.accentColor || site.accent_color || '#ffd700'
-        },
-        popupTitle: currentData?.popupTitle || site.popup_title,
-        popupMessage: currentData?.popupMessage || site.popup_message,
-        popupPrize: currentData?.popupPrize || site.popup_prize,
-        wheelValues: currentData?.wheelValues || site.wheel_values,
-        backgroundColor: currentData?.backgroundColor || site.background_color,
-        backgroundImage: currentData?.backgroundImage || site.background_image
-      }
-      
-      const result = renderFunction(config)
-      html = result.html
-    } else {
-      // Use saved HTML from database (template hasn't changed)
-      console.log('Using saved HTML from database for template:', site.template_id)
-      html = site.generated_html
-    }
-    
     // Fix iframe paths to point to production
     const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nanokit.io'
     html = html.replace(/src="\/templates\//g, `src="${productionUrl}/templates/`)
