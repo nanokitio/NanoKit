@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Loader2, Save, Eye, ArrowLeft, Palette, Type, Image as ImageIcon, Link as LinkIcon, ChevronDown, ChevronUp, Layers, FileText, Scale, Download, Mail, Globe, Monitor, Smartphone } from 'lucide-react'
+import { Loader2, Save, Eye, ArrowLeft, Palette, Type, Image as ImageIcon, Link as LinkIcon, ChevronDown, ChevronUp, Layers, FileText, Scale, Download, Mail, Globe, Monitor, Smartphone, Undo2, Redo2, Edit3, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { NanoKitLogo } from '@/components/NanoKitLogo'
 import { EditorTour } from '@/components/EditorTour'
 import { getTemplateConfig, templateSupportsField } from '@/lib/template-config'
 import ScreenshotProtection from '@/components/ScreenshotProtection'
@@ -86,6 +87,12 @@ export default function SiteEditorPage() {
   const [domainLock, setDomainLock] = useState('')
   const [featuredPlayer, setFeaturedPlayer] = useState('')
   const [sportDirector, setSportDirector] = useState('')
+  const [brandName, setBrandName] = useState('')
+  const [isEditingTitle, setIsEditingTitle] = useState(false)
+  const [history, setHistory] = useState<any[]>([])
+  const [historyIndex, setHistoryIndex] = useState(-1)
+  const [lastSaved, setLastSaved] = useState<Date | null>(null)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
   const toggleSection = (section: 'vertical' | 'template' | 'logo' | 'content' | 'colors' | 'legal') => {
     const isExpanding = !expandedSections[section]
@@ -264,6 +271,7 @@ export default function SiteEditorPage() {
       setBackgroundImage(data.background_image || '')
       setFeaturedPlayer(data.featured_player || '')
       setSportDirector(data.sport_director || '')
+      setBrandName(data.brand_name || 'My New Asset')
     } catch (error) {
       console.error('Error loading site:', error)
       alert('Failed to load site')
@@ -418,6 +426,7 @@ export default function SiteEditorPage() {
       
       // Prepare update data
       const updateData: any = {
+        brand_name: brandName,
         headline,
         subheadline,
         cta,
@@ -463,6 +472,7 @@ export default function SiteEditorPage() {
           console.warn('wheel_values column not in schema, saving without it')
           // Remove only optional fields, keep critical fields like template_id
           const basicUpdate = {
+            brand_name: updateData.brand_name,
             headline: updateData.headline,
             subheadline: updateData.subheadline,
             cta: updateData.cta,
@@ -527,11 +537,43 @@ export default function SiteEditorPage() {
       }
       
       await loadSite() // Reload to get updated HTML
+      setLastSaved(new Date()) // Update last saved timestamp
     } catch (error: any) {
       console.error('Error saving:', error)
       alert(`Failed to save changes: ${error.message || 'Unknown error'}`)
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleSaveAndExit = async () => {
+    await handleSave()
+    router.push('/dashboard')
+  }
+
+  const handleUndo = () => {
+    if (historyIndex > 0) {
+      setHistoryIndex(historyIndex - 1)
+      // Restore previous state from history
+      const prevState = history[historyIndex - 1]
+      if (prevState) {
+        setHeadline(prevState.headline)
+        setSubheadline(prevState.subheadline)
+        setCta(prevState.cta)
+        // Add more fields as needed
+      }
+    }
+  }
+
+  const handleRedo = () => {
+    if (historyIndex < history.length - 1) {
+      setHistoryIndex(historyIndex + 1)
+      const nextState = history[historyIndex + 1]
+      if (nextState) {
+        setHeadline(nextState.headline)
+        setSubheadline(nextState.subheadline)
+        setCta(nextState.cta)
+      }
     }
   }
 
@@ -1012,54 +1054,85 @@ export default function SiteEditorPage() {
 
   return (
     <div className="min-h-screen bg-black flex flex-col font-inter">
-        {/* NetFusion Neon Top Bar - Enhanced */}
-        <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b-2 border-neon-primary/30 px-6 py-4 flex items-center justify-between shadow-lg shadow-neon-primary/20 relative">
+        {/* Enhanced Top Bar */}
+        <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-cyan-500/30 px-6 py-4 flex items-center justify-between shadow-lg shadow-cyan-500/10 relative">
           
           <div className="flex items-center gap-4 relative z-10">
-            <button
-              onClick={() => router.push('/')}
-              className="text-gray-300 hover:text-neon-primary transition-all duration-300 flex items-center gap-2 px-3 py-2 bg-gray-800/50 hover:bg-neon-primary/10 rounded-lg border border-gray-700 hover:border-neon-primary/50 backdrop-blur-sm"
-              title="Go to Home"
-            >
-              <ArrowLeft size={18} />
-              <span className="hidden sm:inline">Home</span>
-            </button>
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="text-neon-primary hover:text-neon-secondary transition-all duration-300 flex items-center gap-2 px-3 py-2 bg-neon-primary/10 hover:bg-neon-primary/20 rounded-lg border border-neon-primary/50 hover:border-neon-primary shadow-sm shadow-neon-primary/20"
-              title="Go to Dashboard"
-            >
-              <span className="hidden sm:inline font-medium">Dashboard</span>
-              <span className="sm:hidden">📊</span>
-            </button>
-            <div className="border-l-2 border-neon-primary/40 pl-4">
-              <h1 className="text-white font-bold font-inter text-lg tracking-wide">{site.brand_name}</h1>
-              <p className="text-sm text-neon-primary/80 font-inter font-medium">Template Editor</p>
+            <div className="cursor-pointer" onClick={async () => { await handleSave(); router.push('/dashboard'); }}>
+              <NanoKitLogo size="header" href="/dashboard" />
+            </div>
+            <div className="border-l border-cyan-500/30 pl-4">
+              {isEditingTitle ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={brandName}
+                    onChange={(e) => setBrandName(e.target.value)}
+                    onBlur={() => setIsEditingTitle(false)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') setIsEditingTitle(false)
+                      if (e.key === 'Escape') {
+                        setBrandName(site?.brand_name || 'My New Asset')
+                        setIsEditingTitle(false)
+                      }
+                    }}
+                    className="bg-slate-800 text-white px-3 py-1 rounded border border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 font-bold text-lg"
+                    autoFocus
+                  />
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 group cursor-pointer" onClick={() => setIsEditingTitle(true)}>
+                  <h1 className="text-white font-bold font-inter text-lg tracking-wide">{brandName}</h1>
+                  <Edit3 size={16} className="text-slate-400 group-hover:text-cyan-400 transition-colors opacity-0 group-hover:opacity-100" />
+                </div>
+              )}
+              <p className="text-sm text-cyan-400/80 font-inter font-medium">Template Editor</p>
             </div>
           </div>
           
-          <div className="flex items-center gap-4 relative z-10">
+          <div className="flex items-center gap-2 relative z-10">
+            <div className="flex items-center gap-1 border border-slate-700/50 rounded-lg p-1 bg-slate-900/50">
+              <button
+                onClick={handleUndo}
+                disabled={historyIndex <= 0}
+                className="p-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800 rounded transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                title="Undo"
+              >
+                <Undo2 size={18} />
+              </button>
+              <button
+                onClick={handleRedo}
+                disabled={historyIndex >= history.length - 1}
+                className="p-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800 rounded transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                title="Redo"
+              >
+                <Redo2 size={18} />
+              </button>
+            </div>
+            
             <button
               data-tour="preview-btn"
               onClick={() => window.open(getPreviewUrl(), '_blank')}
-              className="flex items-center gap-2 px-6 py-3 bg-gray-800/70 hover:bg-neon-primary/10 text-neon-primary hover:text-white rounded-lg transition-all duration-300 border-2 border-neon-primary/40 hover:border-neon-primary hover:shadow-lg hover:shadow-neon-primary/30 backdrop-blur-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/70 hover:bg-cyan-500/10 text-cyan-400 hover:text-white rounded-lg transition-all duration-300 border border-cyan-500/30 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 backdrop-blur-sm font-medium"
             >
               <Eye size={18} />
               <span className="hidden sm:inline">Preview</span>
             </button>
+            
             <button
               data-tour="save-btn"
-              onClick={handleSave}
+              onClick={handleSaveAndExit}
               disabled={saving}
-              className="flex items-center gap-2 px-6 py-3 bg-gray-800/70 hover:bg-neon-primary/10 text-neon-primary hover:text-white rounded-lg transition-all duration-300 border-2 border-neon-primary/40 hover:border-neon-primary hover:shadow-lg hover:shadow-neon-primary/30 backdrop-blur-sm font-medium disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/70 hover:bg-cyan-500/10 text-cyan-400 hover:text-white rounded-lg transition-all duration-300 border border-cyan-500/30 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 backdrop-blur-sm font-medium disabled:opacity-50"
             >
               {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
-              <span className="hidden sm:inline">{saving ? 'Saving...' : 'Save Changes'}</span>
+              <span className="hidden sm:inline">{saving ? 'Saving...' : 'Save & Exit'}</span>
             </button>
+            
             <button
               onClick={handlePublish}
               disabled={publishing}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white rounded-lg transition-all duration-300 border-2 border-green-500/40 hover:border-green-400 hover:shadow-lg hover:shadow-green-500/30 backdrop-blur-sm font-medium disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white rounded-lg transition-all duration-300 shadow-lg shadow-purple-500/30 font-medium disabled:opacity-50"
             >
               {publishing ? <Loader2 size={18} className="animate-spin" /> : <Globe size={18} />}
               <span className="hidden sm:inline">{publishing ? 'Publishing...' : 'Publish Site'}</span>
