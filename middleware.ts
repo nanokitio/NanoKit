@@ -3,7 +3,8 @@ import { updateSession } from '@/lib/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
   // Handle game files - allow public access without authentication
-  if (request.nextUrl.pathname.startsWith('/templates/game/')) {
+  if (request.nextUrl.pathname.startsWith('/templates/game/') || 
+      request.nextUrl.pathname.startsWith('/FisherMan Slot/')) {
     const response = NextResponse.next()
     const pathname = request.nextUrl.pathname
     
