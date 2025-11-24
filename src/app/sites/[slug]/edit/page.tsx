@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Loader2, Save, Eye, ArrowLeft, Palette, Type, Image as ImageIcon, Link as LinkIcon, ChevronDown, ChevronUp, Layers, FileText, Scale, Download, Mail, Globe, Monitor, Smartphone, Undo2, Redo2, Edit3, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Loader2, Save, Eye, ArrowLeft, Palette, Type, Image as ImageIcon, Link as LinkIcon, ChevronDown, ChevronUp, Layers, FileText, Scale, Download, Mail, Globe, Monitor, Smartphone, Undo2, Redo2, Edit3, X, ChevronLeft, ChevronRight, Dices, Trophy, TrendingUp, Bitcoin, ShoppingBag, DollarSign, Heart, MoreHorizontal, Users, Settings, Wallet, Gift, Sparkles } from 'lucide-react'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import { EditorTour } from '@/components/EditorTour'
 import { getTemplateConfig, templateSupportsField } from '@/lib/template-config'
@@ -1195,7 +1195,7 @@ export default function SiteEditorPage() {
                 className="w-full flex items-center justify-between px-4 py-3 bg-gray-800 hover:bg-gray-750 transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  <Layers size={18} className="text-orange-400" />
+                  <Layers size={18} className="text-orange-400" style={{ filter: 'drop-shadow(0 0 6px rgba(251, 146, 60, 0.6))' }} />
                   <h3 className="text-sm font-semibold text-white">Vertical</h3>
                 </div>
                 {expandedSections.vertical ? <ChevronUp size={18} className="text-gray-400" /> : <ChevronDown size={18} className="text-gray-400" />}
@@ -1209,22 +1209,43 @@ export default function SiteEditorPage() {
                     </p>
                   </div>
 
-                  <div>
-                    <select
-                      value={vertical}
-                      onChange={(e) => setVertical(e.target.value)}
-                      className="w-full px-3 py-2 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                    >
-                      <option value="casino">🎰 Casino & Gaming</option>
-                      <option value="sports">⚽ Sports Betting</option>
-                      <option value="forex">💹 Forex & Trading</option>
-                      <option value="crypto">₿ Cryptocurrency</option>
-                      <option value="ecommerce">🛍️ E-commerce</option>
-                      <option value="finance">💰 Finance</option>
-                      <option value="health">🏥 Health & Wellness</option>
-                      <option value="other">📦 Other</option>
-                    </select>
-                    <p className="text-xs text-gray-500 mt-1">Choose the best fit for your offer</p>
+                  <div className="space-y-2">
+                    {[
+                      { value: 'casino', label: 'Casino & Gaming', icon: Dices, color: 'text-orange-400' },
+                      { value: 'sports', label: 'Sports Betting', icon: Trophy, color: 'text-blue-400' },
+                      { value: 'forex', label: 'Forex & Trading', icon: TrendingUp, color: 'text-green-400' },
+                      { value: 'crypto', label: 'Cryptocurrency', icon: Bitcoin, color: 'text-yellow-400' },
+                      { value: 'ecommerce', label: 'E-commerce', icon: ShoppingBag, color: 'text-pink-400' },
+                      { value: 'finance', label: 'Finance', icon: DollarSign, color: 'text-emerald-400' },
+                      { value: 'health', label: 'Health & Wellness', icon: Heart, color: 'text-red-400' },
+                      { value: 'other', label: 'Other', icon: MoreHorizontal, color: 'text-slate-400' },
+                    ].map((option) => {
+                      const Icon = option.icon
+                      const isSelected = vertical === option.value
+                      return (
+                        <button
+                          key={option.value}
+                          onClick={() => setVertical(option.value)}
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-left ${
+                            isSelected
+                              ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/20'
+                              : 'bg-slate-800/50 border border-slate-700/50 hover:border-slate-600 hover:bg-slate-700/50'
+                          }`}
+                        >
+                          <Icon 
+                            size={20} 
+                            className={`${option.color} ${isSelected ? 'animate-pulse' : ''}`}
+                            style={{ filter: 'drop-shadow(0 0 8px currentColor)' }}
+                          />
+                          <span className={`font-medium ${isSelected ? 'text-white' : 'text-slate-300'}`}>
+                            {option.label}
+                          </span>
+                          {isSelected && (
+                            <div className="ml-auto w-2 h-2 rounded-full bg-cyan-400 shadow-lg shadow-cyan-400/50" />
+                          )}
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
               )}
@@ -1592,7 +1613,7 @@ export default function SiteEditorPage() {
                     {/* Team Members Section - Simple fields */}
                     <div className="border-t border-gray-700 pt-6 space-y-4">
                       <div className="flex items-center gap-2 mb-4">
-                        <span className="text-2xl">⚽</span>
+                        <Users size={20} className="text-blue-400" style={{ filter: 'drop-shadow(0 0 6px rgba(96, 165, 250, 0.6))' }} />
                         <h4 className="text-sm font-bold text-white">Team Members</h4>
                       </div>
                       
@@ -1631,7 +1652,7 @@ export default function SiteEditorPage() {
                     {fields.logoUrl && (
                       <div className="border-t border-gray-700 pt-6">
                         <div className="flex items-center gap-2 mb-4">
-                          <span className="text-2xl">🎨</span>
+                          <Palette size={20} className="text-purple-400" style={{ filter: 'drop-shadow(0 0 6px rgba(192, 132, 252, 0.6))' }} />
                           <h4 className="text-sm font-bold text-white">Custom Branding</h4>
                         </div>
                         <div>
@@ -1658,7 +1679,7 @@ export default function SiteEditorPage() {
                     {fields.wheelValues && (
                       <div className="border-t border-gray-700 pt-6">
                         <div className="flex items-center gap-2 mb-4">
-                          <span className="text-2xl">🎰</span>
+                          <Settings size={20} className="text-cyan-400" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 211, 238, 0.6))' }} />
                           <h4 className="text-sm font-bold text-white">Wheel Configuration</h4>
                         </div>
                         <div>
@@ -1684,7 +1705,7 @@ export default function SiteEditorPage() {
                     {fields.gameBalance && (
                       <div className="border-t border-gray-700 pt-6">
                         <div className="flex items-center gap-2 mb-4">
-                          <span className="text-2xl">💰</span>
+                          <Wallet size={20} className="text-yellow-400" style={{ filter: 'drop-shadow(0 0 6px rgba(250, 204, 21, 0.6))' }} />
                           <h4 className="text-sm font-bold text-white">Game Balance</h4>
                         </div>
                         <div>
@@ -1713,7 +1734,7 @@ export default function SiteEditorPage() {
                       <div className="border-t border-gray-700 pt-6">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
-                            <span className="text-2xl">🎉</span>
+                            <Gift size={20} className="text-pink-400" style={{ filter: 'drop-shadow(0 0 6px rgba(244, 114, 182, 0.6))' }} />
                             <h4 className="text-sm font-bold text-white">Win Popup</h4>
                           </div>
                           <button
@@ -1816,7 +1837,7 @@ export default function SiteEditorPage() {
                       <div className="border-t border-gray-700 pt-6">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
-                            <span className="text-2xl">🎨</span>
+                            <Sparkles size={20} className="text-purple-400" style={{ filter: 'drop-shadow(0 0 6px rgba(192, 132, 252, 0.6))' }} />
                             <h4 className="text-sm font-bold text-white">Background</h4>
                           </div>
                           {fields.backgroundColor?.isPremium && (
