@@ -79,38 +79,52 @@ export async function POST(request: NextRequest) {
     const s3Key = `${user.id}/${slug}-${timestamp}/index.html`
     const s3KeyCSS = `${user.id}/${slug}-${timestamp}/style.css`
 
-    // Generate protected prelander with fingerprinting
-    // Use currentData from editor if available, otherwise fall back to site data
-    const { html, css } = await generateSecurePrelanderWithFingerprint(
-      site,
-      user.id,
-      domainLock,
-      currentData
-    )
+    // Use the saved HTML from database (the exact template the user sees)
+    let html = site.generated_html
+    let css = site.generated_css || ''
+    
+    // If no HTML saved, generate it
+    if (!html) {
+      const { html: generatedHtml, css: generatedCss } = await generateSecurePrelanderWithFingerprint(
+        site,
+        user.id,
+        domainLock,
+        currentData
+      )
+      html = generatedHtml
+      css = generatedCss
+    }
+    
+    // Fix iframe paths to point to production
+    const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nanokit.io'
+    html = html.replace(/src="\/templates\//g, `src="${productionUrl}/templates/`)
+    html = html.replace(/href="\/templates\//g, `href="${productionUrl}/templates/`)
 
     const bucketName = process.env.AWS_S3_BUCKET || 'landertag'
 
-    // Upload HTML to S3
+    // Upload HTML to S3 (bucket policy makes it public)
     await s3Client.send(
       new PutObjectCommand({
         Bucket: bucketName,
         Key: s3Key,
         Body: html,
-        ContentType: 'text/html',
-        CacheControl: 'public, max-age=31536000',
+        ContentType: 'text/html; charset=utf-8',
+        CacheControl: 'public, max-age=3600'
       })
     )
 
-    // Upload CSS to S3
-    await s3Client.send(
-      new PutObjectCommand({
-        Bucket: bucketName,
-        Key: s3KeyCSS,
-        Body: css,
-        ContentType: 'text/css',
-        CacheControl: 'public, max-age=31536000',
-      })
-    )
+    // Upload CSS to S3 if exists
+    if (css && css.trim()) {
+      await s3Client.send(
+        new PutObjectCommand({
+          Bucket: bucketName,
+          Key: s3KeyCSS,
+          Body: css,
+          ContentType: 'text/css; charset=utf-8',
+          CacheControl: 'public, max-age=3600'
+        })
+      )
+    }
 
     // Generate public URLs - use S3 regional endpoint (no SSL issues)
     const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN
