@@ -79,35 +79,47 @@ export async function POST(request: NextRequest) {
     const s3Key = `${user.id}/${slug}-${timestamp}/index.html`
     const s3KeyCSS = `${user.id}/${slug}-${timestamp}/style.css`
 
-    // ALWAYS regenerate HTML to ensure we get the correct template
-    // Never use database HTML as it may be stale or incorrect
-    console.log('Generating HTML for template:', currentData?.templateId || site.template_id)
+    // Use the saved generated_html from database (the EXACT HTML from the editor)
+    let html = site.generated_html
     
-    const templateData = {
-      templateId: currentData?.templateId || site.template_id || 't17',
-      headline: currentData?.headline || site.headline,
-      subheadline: currentData?.subheadline || site.subheadline,
-      cta: currentData?.cta || site.cta,
-      ctaUrl: currentData?.ctaUrl || site.cta_url,
-      logo: currentData?.logoUrl || site.logo_url,
-      brandName: currentData?.brandName || site.brand_name,
-      colors: {
-        primary: currentData?.primaryColor || site.primary_color || '#667eea',
-        secondary: currentData?.secondaryColor || site.secondary_color || '#764ba2',
-        accent: currentData?.accentColor || site.accent_color || '#ffd700'
-      },
-      // Template-specific properties
-      popupTitle: currentData?.popupTitle || site.popup_title,
-      popupMessage: currentData?.popupMessage || site.popup_message,
-      popupPrize: currentData?.popupPrize || site.popup_prize,
-      wheelValues: currentData?.wheelValues || site.wheel_values,
-      backgroundColor: currentData?.backgroundColor || site.background_color,
-      backgroundImage: currentData?.backgroundImage || site.background_image,
-      gameBalance: currentData?.gameBalance || site.game_balance
+    // If no HTML saved or template changed, we need to regenerate first
+    if (!html || (currentData?.templateId && currentData.templateId !== site.template_id)) {
+      console.log('No HTML or template changed, calling /api/regenerate first...')
+      
+      // Call regenerate API to create the HTML properly
+      try {
+        const regenerateResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/regenerate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ slug }),
+        })
+        
+        if (regenerateResponse.ok) {
+          // Re-fetch site data with new HTML
+          const { data: updatedSite } = await supabase
+            .from('sites')
+            .select('*')
+            .eq('slug', slug)
+            .single()
+          
+          if (updatedSite?.generated_html) {
+            html = updatedSite.generated_html
+          }
+        }
+      } catch (e) {
+        console.error('Failed to regenerate HTML:', e)
+      }
     }
     
-    let html = generateTemplateHTML(templateData)
-    const css = ''  // CSS is embedded in HTML for templates
+    // If still no HTML, return error
+    if (!html) {
+      return NextResponse.json(
+        { error: 'No HTML available. Please save the site first in the editor.' },
+        { status: 400 }
+      )
+    }
     
     // Fix iframe paths to point to production
     const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nanokit.io'
