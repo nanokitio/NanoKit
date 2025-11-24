@@ -1140,15 +1140,6 @@ export default function SiteEditorPage() {
               <Download size={18} />
               <span className="hidden sm:inline">Download / Host</span>
             </button>
-            
-            <button
-              onClick={handlePublish}
-              disabled={publishing}
-              className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white rounded-lg transition-all duration-300 shadow-lg shadow-purple-500/30 font-medium disabled:opacity-50"
-            >
-              {publishing ? <Loader2 size={18} className="animate-spin" /> : <Globe size={18} />}
-              <span className="hidden sm:inline">{publishing ? 'Publishing...' : 'Publish Site'}</span>
-            </button>
           </div>
         </div>
 
