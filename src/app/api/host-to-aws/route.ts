@@ -122,14 +122,15 @@ let html = rawHtml
 
     const bucketName = process.env.AWS_S3_BUCKET || 'landertag'
 
-    // Upload HTML to S3 (bucket policy makes it public)
+    // Upload HTML to S3 with public read access
     await s3Client.send(
       new PutObjectCommand({
         Bucket: bucketName,
         Key: s3Key,
         Body: html,
         ContentType: 'text/html; charset=utf-8',
-        CacheControl: 'public, max-age=3600'
+        CacheControl: 'public, max-age=3600',
+        ACL: 'public-read'
       })
     )
 
