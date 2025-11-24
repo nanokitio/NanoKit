@@ -32,6 +32,7 @@ export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [showColumnMenu, setShowColumnMenu] = useState(false)
+  const [showUserMenu, setShowUserMenu] = useState(false)
   const [visibleColumns, setVisibleColumns] = useState({
     template: true,
     status: true,
@@ -58,11 +59,14 @@ export default function DashboardPage() {
       if (showColumnMenu && !target.closest('.column-menu-container')) {
         setShowColumnMenu(false)
       }
+      if (showUserMenu && !target.closest('.user-menu-container')) {
+        setShowUserMenu(false)
+      }
     }
     
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [showColumnMenu])
+  }, [showColumnMenu, showUserMenu])
 
   const loadData = async () => {
     try {
@@ -299,7 +303,10 @@ export default function DashboardPage() {
   }
 
   const getFilteredSites = () => {
-    let filtered = sites.filter(site => showArchived ? site.status === 'draft' : site.status === 'published')
+    // Start with all sites or filter by archived status
+    let filtered = showArchived 
+      ? sites.filter(site => site.status === 'draft')
+      : sites.filter(site => site.status !== 'draft')
     
     // Apply view mode filter
     switch (viewMode) {
@@ -309,6 +316,7 @@ export default function DashboardPage() {
       case 'downloaded':
         filtered = filtered.filter(site => site.is_downloaded)
         break
+      // 'all' mode shows all non-archived sites (or all archived if showArchived is true)
     }
     
     // Apply search filter
@@ -334,11 +342,14 @@ export default function DashboardPage() {
   }
 
   const getViewModeStats = () => {
-    const allSites = sites.filter(site => showArchived ? site.status === 'draft' : site.status === 'published')
+    const baseSites = showArchived 
+      ? sites.filter(site => site.status === 'draft')
+      : sites.filter(site => site.status !== 'draft')
+    
     return {
-      all: allSites.length,
-      published: allSites.filter(site => site.status === 'published' || site.is_published).length,
-      downloaded: allSites.filter(site => site.is_downloaded).length
+      all: baseSites.length,
+      published: baseSites.filter(site => site.status === 'published' || site.is_published).length,
+      downloaded: baseSites.filter(site => site.is_downloaded).length
     }
   }
 
@@ -367,7 +378,7 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center space-x-6">
-              <NanoKitLogo size="header" href="/" />
+              <NanoKitLogo size="header" href="/dashboard" />
               <div className="border-l border-neon-primary/30 pl-6">
                 <h2 className="text-2xl font-bold text-white font-inter">
                   Dashboard
@@ -380,13 +391,63 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <button
-                onClick={handleSignOut}
-                className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg hover:scale-110 transition-transform duration-200 shadow-lg shadow-purple-500/30"
-                title="Sign Out"
-              >
-                {(user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'U')[0].toUpperCase()}
-              </button>
+              <div className="relative user-menu-container">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg hover:scale-110 transition-transform duration-200 shadow-lg shadow-purple-500/30"
+                  title="User Menu"
+                >
+                  {(user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'U')[0].toUpperCase()}
+                </button>
+                
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-56 bg-slate-800/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl z-50 overflow-hidden">
+                    <div className="p-3 border-b border-slate-700/50">
+                      <p className="text-sm font-semibold text-white truncate">
+                        {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'User'}
+                      </p>
+                      <p className="text-xs text-slate-400 truncate">{user?.email}</p>
+                    </div>
+                    
+                    <div className="py-2">
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false)
+                          router.push('/subscription')
+                        }}
+                        className="w-full px-4 py-2 text-left text-sm text-slate-300 hover:bg-slate-700/50 transition-colors flex items-center gap-3"
+                      >
+                        <span className="text-lg">📋</span>
+                        <span>My Plan & Subscription</span>
+                      </button>
+                      
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false)
+                          router.push('/payment-method')
+                        }}
+                        className="w-full px-4 py-2 text-left text-sm text-slate-300 hover:bg-slate-700/50 transition-colors flex items-center gap-3"
+                      >
+                        <span className="text-lg">💳</span>
+                        <span>Payment Method</span>
+                      </button>
+                    </div>
+                    
+                    <div className="border-t border-slate-700/50">
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false)
+                          handleSignOut()
+                        }}
+                        className="w-full px-4 py-3 text-left text-sm text-red-400 hover:bg-slate-700/50 transition-colors flex items-center gap-3"
+                      >
+                        <span className="text-lg">🚪</span>
+                        <span>Log Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
