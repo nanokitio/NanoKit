@@ -129,15 +129,14 @@ let html = rawHtml
     html = html.replace(/src="\/templates\//g, `src="${productionUrl}/templates/`)
     html = html.replace(/href="\/templates\//g, `href="${productionUrl}/templates/`)
 
-    // Upload HTML to S3 with public read access
+    // Upload HTML to S3 (bucket policy makes it public)
     await s3Client.send(
       new PutObjectCommand({
         Bucket: bucketName,
         Key: s3Key,
         Body: html,
         ContentType: 'text/html; charset=utf-8',
-        CacheControl: 'public, max-age=3600',
-        ACL: 'public-read'
+        CacheControl: 'public, max-age=3600'
       })
     )
 
