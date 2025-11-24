@@ -120,7 +120,7 @@ let html = rawHtml
     html = html.replace(/src="\/templates\//g, `src="${productionUrl}/templates/`)
     html = html.replace(/href="\/templates\//g, `href="${productionUrl}/templates/`)
 
-    const bucketName = process.env.AWS_S3_BUCKET || 'landertag'
+    const bucketName = process.env.AWS_S3_BUCKET || 'landertag-hosting'
 
     // Upload HTML to S3 with public read access
     await s3Client.send(
