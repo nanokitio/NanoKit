@@ -9,6 +9,7 @@ import { formatDate } from '@/lib/utils'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import { Site } from '@/lib/types'
 import { CreditCard, FileText, LogOut, Search, BarChart3, Rocket, Download, Archive, Eye, Edit, Trash2, Zap, User, Settings, Gift, HelpCircle, MessageSquare, ChevronRight } from 'lucide-react'
+import { HostedPrelanders } from '@/components/HostedPrelanders'
 
 interface SiteWithVisits extends Site {
   visits?: { count: number }[]
@@ -875,6 +876,11 @@ export default function DashboardPage() {
             </div>
           </div>
         )}
+        
+        {/* Hosted Prelanders Section */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-8">
+          <HostedPrelanders />
+        </div>
       </main>
 
       {/* Delete Confirmation Modal */}
