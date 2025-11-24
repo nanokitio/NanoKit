@@ -3,8 +3,26 @@ import { createClient } from '@/lib/supabase/server'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 // @ts-ignore - javascript-obfuscator doesn't have perfect types
 import JavaScriptObfuscator from 'javascript-obfuscator'
-import { templates } from '@/templates'
-import { BrandConfig } from '@/lib/types'
+import { renderTemplate as renderT6 } from '@/templates/t6/server'
+import { renderTemplate as renderT7 } from '@/templates/t7/server'
+import { renderTemplate as renderT9 } from '@/templates/t9/server'
+import { renderTemplate as renderT14 } from '@/templates/t14/server'
+import { renderTemplate as renderT15 } from '@/templates/t15/server'
+import { renderTemplate as renderT16 } from '@/templates/t16/server'
+import { renderTemplate as renderT17 } from '@/templates/t17/server'
+import { renderTemplate as renderT18 } from '@/templates/t18/server'
+
+// Map of template renderers
+const templateRenderers: Record<string, (config: any) => { html: string; css?: string }> = {
+  t6: renderT6,
+  t7: renderT7,
+  t9: renderT9,
+  t14: renderT14,
+  t15: renderT15,
+  t16: renderT16,
+  t17: renderT17,
+  t18: renderT18
+}
 
 // Initialize S3 Client
 const s3Client = new S3Client({
@@ -553,9 +571,9 @@ function generateTemplateHTML(data: any): string {
   const templateId = data.templateId || 't17'
   
   // Get the template renderer
-  const template = templates[templateId as keyof typeof templates]
+  const renderTemplate = templateRenderers[templateId]
   
-  if (!template) {
+  if (!renderTemplate) {
     // Fallback to simple HTML if template not found
     return `
     <div style="min-height: 100vh; background: ${data.colors.primary}; display: flex; align-items: center; justify-content: center; padding: 20px;">
@@ -589,7 +607,7 @@ function generateTemplateHTML(data: any): string {
   }
   
   // Render using real template
-  const { html } = template.renderTemplate(config)
+  const { html } = renderTemplate(config)
   
   // Replace relative iframe URLs with absolute URLs pointing to nanokit.io
   const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nanokit.io'
