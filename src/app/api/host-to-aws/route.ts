@@ -173,21 +173,6 @@ let html = rawHtml
       // Continue anyway - hosting was successful
     }
 
-    // Update site record to mark as published
-    const { error: updateError } = await supabase
-      .from('sites')
-      .update({
-        is_published: true,
-        published_at: new Date().toISOString(),
-        status: 'published'
-      })
-      .eq('id', site.id)
-
-    if (updateError) {
-      console.error('Failed to update site status:', updateError)
-      // Continue anyway - hosting was successful
-    }
-
     // Send email notification
     try {
       const { sendHostingEmail } = await import('@/lib/aws-ses')

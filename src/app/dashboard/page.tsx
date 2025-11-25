@@ -14,10 +14,9 @@ import { HostedPrelanders } from '@/components/HostedPrelanders'
 interface SiteWithVisits extends Site {
   visits?: { count: number }[]
   is_downloaded?: boolean
-  is_published?: boolean
   downloaded_at?: string
-  published_at?: string
   download_count?: number
+  deployment_count?: number // Count of AWS hosted deployments
 }
 
 export default function DashboardPage() {
@@ -104,7 +103,8 @@ export default function DashboardPage() {
         .from('sites')
         .select(`
           *,
-          visits(count)
+          visits(count),
+          prelander_deployments(count)
         `)
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
@@ -121,7 +121,8 @@ export default function DashboardPage() {
             .from('sites')
             .select(`
               *,
-              visits(count)
+              visits(count),
+              prelander_deployments(count)
             `)
             .eq('org_id', org.id)
             .order('created_at', { ascending: false })
@@ -139,8 +140,16 @@ export default function DashboardPage() {
         console.error('Error fetching sites:', sitesError)
         setSites([])
       } else {
-        console.log('Setting sites:', sitesData)
-        setSites(sitesData || [])
+        // Process sites data to extract deployment counts
+        const processedSites = (sitesData || []).map((site: any) => ({
+          ...site,
+          deployment_count: Array.isArray(site.prelander_deployments) 
+            ? site.prelander_deployments[0]?.count || 0 
+            : 0
+        }))
+        
+        console.log('Setting sites:', processedSites)
+        setSites(processedSites)
       }
     } catch (error) {
       console.error('Error loading data:', error)
@@ -313,9 +322,11 @@ export default function DashboardPage() {
     // Apply view mode filter
     switch (viewMode) {
       case 'published':
-        filtered = filtered.filter(site => site.status === 'published' || site.is_published)
+        // Published = Sites hosted with us (have AWS deployments)
+        filtered = filtered.filter(site => (site.deployment_count || 0) > 0)
         break
       case 'downloaded':
+        // Downloaded = Sites downloaded as ZIP file
         filtered = filtered.filter(site => site.is_downloaded)
         break
       // 'all' mode shows all non-archived sites (or all archived if showArchived is true)
@@ -350,7 +361,7 @@ export default function DashboardPage() {
     
     return {
       all: baseSites.length,
-      published: baseSites.filter(site => site.status === 'published' || site.is_published).length,
+      published: baseSites.filter(site => (site.deployment_count || 0) > 0).length,
       downloaded: baseSites.filter(site => site.is_downloaded).length
     }
   }
