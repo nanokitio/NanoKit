@@ -680,7 +680,7 @@ export default function DashboardPage() {
                     </button>
                     
                     {showColumnMenu && (
-                      <div className="absolute right-0 mt-2 w-56 bg-slate-800/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl z-50 p-3">
+                      <div className="absolute right-0 mt-2 w-56 bg-slate-800/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl z-[100] p-3">
                         <div className="text-xs font-bold text-cyan-300 uppercase mb-3">SHOW/HIDE COLUMNS</div>
                         {Object.entries({
                           template: 'Template',
