@@ -667,7 +667,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="mt-8 flow-root">
-              <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/10">
+              <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl shadow-purple-500/10">
                 {/* Column Menu */}
                 <div className="flex justify-end p-4 border-b border-slate-700/50">
                   <div className="relative column-menu-container">
