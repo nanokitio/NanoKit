@@ -765,7 +765,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
     <div class="game-container">
       <div class="game-frame">
         <iframe 
-          src="https://www.nanokit.io/FisherMan%20Slot/index.html"
+          src="https://raw.githubusercontent.com/nanokitio/NanoKit/main/public/FisherMan%20Slot/index.html"
           title="Fisherman Slot Game"
           class="game-iframe"
           frameborder="0"

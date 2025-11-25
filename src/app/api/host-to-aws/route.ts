@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import fs from 'fs/promises'
+import path from 'path'
 // @ts-ignore - javascript-obfuscator doesn't have perfect types
 import JavaScriptObfuscator from 'javascript-obfuscator'
 import { renderTemplate as renderT6 } from '@/templates/t6/server'
@@ -168,6 +170,21 @@ let html = rawHtml
 
     if (deploymentError) {
       console.error('Failed to save deployment:', deploymentError)
+      // Continue anyway - hosting was successful
+    }
+
+    // Update site record to mark as published
+    const { error: updateError } = await supabase
+      .from('sites')
+      .update({
+        is_published: true,
+        published_at: new Date().toISOString(),
+        status: 'published'
+      })
+      .eq('id', site.id)
+
+    if (updateError) {
+      console.error('Failed to update site status:', updateError)
       // Continue anyway - hosting was successful
     }
 
