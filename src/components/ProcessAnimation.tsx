@@ -135,7 +135,7 @@ export function ProcessAnimation() {
           </div>
         )
       
-      case 1: // Pick Template - Real Template Selector with Casino templates
+      case 1: // Pick Template - Real Template Selector with ACTUAL casino template preview
         return (
           <div className="w-full max-w-4xl">
             <div className="text-center space-y-3 mb-6">
@@ -143,55 +143,102 @@ export function ProcessAnimation() {
                 <Palette className="w-8 h-8 text-purple-400" style={{ filter: `drop-shadow(0 0 8px ${step.color})` }} />
               </div>
               <h3 className="text-3xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent" style={{ animation: 'text-pop 0.5s ease-out 0.4s forwards', opacity: 0 }}>
-                Pick Your Template
+                Pick Template
               </h3>
               <p className="text-slate-400" style={{ animation: 'text-pop 0.5s ease-out 0.5s forwards', opacity: 0 }}>
-                Casino templates ready to customize
+                Click on Cyber Casino template
               </p>
             </div>
             
-            {/* Template Grid */}
-            <div className="grid grid-cols-3 gap-4" style={{ animation: 'card-pop 0.6s ease-out 0.6s forwards', opacity: 0 }}>
-              {['Cyber Casino', 'Fortune Wheel', 'Scratch Card'].map((name, i) => (
-                <div 
-                  key={i} 
-                  className="relative aspect-[3/4] rounded-xl overflow-hidden cursor-pointer group transition-all" 
-                  style={{ 
-                    animation: `card-pop 0.6s ease-out ${0.8 + i * 0.1}s forwards`, 
-                    opacity: 0 
-                  }}
-                >
-                  <div className={`absolute inset-0 bg-slate-900/90 backdrop-blur-xl border p-3 transition-all ${i === 0 ? 'border-purple-400/60' : 'border-slate-700/50 group-hover:border-purple-400/50'}`} style={{ boxShadow: i === 0 ? `0 0 40px ${step.color}40` : 'none' }}>
-                    {/* Template Preview Thumbnail */}
-                    <div className="relative h-full rounded-lg overflow-hidden bg-gradient-to-br from-purple-900/40 via-slate-900 to-slate-800 border border-slate-700/30">
-                      {/* Simulated Casino Template */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-4xl" style={{ filter: 'drop-shadow(0 0 10px rgba(168,85,247,0.5))' }}>{i === 0 ? '🎰' : i === 1 ? '🎡' : '🎫'}</div>
-                      </div>
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
-                        <div className="h-2 bg-purple-500/30 rounded w-3/4 mb-1" />
-                        <div className="h-1.5 bg-slate-700/40 rounded w-1/2" />
-                      </div>
-                    </div>
+            {/* Editor Interface with Template Tab */}
+            <div className="relative bg-[#0F172A] rounded-2xl border border-slate-700/50 overflow-hidden shadow-2xl" style={{ boxShadow: `0 0 60px ${step.color}20, 0 8px 32px rgba(0,0,0,0.4)`, animation: 'card-pop 0.6s ease-out 0.6s forwards', opacity: 0 }}>
+              {/* Top Bar */}
+              <div className="bg-[#1E293B] border-b border-slate-700/50 px-6 py-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 font-black text-lg">NANO KIT</div>
+                  <div className="text-white/60 text-sm">My New Site</div>
+                </div>
+              </div>
+              
+              <div className="flex h-[450px]">
+                {/* Left Sidebar - Template Tab Active */}
+                <div className="w-64 bg-[#0F172A] border-r border-slate-700/50 p-4 space-y-2">
+                  <div className="flex items-center gap-2 px-3 py-2 bg-slate-800/30 rounded-lg border border-slate-700/30 opacity-50">
+                    <Sparkles className="w-4 h-4 text-slate-500" />
+                    <span className="text-slate-500 text-sm">Vertical</span>
                   </div>
-                  
-                  {/* Selected indicator */}
-                  {i === 0 && (
-                    <div className="absolute top-2 right-2 z-10" style={{ animation: 'check-bounce 0.5s ease-out 1.2s forwards', opacity: 0 }}>
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg" style={{ boxShadow: `0 0 20px ${step.color}80` }}>
-                        <Check className="w-5 h-5 text-white" strokeWidth={3} />
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Template name */}
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <div className="bg-slate-900/95 backdrop-blur-sm rounded-lg px-3 py-2 border border-slate-700/50">
-                      <p className="text-sm font-bold text-white truncate">{name}</p>
-                    </div>
+                  {/* Template Tab - ACTIVE */}
+                  <div className="flex items-center gap-2 px-3 py-2 bg-purple-500/20 rounded-lg border border-purple-400/50 cursor-pointer" style={{ boxShadow: `0 0 20px ${step.color}30`, animation: 'dropdown-open 0.4s ease-out 0.8s forwards', opacity: 0 }}>
+                    <Palette className="w-4 h-4 text-purple-400" />
+                    <span className="text-white text-sm font-semibold">Template</span>
                   </div>
                 </div>
-              ))}
+                
+                {/* Template Grid Area */}
+                <div className="flex-1 bg-gradient-to-br from-slate-900 to-slate-800 p-6 overflow-y-auto">
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Cyber Casino Template - WITH REAL PREVIEW */}
+                    <div className="relative group cursor-pointer" style={{ animation: 'card-pop 0.6s ease-out 1s forwards', opacity: 0 }}>
+                      <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-gradient-to-br from-purple-900/40 via-slate-900 to-slate-800 border-2 border-purple-400/60 transition-all" style={{ boxShadow: `0 0 40px ${step.color}50` }}>
+                        {/* REAL Template Preview */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/30 to-pink-600/30 p-4 flex flex-col items-center justify-center">
+                          <div className="text-center space-y-3">
+                            <div className="text-2xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                              Win Big Today! 💎
+                            </div>
+                            <div className="text-xs text-slate-300">Join thousands of winners...</div>
+                            <div className="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg text-white text-xs font-bold">
+                              🎁 BONUS: 05:49
+                            </div>
+                            {/* Mini slot machine visual */}
+                            <div className="flex gap-2 justify-center mt-2">
+                              <div className="w-12 h-12 bg-gradient-to-br from-green-500/30 to-emerald-500/30 rounded border border-green-400/40 flex items-center justify-center">
+                                <div className="text-lg">💵</div>
+                              </div>
+                              <div className="w-12 h-12 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded border border-purple-400/40 flex items-center justify-center">
+                                <div className="text-lg">🎖</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Click Indicator */}
+                        <div className="absolute inset-0 flex items-center justify-center" style={{ animation: 'click-pulse 1s ease-out 1.5s infinite' }}>
+                          <div className="w-16 h-16 rounded-full border-4 border-purple-400 bg-purple-500/20" style={{ animation: 'ping-slow 1.5s ease-out 1.5s infinite' }} />
+                        </div>
+                      </div>
+                      
+                      {/* Selected Check */}
+                      <div className="absolute top-2 right-2 z-20" style={{ animation: 'check-bounce 0.5s ease-out 1.7s forwards', opacity: 0 }}>
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg" style={{ boxShadow: `0 0 20px ${step.color}90` }}>
+                          <Check className="w-6 h-6 text-white" strokeWidth={3} />
+                        </div>
+                      </div>
+                      
+                      {/* Template Name */}
+                      <div className="absolute bottom-3 left-3 right-3">
+                        <div className="bg-slate-900/95 backdrop-blur-sm rounded-lg px-3 py-2 border border-purple-400/50">
+                          <p className="text-sm font-bold text-white">🎰 Cyber Casino</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Other Templates - Smaller */}
+                    {['Fortune Wheel', 'Scratch Card'].map((name, i) => (
+                      <div key={i} className="relative aspect-[3/4] rounded-xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 opacity-60" style={{ animation: `card-pop 0.4s ease-out ${1.2 + i * 0.1}s forwards`, opacity: 0 }}>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="text-3xl">{i === 0 ? '🎡' : '🎫'}</div>
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <div className="bg-slate-900/80 rounded px-2 py-1 border border-slate-700/50">
+                            <p className="text-xs font-semibold text-slate-400 truncate">{name}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )
@@ -204,10 +251,10 @@ export function ProcessAnimation() {
                 <Zap className="w-8 h-8 text-pink-400" style={{ filter: `drop-shadow(0 0 8px ${step.color})` }} />
               </div>
               <h3 className="text-3xl font-black bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent" style={{ animation: 'text-pop 0.5s ease-out 0.4s forwards', opacity: 0 }}>
-                Customize Content
+                Edit Content
               </h3>
               <p className="text-slate-400" style={{ animation: 'text-pop 0.5s ease-out 0.5s forwards', opacity: 0 }}>
-                Edit your heading text
+                Change heading to "Win Big Today!"
               </p>
             </div>
             
@@ -271,18 +318,40 @@ export function ProcessAnimation() {
                   </div>
                 </div>
                 
-                {/* Preview Area - Real Template */}
-                <div className="flex-1 bg-gradient-to-br from-purple-900/20 via-slate-900 to-slate-800 flex items-center justify-center p-8">
-                  <div className="relative w-full max-w-md bg-gradient-to-br from-purple-600/10 to-pink-600/10 rounded-2xl border border-purple-500/20 p-8 text-center" style={{ boxShadow: '0 0 40px rgba(168,85,247,0.3)' }}>
-                    {/* Animated Title Change */}
-                    <div className="mb-4">
-                      <div className="text-2xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent" style={{ animation: 'title-morph 0.8s ease-out 1.4s forwards' }}>
-                        My New Site - Win Big Today! 💎
+                {/* Preview Area - Real Cyber Casino Template */}
+                <div className="flex-1 bg-gradient-to-br from-purple-900/20 via-slate-900 to-slate-800 flex items-center justify-center p-6">
+                  <div className="relative w-full max-w-md bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-2xl border border-purple-500/30 p-8 text-center" style={{ boxShadow: '0 0 50px rgba(168,85,247,0.4)' }}>
+                    {/* Grid background effect */}
+                    <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)] bg-[size:20px_20px] opacity-30 rounded-2xl" />
+                    
+                    {/* Content */}
+                    <div className="relative z-10">
+                      {/* Animated Title Change */}
+                      <div className="mb-6">
+                        <div className="text-3xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight" style={{ animation: 'title-morph 0.8s ease-out 1.4s forwards', filter: 'drop-shadow(0 0 20px rgba(168,85,247,0.6))' }}>
+                          My New Site - Win Big Today! 💎
+                        </div>
                       </div>
-                    </div>
-                    <div className="text-slate-400 text-sm mb-6">Join thousands of winners at the hottest casino of 2025</div>
-                    <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl text-white font-bold">
-                      <span>🎁 BONUS EXPIRES: 05:49</span>
+                      <div className="text-slate-300 text-sm mb-8 px-4">Join thousands of winners at the hottest casino of 2025</div>
+                      
+                      {/* Bonus Timer */}
+                      <div className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl text-white font-bold shadow-lg mb-6" style={{ boxShadow: '0 0 30px rgba(236,72,153,0.5)' }}>
+                        <span>🎁 BONUS EXPIRES: 05:49 ⏰</span>
+                      </div>
+                      
+                      {/* Win boxes */}
+                      <div className="grid grid-cols-2 gap-3 mt-6">
+                        <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl border border-green-400/40 p-4">
+                          <div className="text-green-400 font-bold text-xs mb-1">MAX WIN</div>
+                          <div className="text-white font-black text-lg">$5,000</div>
+                          <div className="text-2xl mt-1">💵</div>
+                        </div>
+                        <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl border border-purple-400/40 p-4">
+                          <div className="text-purple-400 font-bold text-xs mb-1">MIN WIN</div>
+                          <div className="text-white font-black text-lg">$1,050</div>
+                          <div className="text-2xl mt-1">🎖</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -299,10 +368,10 @@ export function ProcessAnimation() {
                 <Palette className="w-8 h-8 text-red-400" style={{ filter: `drop-shadow(0 0 8px ${step.color})` }} />
               </div>
               <h3 className="text-3xl font-black bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent" style={{ animation: 'text-pop 0.5s ease-out 0.4s forwards', opacity: 0 }}>
-                Preview Your Site
+                Preview Site
               </h3>
               <p className="text-slate-400" style={{ animation: 'text-pop 0.5s ease-out 0.5s forwards', opacity: 0 }}>
-                See it live before publishing
+                Click "Preview" to see it live
               </p>
             </div>
             
@@ -315,8 +384,16 @@ export function ProcessAnimation() {
                   <div className="text-white/60 text-sm">My New Site</div>
                 </div>
                 <div className="flex gap-2">
-                  {/* Preview Button - ACTIVE */}
-                  <div className="px-3 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-sm rounded-lg font-bold" style={{ boxShadow: `0 0 20px ${step.color}50`, animation: 'button-pulse 0.6s ease-out 0.8s forwards', opacity: 0 }}>▶ Preview</div>
+                  {/* Preview Button - ACTIVE with Click Indicator */}
+                  <div className="relative">
+                    <div className="px-3 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-sm rounded-lg font-bold cursor-pointer" style={{ boxShadow: `0 0 20px ${step.color}50`, animation: 'button-pulse 0.6s ease-out 0.8s forwards', opacity: 0 }}>
+                      ▶ Preview
+                    </div>
+                    {/* Click indicator */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ animation: 'click-pulse 1s ease-out 1.2s infinite' }}>
+                      <div className="w-full h-full rounded-lg border-2 border-cyan-400 bg-cyan-500/10" style={{ animation: 'ping-slow 1.5s ease-out 1.2s infinite' }} />
+                    </div>
+                  </div>
                   <div className="px-4 py-1.5 bg-slate-800/50 text-slate-400 text-sm rounded-lg border border-slate-700/50">Download / Host</div>
                 </div>
               </div>
@@ -349,10 +426,10 @@ export function ProcessAnimation() {
                 <Rocket className="w-8 h-8 text-emerald-400" style={{ filter: `drop-shadow(0 0 8px ${step.color})` }} />
               </div>
               <h3 className="text-3xl font-black bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent" style={{ animation: 'text-pop 0.5s ease-out 0.4s forwards', opacity: 0 }}>
-                Launch Your Site
+                Launch Site
               </h3>
               <p className="text-slate-400" style={{ animation: 'text-pop 0.5s ease-out 0.5s forwards', opacity: 0 }}>
-                Download or host on AWS instantly
+                Click "Download / Host" to go live
               </p>
             </div>
             
@@ -366,10 +443,16 @@ export function ProcessAnimation() {
                 </div>
                 <div className="flex gap-2">
                   <div className="px-3 py-1.5 bg-cyan-500/10 text-cyan-400 text-sm rounded-lg border border-cyan-400/20">Preview</div>
-                  {/* Download/Host Button - ACTIVE */}
-                  <div className="px-6 py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm rounded-lg font-bold relative overflow-hidden" style={{ boxShadow: `0 0 30px ${step.color}60`, animation: 'button-pulse 0.6s ease-out 0.8s forwards', opacity: 0 }}>
-                    <span className="relative z-10">🚀 Download / Host</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+                  {/* Download/Host Button - ACTIVE with Click Indicator */}
+                  <div className="relative">
+                    <div className="px-6 py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm rounded-lg font-bold relative overflow-hidden cursor-pointer" style={{ boxShadow: `0 0 30px ${step.color}60`, animation: 'button-pulse 0.6s ease-out 0.8s forwards', opacity: 0 }}>
+                      <span className="relative z-10">🚀 Download / Host</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+                    </div>
+                    {/* Click indicator */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ animation: 'click-pulse 1s ease-out 1.2s infinite' }}>
+                      <div className="w-full h-full rounded-lg border-2 border-emerald-400 bg-emerald-500/10" style={{ animation: 'ping-slow 1.5s ease-out 1.2s infinite' }} />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -615,6 +698,26 @@ export function ProcessAnimation() {
           }
           100% {
             transform: translateX(100%);
+          }
+        }
+        
+        @keyframes click-pulse {
+          0%, 100% {
+            opacity: 0;
+          }
+          50% {
+            opacity: 1;
+          }
+        }
+        
+        @keyframes ping-slow {
+          0% {
+            transform: scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: scale(1.1);
+            opacity: 0;
           }
         }
       `}</style>
