@@ -32,9 +32,9 @@ export function ProcessAnimation() {
     },
     { 
       number: '03', 
-      title: 'Build', 
-      desc: 'AI creates your site', 
-      Icon: Zap, 
+      title: 'Customize', 
+      desc: 'Make it yours', 
+      Icon: Palette, 
       color: '#FF76FF',
       rotate: -15,
     },
@@ -184,63 +184,76 @@ export function ProcessAnimation() {
           </div>
         )
       
-      case 2: // Build - AI Processing with NanoKit Style
+      case 2: // Customize - Template Editor Interface
         return (
-          <div className="w-full max-w-2xl">
+          <div className="w-full max-w-3xl">
             <div className="text-center space-y-3 mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-pink-500/20 to-orange-500/20 border border-pink-400/30 mb-2" style={{ animation: 'button-pop 0.5s ease-out 0.2s forwards', opacity: 0 }}>
-                <Zap className="w-8 h-8 text-pink-400 animate-pulse" style={{ filter: `drop-shadow(0 0 8px ${step.color})` }} />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-400/30 mb-2" style={{ animation: 'button-pop 0.5s ease-out 0.2s forwards', opacity: 0 }}>
+                <Palette className="w-8 h-8 text-pink-400" style={{ filter: `drop-shadow(0 0 8px ${step.color})` }} />
               </div>
-              <h3 className="text-3xl font-black bg-gradient-to-r from-pink-400 to-orange-400 bg-clip-text text-transparent" style={{ animation: 'text-pop 0.5s ease-out 0.4s forwards', opacity: 0 }}>
-                AI Building Site
+              <h3 className="text-3xl font-black bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent" style={{ animation: 'text-pop 0.5s ease-out 0.4s forwards', opacity: 0 }}>
+                Customize Your Template
               </h3>
               <p className="text-slate-400" style={{ animation: 'text-pop 0.5s ease-out 0.5s forwards', opacity: 0 }}>
-                Creating your perfect landing page
+                Edit colors, text, and images
               </p>
             </div>
             
-            <div className="relative aspect-video bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-slate-700/50 overflow-hidden p-6 shadow-2xl" style={{ boxShadow: `0 0 60px ${step.color}20, 0 8px 32px rgba(0,0,0,0.4)` }}>
-              {/* Terminal-style output */}
-              <div className="space-y-3 font-mono text-sm">
-                {[
-                  { text: '$ Analyzing requirements...', delay: 0.5, icon: '⚡' },
-                  { text: '$ Generating layout structure...', delay: 0.7, icon: '🎨' },
-                  { text: '$ Applying brand colors & fonts...', delay: 0.9, icon: '✨' },
-                  { text: '$ Optimizing for performance...', delay: 1.1, icon: '🚀' },
-                  { text: '✓ Your site is ready!', delay: 1.3, success: true, icon: '✓' },
-                ].map((line, i) => (
-                  <div key={i} className="flex items-center gap-3" style={{ animation: `code-line 0.4s ease-out ${line.delay}s forwards`, opacity: 0 }}>
-                    <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-gradient-to-br flex items-center justify-center text-xs" style={{ background: line.success ? 'linear-gradient(135deg, #10B981, #059669)' : `linear-gradient(135deg, ${step.color}, #EC4899)` }}>
-                      {line.icon}
+            {/* Editor Interface */}
+            <div className="relative bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-slate-700/50 overflow-hidden shadow-2xl" style={{ boxShadow: `0 0 60px ${step.color}20, 0 8px 32px rgba(0,0,0,0.4)` }}>
+              <div className="flex">
+                {/* Left Panel - Controls */}
+                <div className="w-1/3 bg-slate-950/50 border-r border-slate-700/50 p-4 space-y-4" style={{ animation: 'text-pop 0.5s ease-out 0.6s forwards', opacity: 0 }}>
+                  <div className="space-y-2">
+                    <div className="text-xs text-slate-400 font-semibold">Colors</div>
+                    <div className="flex gap-2">
+                      {['#4FC3FF', '#A855F7', '#FF76FF'].map((color, i) => (
+                        <div key={i} className="w-8 h-8 rounded-lg border-2 border-white/20 cursor-pointer transition-all hover:scale-110" style={{ background: color, animation: `button-pop 0.3s ease-out ${0.8 + i * 0.1}s forwards`, opacity: 0 }} />
+                      ))}
                     </div>
-                    <span className="text-slate-300">{line.text}</span>
-                    {!line.success && (
-                      <div className="ml-auto flex gap-1">
-                        <div className="w-1.5 h-1.5 rounded-full bg-pink-400 animate-pulse" style={{ animationDelay: '0s' }} />
-                        <div className="w-1.5 h-1.5 rounded-full bg-pink-400 animate-pulse" style={{ animationDelay: '0.2s' }} />
-                        <div className="w-1.5 h-1.5 rounded-full bg-pink-400 animate-pulse" style={{ animationDelay: '0.4s' }} />
-                      </div>
-                    )}
                   </div>
-                ))}
-              </div>
-              
-              {/* Progress bar with gradient */}
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="flex justify-between text-xs text-slate-500 mb-2">
-                  <span>Building...</span>
-                  <span className="font-mono">~30s</span>
-                </div>
-                <div className="h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700/50">
-                  <div className="h-full rounded-full relative" style={{ background: `linear-gradient(90deg, ${step.color}, #10B981)`, animation: 'progress-fill 2s ease-out forwards', width: '0%', boxShadow: `0 0 10px ${step.color}60` }}>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
+                  
+                  <div className="space-y-2">
+                    <div className="text-xs text-slate-400 font-semibold">Typography</div>
+                    <div className="space-y-1.5">
+                      {['Heading', 'Body'].map((label, i) => (
+                        <div key={i} className="h-6 bg-slate-800/50 rounded border border-slate-700/30 px-2 flex items-center text-xs text-slate-400" style={{ animation: `input-fill 0.3s ease-out ${1 + i * 0.1}s forwards`, opacity: 0 }}>
+                          {label}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="text-xs text-slate-400 font-semibold">Images</div>
+                    <div className="h-16 bg-gradient-to-br from-pink-500/10 to-purple-500/10 rounded border border-pink-400/20 flex items-center justify-center cursor-pointer" style={{ animation: 'button-pop 0.3s ease-out 1.2s forwards', opacity: 0 }}>
+                      <span className="text-xs text-pink-400">Upload</span>
+                    </div>
                   </div>
                 </div>
+                
+                {/* Right Panel - Preview */}
+                <div className="flex-1 p-6 space-y-3" style={{ animation: 'text-pop 0.5s ease-out 0.7s forwards', opacity: 0 }}>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="text-xs text-slate-500">Live Preview</div>
+                    <div className="flex gap-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                      <div className="text-xs text-slate-500">Auto-save</div>
+                    </div>
+                  </div>
+                  
+                  {/* Mini website preview */}
+                  <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg p-4 border border-slate-700/30 space-y-2">
+                    <div className="h-6 bg-gradient-to-r from-pink-400/30 to-purple-400/30 rounded w-3/4 transition-all" style={{ animation: 'card-pop 0.4s ease-out 0.9s forwards', opacity: 0 }} />
+                    <div className="h-3 bg-slate-700/40 rounded w-1/2" style={{ animation: 'card-pop 0.4s ease-out 1s forwards', opacity: 0 }} />
+                    <div className="h-3 bg-slate-700/40 rounded w-2/3" style={{ animation: 'card-pop 0.4s ease-out 1.1s forwards', opacity: 0 }} />
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      <div className="h-12 bg-gradient-to-br from-pink-500/20 to-purple-500/20 rounded border border-pink-400/20" style={{ animation: 'card-pop 0.4s ease-out 1.2s forwards', opacity: 0 }} />
+                      <div className="h-12 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded border border-cyan-400/20" style={{ animation: 'card-pop 0.4s ease-out 1.3s forwards', opacity: 0 }} />
+                    </div>
+                  </div>
+                </div>
               </div>
-              
-              {/* Floating particles */}
-              <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-pink-400 animate-ping" />
-              <div className="absolute top-8 right-12 w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" style={{ animationDelay: '0.5s' }} />
             </div>
           </div>
         )
