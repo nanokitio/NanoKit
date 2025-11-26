@@ -35,6 +35,7 @@ interface SearchParams {
   featuredPlayer?: string
   sportDirector?: string
   preview?: string  // Flag to disable protections in editor preview
+  editable?: string  // Flag to enable inline editing
 }
 
 export default async function SitePage({ 
@@ -92,7 +93,8 @@ export default async function SitePage({
       backgroundColor: query.backgroundColor || site.background_color || '#1a1a2e',
       backgroundImage: query.backgroundImage || site.background_image || '',
       featuredPlayer: query.featuredPlayer || site.featured_player || '',
-      sportDirector: query.sportDirector || site.sport_director || ''
+      sportDirector: query.sportDirector || site.sport_director || '',
+      editable: query.editable === '1'  // Pass editable flag to template
     } as any
 
     // Render based on template ID

@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { BrandConfig } from '@/lib/types'
+import { EditableText } from '@/components/EditableText'
 
 interface Template6Props {
   brand: BrandConfig
@@ -11,6 +12,13 @@ export function Template6({ brand }: Template6Props) {
   const [spinCount, setSpinCount] = React.useState(0);
   const [showWinModal, setShowWinModal] = React.useState(false);
   const [isSpinning, setIsSpinning] = React.useState(false);
+
+  // Function to send inline edits to parent (editor)
+  const handleInlineEdit = (field: string, value: string) => {
+    if (brand.editable && window.parent) {
+      window.parent.postMessage({ type: 'inlineEdit', field, value }, '*')
+    }
+  };
 
   const symbols = ['◆', '▲', '●', '★', '◇', '▼'];
 
@@ -74,12 +82,22 @@ export function Template6({ brand }: Template6Props) {
           
           <div className="synth-title-container mb-6">
             <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 mb-4 synth-glow animate-text-shimmer tracking-wider">
-              ◆ {brand.copy.headline || `${brand.brandName.toUpperCase()} CYBER WINS`} ◆
+              ◆ <EditableText 
+                value={brand.copy.headline || `${brand.brandName.toUpperCase()} CYBER WINS`}
+                onChange={(value) => handleInlineEdit('headline', value)}
+                disabled={!brand.editable}
+                className="inline"
+              /> ◆
             </h1>
             <div className="synth-underline"></div>
           </div>
           <p className="text-lg md:text-xl text-cyan-100 mb-6 font-light tracking-wide retro-text">
-            {brand.copy.subheadline || 'Enter the neon grid where digital fortunes await'}
+            <EditableText 
+              value={brand.copy.subheadline || 'Enter the neon grid where digital fortunes await'}
+              onChange={(value) => handleInlineEdit('subheadline', value)}
+              disabled={!brand.editable}
+              className="inline"
+            />
           </p>
           
           {/* Retro Timer */}
@@ -171,7 +189,12 @@ export function Template6({ brand }: Template6Props) {
             onClick={() => brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
           >
             <span className="tracking-widest">
-              ★ {brand.copy.cta || 'ENTER THE GRID'} ★
+              ★ <EditableText 
+                value={brand.copy.cta || 'ENTER THE GRID'}
+                onChange={(value) => handleInlineEdit('cta', value)}
+                disabled={!brand.editable}
+                className="inline"
+              /> ★
             </span>
           </button>
           <p className="text-cyan-200/60 text-sm mt-6 font-mono tracking-wide">18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY</p>

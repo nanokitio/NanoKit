@@ -210,11 +210,35 @@ export default function SiteEditorPage() {
     }
   ]
 
-  // Listen for close message from iframe
+  // Listen for close message from iframe AND inline edits
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data === 'closePopup') {
         setIsPopupOpen(false)
+      }
+      // Handle inline text edits from template
+      if (event.data.type === 'inlineEdit') {
+        const { field, value } = event.data
+        switch(field) {
+          case 'headline':
+            setHeadline(value)
+            break
+          case 'subheadline':
+            setSubheadline(value)
+            break
+          case 'cta':
+            setCta(value)
+            break
+          case 'popupTitle':
+            setPopupTitle(value)
+            break
+          case 'popupMessage':
+            setPopupMessage(value)
+            break
+          case 'popupPrize':
+            setPopupPrize(value)
+            break
+        }
       }
     }
     
@@ -1048,6 +1072,7 @@ export default function SiteEditorPage() {
       featuredPlayer: featuredPlayer || '',  // Team member names
       sportDirector: sportDirector || '',
       preview: '1',  // Flag to disable blur in editor iframe
+      editable: '1',  // Flag to enable inline editing
     })
     
     return `/sites/${slug}?${params.toString()}`

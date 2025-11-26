@@ -108,6 +108,8 @@ export interface BrandConfig {
   // Team members - simple fields
   featuredPlayer?: string  // e.g., "Ale Miranda"
   sportDirector?: string   // e.g., "Nicolás Cantudo"
+  // Inline editing flag
+  editable?: boolean  // Enables inline text editing in the editor
 }
 
 // Template render result
