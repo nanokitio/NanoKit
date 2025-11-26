@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import Image from 'next/image'
-import Spline from '@splinetool/react-spline'
 import { useState, useEffect } from 'react'
 import { Menu, X, ArrowUp, Sparkles, Palette, Rocket } from 'lucide-react'
 
@@ -151,16 +150,46 @@ export default function Home() {
         />
       )}
 
+      {/* Animated Vertical Lines */}
+      <div className="fixed inset-0 z-[0] overflow-hidden pointer-events-none">
+        {/* Line 1 - Turquoise (Left) */}
+        <div
+          className="absolute top-0 w-1 bg-gradient-to-b from-[#4FC3FF] to-[#4FC3FF]/20"
+          style={{
+            left: '20%',
+            height: '100%',
+            animation: 'drawLine 2s ease-out forwards',
+            boxShadow: '0 0 20px rgba(79, 195, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
+          }}
+        />
+        
+        {/* Line 2 - Fuchsia (Center) */}
+        <div
+          className="absolute top-0 w-1 bg-gradient-to-b from-[#FF76FF] to-[#FF76FF]/20"
+          style={{
+            left: '50%',
+            height: '100%',
+            animation: 'drawLine 2s ease-out 0.3s forwards',
+            animationFillMode: 'both',
+            boxShadow: '0 0 20px rgba(255, 118, 255, 0.6), 0 0 40px rgba(255, 118, 255, 0.4)'
+          }}
+        />
+        
+        {/* Line 3 - Purple-Turquoise (Right) */}
+        <div
+          className="absolute top-0 w-1 bg-gradient-to-b from-[#B94AFF] to-[#4FC3FF]/20"
+          style={{
+            left: '80%',
+            height: '100%',
+            animation: 'drawLine 2s ease-out 0.6s forwards',
+            animationFillMode: 'both',
+            boxShadow: '0 0 20px rgba(185, 74, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
+          }}
+        />
+      </div>
+
       {/* Hero Section */}
       <section id="home" className="relative z-10 min-h-screen pt-32 pb-32 px-6">
-        {/* Spline background - behind hero copy, above stars */}
-        <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center -translate-x-[10px]">
-          <Spline scene="https://prod.spline.design/Ki5g7f1gDlFXh-FW/scene.splinecode" />
-        </div>
-        
-        {/* Gradient overlay to fade bottom to black */}
-        <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-transparent via-transparent to-black"></div>
-        
         <div className="relative max-w-6xl mx-auto text-center z-10">
           <h1 className="text-7xl md:text-9xl font-black leading-[0.95] mb-10 animate-fadeInUp" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
             <span className="block text-white drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
@@ -385,6 +414,19 @@ export default function Home() {
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes drawLine {
+          0% {
+            height: 0;
+            opacity: 0;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            height: 100%;
+            opacity: 1;
+          }
         }
         .animate-gradient {
           animation: gradient 3s ease infinite;
