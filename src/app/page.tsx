@@ -376,12 +376,9 @@ export default function Home() {
             </span>
           </h2>
           
-          <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl" style={{
-            boxShadow: '0 0 60px rgba(79, 195, 255, 0.3), inset 0 0 40px rgba(168, 85, 247, 0.1)'
-          }}>
-            <div className="aspect-video flex items-center justify-center">
-              <ProcessAnimation />
-            </div>
+          {/* Floating Animation - No Container */}
+          <div className="relative w-full min-h-[600px] flex items-center justify-center">
+            <ProcessAnimation />
           </div>
         </div>
       </section>

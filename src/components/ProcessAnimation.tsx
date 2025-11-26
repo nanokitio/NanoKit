@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Sparkles, Palette, Zap, Rocket } from 'lucide-react'
 
 export function ProcessAnimation() {
   const [currentStep, setCurrentStep] = useState(0)
@@ -8,178 +9,222 @@ export function ProcessAnimation() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentStep((prev) => (prev + 1) % 4)
-    }, 3000) // Change step every 3 seconds
-
+    }, 3000)
     return () => clearInterval(interval)
   }, [])
 
   const steps = [
-    {
-      title: '1. Create Account',
-      icon: (
-        <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="8" r="4" />
-          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-        </svg>
-      ),
-      color: 'from-cyan-400 to-blue-500',
-      glow: 'rgba(79, 195, 255, 0.6)',
+    { 
+      number: '01', 
+      title: 'Create Account', 
+      desc: 'Sign up instantly', 
+      Icon: Sparkles, 
+      color: '#4FC3FF',
+      rotate: 0,
     },
-    {
-      title: '2. Pick Template',
-      icon: (
-        <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="3" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="3" width="7" height="7" rx="1" />
-          <rect x="3" y="14" width="7" height="7" rx="1" />
-          <rect x="14" y="14" width="7" height="7" rx="1" />
-        </svg>
-      ),
-      color: 'from-purple-400 to-pink-500',
-      glow: 'rgba(168, 85, 247, 0.6)',
+    { 
+      number: '02', 
+      title: 'Choose Template', 
+      desc: 'Pick your design', 
+      Icon: Palette, 
+      color: '#A855F7',
+      rotate: 15,
     },
-    {
-      title: '3. Customize',
-      icon: (
-        <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 20h9" />
-          <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-        </svg>
-      ),
-      color: 'from-pink-400 to-rose-500',
-      glow: 'rgba(255, 118, 255, 0.6)',
+    { 
+      number: '03', 
+      title: 'Build', 
+      desc: 'AI creates your site', 
+      Icon: Zap, 
+      color: '#FF76FF',
+      rotate: -15,
     },
-    {
-      title: '4. Publish',
-      icon: (
-        <svg className="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5z" />
-          <path d="M2 17l10 5 10-5" />
-          <path d="M2 12l10 5 10-5" />
-        </svg>
-      ),
-      color: 'from-emerald-400 to-teal-500',
-      glow: 'rgba(16, 185, 129, 0.6)',
+    { 
+      number: '04', 
+      title: 'Launch', 
+      desc: 'Go live now', 
+      Icon: Rocket, 
+      color: '#10B981',
+      rotate: 45,
     },
   ]
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center p-12">
-      {/* Connection Lines */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-        <defs>
-          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(79, 195, 255, 0.3)" />
-            <stop offset="50%" stopColor="rgba(168, 85, 247, 0.3)" />
-            <stop offset="100%" stopColor="rgba(255, 118, 255, 0.3)" />
-          </linearGradient>
-        </defs>
-        
-        {/* Horizontal connecting line */}
-        <line
-          x1="20%"
-          y1="50%"
-          x2="80%"
-          y2="50%"
-          stroke="url(#lineGradient)"
-          strokeWidth="2"
-          strokeDasharray="5,5"
-          className="animate-pulse"
-        />
-      </svg>
+    <div className="relative w-full min-h-[500px] flex items-center justify-center">
+      {/* Ambient Glow */}
+      <div 
+        className="absolute w-[500px] h-[500px] rounded-full blur-3xl transition-all duration-1000"
+        style={{
+          background: `radial-gradient(circle, ${steps[currentStep].color}40, transparent)`,
+        }}
+      />
 
-      {/* Steps Container */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 w-full max-w-5xl relative" style={{ zIndex: 2 }}>
+      {/* Main Content - Horizontal Timeline */}
+      <div className="relative flex items-center gap-4 md:gap-8 max-w-6xl px-4">
         {steps.map((step, index) => {
-          const isActive = currentStep === index
-          const isPast = currentStep > index || (currentStep === 0 && index === 3)
-
+          const isActive = index === currentStep
+          const isPast = index < currentStep
+          
           return (
-            <div
-              key={index}
-              className="flex flex-col items-center gap-4 transition-all duration-700"
-              style={{
-                opacity: isActive ? 1 : isPast ? 0.5 : 0.3,
-                transform: isActive ? 'scale(1.1)' : 'scale(1)',
-              }}
-            >
-              {/* Icon Circle */}
+            <div key={index} className="flex flex-col items-center relative">
+              {/* Step Circle */}
               <div
-                className="relative rounded-full p-6 backdrop-blur-xl border-2 transition-all duration-700"
+                className="relative w-24 h-24 md:w-32 md:h-32 rounded-full flex flex-col items-center justify-center transition-all duration-700 cursor-pointer group"
                 style={{
-                  background: isActive
-                    ? `linear-gradient(135deg, ${step.color})`
-                    : 'rgba(255, 255, 255, 0.05)',
-                  borderColor: isActive ? step.glow : 'rgba(255, 255, 255, 0.1)',
-                  boxShadow: isActive ? `0 0 40px ${step.glow}, 0 0 80px ${step.glow}` : 'none',
+                  background: isActive 
+                    ? `linear-gradient(135deg, ${step.color}, ${step.color}DD)` 
+                    : isPast 
+                    ? `${step.color}40` 
+                    : 'rgba(255,255,255,0.05)',
+                  border: `3px solid ${isActive ? step.color : isPast ? `${step.color}60` : 'rgba(255,255,255,0.1)'}`,
+                  boxShadow: isActive 
+                    ? `0 0 60px ${step.color}80, 0 0 100px ${step.color}40, inset 0 0 20px rgba(255,255,255,0.2)` 
+                    : isPast
+                    ? `0 0 20px ${step.color}40`
+                    : 'none',
+                  transform: isActive ? 'scale(1.15)' : 'scale(1)',
                 }}
               >
-                {/* Pulse ring */}
+                {/* Pulse Ring */}
                 {isActive && (
-                  <div
-                    className="absolute inset-0 rounded-full animate-ping"
-                    style={{
-                      background: `linear-gradient(135deg, ${step.color})`,
-                      opacity: 0.3,
-                    }}
-                  />
+                  <>
+                    <div 
+                      className="absolute inset-0 rounded-full border-2 animate-ping"
+                      style={{
+                        borderColor: step.color,
+                        opacity: 0.6,
+                      }}
+                    />
+                    <div 
+                      className="absolute inset-0 rounded-full border-2 animate-ping"
+                      style={{
+                        borderColor: step.color,
+                        opacity: 0.4,
+                        animationDelay: '0.5s',
+                      }}
+                    />
+                  </>
                 )}
 
-                {/* Icon */}
-                <div className="relative text-white">{step.icon}</div>
+                {/* Icon with Neon Effect */}
+                <div 
+                  className="transition-all duration-500 relative"
+                  style={{
+                    transform: isActive 
+                      ? `scale(1.1) rotate(${step.rotate}deg)` 
+                      : isPast 
+                      ? `scale(0.95) rotate(${step.rotate * 0.5}deg)` 
+                      : 'scale(0.9) rotate(0deg)',
+                  }}
+                >
+                  <step.Icon
+                    size={48}
+                    strokeWidth={2.5}
+                    className="transition-all duration-700"
+                    style={{
+                      color: isActive ? step.color : isPast ? `${step.color}AA` : 'rgba(255,255,255,0.3)',
+                      filter: isActive 
+                        ? `drop-shadow(0 0 8px ${step.color}) drop-shadow(0 0 16px ${step.color}) drop-shadow(0 0 24px ${step.color})` 
+                        : isPast
+                        ? `drop-shadow(0 0 4px ${step.color})`
+                        : 'none',
+                      animation: isActive ? 'neon-flicker 2s ease-in-out infinite' : 'none',
+                    }}
+                  />
+                  
+                  {/* Extra glow layer for active state */}
+                  {isActive && (
+                    <div 
+                      className="absolute inset-0 blur-xl opacity-60 transition-opacity duration-700"
+                      style={{
+                        background: step.color,
+                      }}
+                    />
+                  )}
+                </div>
+
+                {/* Number Badge */}
+                <div 
+                  className="absolute -top-2 -right-2 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-xs md:text-sm font-black transition-all duration-500"
+                  style={{
+                    background: isActive ? step.color : isPast ? `${step.color}60` : 'rgba(255,255,255,0.1)',
+                    color: '#fff',
+                    boxShadow: isActive ? `0 0 20px ${step.color}` : 'none',
+                  }}
+                >
+                  {step.number}
+                </div>
+
+                {/* Hover Effect */}
+                <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
               </div>
 
-              {/* Step Title */}
-              <div className="text-center">
-                <h3
-                  className="text-sm md:text-base font-bold transition-all duration-700"
+              {/* Label */}
+              <div className="mt-4 text-center space-y-1">
+                <h4 
+                  className="text-lg md:text-2xl font-black transition-all duration-500"
                   style={{
-                    color: isActive ? '#fff' : 'rgba(255, 255, 255, 0.6)',
-                    textShadow: isActive ? `0 0 20px ${step.glow}` : 'none',
+                    color: isActive ? step.color : isPast ? `${step.color}CC` : 'rgba(255,255,255,0.4)',
+                    textShadow: isActive ? `0 0 30px ${step.color}` : 'none',
                   }}
                 >
                   {step.title}
-                </h3>
+                </h4>
+                <p 
+                  className="text-xs md:text-sm transition-opacity duration-500"
+                  style={{
+                    color: 'rgba(255,255,255,0.6)',
+                    opacity: isActive ? 1 : 0.5,
+                  }}
+                >
+                  {step.desc}
+                </p>
               </div>
 
-              {/* Progress Indicator */}
-              {isActive && (
-                <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full"
-                    style={{
-                      background: `linear-gradient(90deg, ${step.color})`,
-                      animation: 'progressBar 3s linear',
-                    }}
-                  />
-                </div>
+              {/* Connecting Line */}
+              {index < steps.length - 1 && (
+                <div 
+                  className="absolute top-12 md:top-16 left-[calc(50%+48px)] md:left-[calc(50%+64px)] w-4 md:w-8 h-1 transition-all duration-700"
+                  style={{
+                    background: isPast || (index === currentStep) 
+                      ? `linear-gradient(90deg, ${step.color}, ${steps[index + 1].color})` 
+                      : 'rgba(255,255,255,0.1)',
+                    boxShadow: isPast || (index === currentStep) ? `0 0 10px ${step.color}` : 'none',
+                  }}
+                />
               )}
             </div>
           )
         })}
       </div>
 
-      {/* Center connecting dots */}
-      <div className="absolute top-1/2 left-0 right-0 flex justify-center items-center gap-4 pointer-events-none hidden md:flex">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="w-2 h-2 rounded-full animate-pulse"
+      {/* Bottom Progress Bar */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-md px-4">
+        <div className="h-2 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
+          <div 
+            className="h-full transition-all duration-700 rounded-full"
             style={{
-              background: 'rgba(79, 195, 255, 0.5)',
-              animationDelay: `${i * 0.3}s`,
+              width: `${((currentStep + 1) / 4) * 100}%`,
+              background: `linear-gradient(90deg, ${steps[0].color}, ${steps[currentStep].color})`,
+              boxShadow: `0 0 20px ${steps[currentStep].color}`,
             }}
           />
-        ))}
+        </div>
+        <div className="text-center mt-3 text-sm text-white/60 font-medium">
+          Step {currentStep + 1} of 4 • 60 seconds total
+        </div>
       </div>
 
+      {/* Neon Animation Styles */}
       <style jsx>{`
-        @keyframes progressBar {
-          from {
-            width: 0%;
+        @keyframes neon-flicker {
+          0%, 100% {
+            opacity: 1;
           }
-          to {
-            width: 100%;
+          10%, 30%, 50%, 70%, 90% {
+            opacity: 0.95;
+          }
+          20%, 40%, 60%, 80% {
+            opacity: 1;
           }
         }
       `}</style>
