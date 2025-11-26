@@ -211,74 +211,83 @@ export default function Home() {
         />
       )}
 
-      {/* Animated Vertical Lines - Fixed at screen edges with safe margins */}
+      {/* Animated Vertical Lines - Decorative edges only */}
       <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
-        {/* RIGHT SIDE LINES - Always respect safe margin from edge */}
-        {/* Line 1 - Turquoise */}
-        <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#4FC3FF] to-[#4FC3FF]/20 right-[max(24px,calc((100vw-80rem)/2+120px))] lg:right-[max(32px,calc((100vw-80rem)/2+120px))]"
-          style={{
-            height: '100%',
-            animation: 'drawLine 2s ease-out forwards',
-            boxShadow: '0 0 20px rgba(79, 195, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
-          }}
-        />
-        
-        {/* Line 2 - Fuchsia */}
-        <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#FF76FF] to-[#FF76FF]/20 right-[max(24px,calc((100vw-80rem)/2+80px))] lg:right-[max(32px,calc((100vw-80rem)/2+80px))]"
-          style={{
-            height: '100%',
-            animation: 'drawLine 2s ease-out 0.3s forwards',
-            animationFillMode: 'both',
-            boxShadow: '0 0 20px rgba(255, 118, 255, 0.6), 0 0 40px rgba(255, 118, 255, 0.4)'
-          }}
-        />
-        
-        {/* Line 3 - Purple-Turquoise */}
-        <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#B94AFF] to-[#4FC3FF]/20 right-[max(24px,calc((100vw-80rem)/2+40px))] lg:right-[max(32px,calc((100vw-80rem)/2+40px))]"
-          style={{
-            height: '100%',
-            animation: 'drawLine 2s ease-out 0.6s forwards',
-            animationFillMode: 'both',
-            boxShadow: '0 0 20px rgba(185, 74, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
-          }}
-        />
+        {/* Hide on small screens where they interfere */}
+        <div className="hidden sm:block">
+          {/* RIGHT SIDE LINES */}
+          {/* Line 1 - Turquoise */}
+          <div
+            className="absolute top-0 w-1 bg-gradient-to-b from-[#4FC3FF] to-[#4FC3FF]/20"
+            style={{
+              right: '10px',
+              height: '100%',
+              animation: 'drawLine 2s ease-out forwards',
+              boxShadow: '0 0 20px rgba(79, 195, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
+            }}
+          />
+          
+          {/* Line 2 - Fuchsia */}
+          <div
+            className="absolute top-0 w-1 bg-gradient-to-b from-[#FF76FF] to-[#FF76FF]/20"
+            style={{
+              right: '30px',
+              height: '100%',
+              animation: 'drawLine 2s ease-out 0.3s forwards',
+              animationFillMode: 'both',
+              boxShadow: '0 0 20px rgba(255, 118, 255, 0.6), 0 0 40px rgba(255, 118, 255, 0.4)'
+            }}
+          />
+          
+          {/* Line 3 - Purple-Turquoise */}
+          <div
+            className="absolute top-0 w-1 bg-gradient-to-b from-[#B94AFF] to-[#4FC3FF]/20"
+            style={{
+              right: '50px',
+              height: '100%',
+              animation: 'drawLine 2s ease-out 0.6s forwards',
+              animationFillMode: 'both',
+              boxShadow: '0 0 20px rgba(185, 74, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
+            }}
+          />
 
-        {/* LEFT SIDE LINES - Mirror positioning */}
-        {/* Line 4 - Purple-Turquoise */}
-        <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#B94AFF] to-[#4FC3FF]/20 left-[max(24px,calc((100vw-80rem)/2+40px))] lg:left-[max(32px,calc((100vw-80rem)/2+40px))]"
-          style={{
-            height: '100%',
-            animation: 'drawLine 2s ease-out forwards',
-            animationFillMode: 'both',
-            boxShadow: '0 0 20px rgba(185, 74, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
-          }}
-        />
-        
-        {/* Line 5 - Fuchsia */}
-        <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#FF76FF] to-[#FF76FF]/20 left-[max(24px,calc((100vw-80rem)/2+80px))] lg:left-[max(32px,calc((100vw-80rem)/2+80px))]"
-          style={{
-            height: '100%',
-            animation: 'drawLine 2s ease-out 0.3s forwards',
-            animationFillMode: 'both',
-            boxShadow: '0 0 20px rgba(255, 118, 255, 0.6), 0 0 40px rgba(255, 118, 255, 0.4)'
-          }}
-        />
-        
-        {/* Line 6 - Turquoise */}
-        <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#4FC3FF] to-[#4FC3FF]/20 left-[max(24px,calc((100vw-80rem)/2+120px))] lg:left-[max(32px,calc((100vw-80rem)/2+120px))]"
-          style={{
-            height: '100%',
-            animation: 'drawLine 2s ease-out 0.6s forwards',
-            animationFillMode: 'both',
-            boxShadow: '0 0 20px rgba(79, 195, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
-          }}
-        />
+          {/* LEFT SIDE LINES */}
+          {/* Line 4 - Purple-Turquoise */}
+          <div
+            className="absolute top-0 w-1 bg-gradient-to-b from-[#B94AFF] to-[#4FC3FF]/20"
+            style={{
+              left: '10px',
+              height: '100%',
+              animation: 'drawLine 2s ease-out forwards',
+              animationFillMode: 'both',
+              boxShadow: '0 0 20px rgba(185, 74, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
+            }}
+          />
+          
+          {/* Line 5 - Fuchsia */}
+          <div
+            className="absolute top-0 w-1 bg-gradient-to-b from-[#FF76FF] to-[#FF76FF]/20"
+            style={{
+              left: '30px',
+              height: '100%',
+              animation: 'drawLine 2s ease-out 0.3s forwards',
+              animationFillMode: 'both',
+              boxShadow: '0 0 20px rgba(255, 118, 255, 0.6), 0 0 40px rgba(255, 118, 255, 0.4)'
+            }}
+          />
+          
+          {/* Line 6 - Turquoise */}
+          <div
+            className="absolute top-0 w-1 bg-gradient-to-b from-[#4FC3FF] to-[#4FC3FF]/20"
+            style={{
+              left: '50px',
+              height: '100%',
+              animation: 'drawLine 2s ease-out 0.6s forwards',
+              animationFillMode: 'both',
+              boxShadow: '0 0 20px rgba(79, 195, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
+            }}
+          />
+        </div>
       </div>
 
       {/* Hero Section */}
