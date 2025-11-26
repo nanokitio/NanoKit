@@ -317,11 +317,6 @@ export default function Home() {
                 </span>
               </Button>
             </Link>
-            <a href="#templates">
-              <Button variant="ghost" className="text-[#EAF1FF] hover:text-[#4FC3FF] border-2 border-[#4FC3FF]/30 hover:border-[#4FC3FF] px-12 py-7 rounded-2xl text-xl font-bold transition-all duration-300 backdrop-blur-sm hover:bg-[#4FC3FF]/10">
-                Browse Templates
-              </Button>
-            </a>
           </div>
 
         </div>
