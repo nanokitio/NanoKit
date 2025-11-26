@@ -133,7 +133,7 @@ export function ProcessAnimation() {
             </div>
             
             <div className="grid grid-cols-3 gap-4">
-              {['Tech Startup', 'SaaS Product', 'App Launch'].map((name, i) => (
+              {['Cyber Casino', 'Fortune Wheel', 'Scratch Card'].map((name, i) => (
                 <div 
                   key={i} 
                   className="relative aspect-[3/4] rounded-xl overflow-hidden cursor-pointer group transition-all" 
