@@ -77,7 +77,46 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden relative" style={{ fontFamily: 'Space Grotesk, system-ui, sans-serif' }}>
+    <div className="min-h-screen text-white overflow-x-hidden relative" style={{ fontFamily: 'Space Grotesk, system-ui, sans-serif' }}>
+      {/* Vintage Black Background with Retro Effects */}
+      <div className="fixed inset-0" style={{ zIndex: -2 }}>
+        {/* Base black background */}
+        <div className="absolute inset-0 bg-black" />
+        
+        {/* Vintage gradient overlay - subtle deep blue and purple tones */}
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(25, 25, 60, 0.3) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 1) 100%)',
+          }}
+        />
+        
+        {/* Subtle color tint for vintage feel */}
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.2) 0%, rgba(0, 0, 0, 0) 100%)',
+          }}
+        />
+        
+        {/* Vignette effect */}
+        <div 
+          className="absolute inset-0" 
+          style={{
+            boxShadow: 'inset 0 0 200px rgba(0, 0, 0, 0.8)',
+          }}
+        />
+        
+        {/* Film grain texture overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]" 
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat',
+          }}
+        />
+      </div>
+
       {/* Vintage Starfield background with constellations */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
         {/* Constellation lines */}
