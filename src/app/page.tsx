@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
+import { ProcessAnimation } from '@/components/ProcessAnimation'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { Menu, X, ArrowUp, Sparkles, Palette, Rocket } from 'lucide-react'
@@ -375,11 +376,11 @@ export default function Home() {
             </span>
           </h2>
           
-          <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl" style={{
-            boxShadow: '0 0 60px rgba(79, 195, 255, 0.3)'
+          <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl" style={{
+            boxShadow: '0 0 60px rgba(79, 195, 255, 0.3), inset 0 0 40px rgba(168, 85, 247, 0.1)'
           }}>
-            <div className="aspect-video flex items-center justify-center text-white/50 text-2xl">
-              60 sec video tutorial
+            <div className="aspect-video flex items-center justify-center">
+              <ProcessAnimation />
             </div>
           </div>
         </div>
