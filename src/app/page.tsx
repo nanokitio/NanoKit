@@ -79,9 +79,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden relative" style={{ fontFamily: 'Space Grotesk, system-ui, sans-serif' }}>
       {/* Vintage Starfield background with constellations */}
-      <div className="absolute inset-0 overflow-hidden" style={{ zIndex: -1 }}>
+      <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
         {/* Constellation lines */}
-        <svg className="absolute inset-0 w-full h-full" style={{ opacity: 0.3 }}>
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ opacity: 0.3 }}>
           {constellations.map((line, i) => (
             <line
               key={i}
@@ -212,7 +212,7 @@ export default function Home() {
       )}
 
       {/* Animated Vertical Lines */}
-      <div className="fixed inset-0 z-[0] overflow-hidden pointer-events-none">
+      <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
         {/* RIGHT SIDE LINES */}
         {/* Line 1 - Turquoise */}
         <div
