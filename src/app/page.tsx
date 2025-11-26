@@ -331,7 +331,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section id="home" className="relative z-10 min-h-screen pt-32 pb-12 px-6">
+      <section id="home" className="relative z-10 min-h-screen pt-32 pb-8 px-6">
         <div className="relative max-w-6xl mx-auto text-center z-10">
           <h1 className="text-7xl md:text-9xl font-black leading-[0.95] mb-10 animate-fadeInUp" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
             <span className="block text-white drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
@@ -366,7 +366,7 @@ export default function Home() {
       </section>
 
       {/* Video Section - From Idea to Live Page in 60 Seconds */}
-      <section id="video" className="relative z-10 py-16 px-6 bg-transparent">
+      <section id="video" className="relative z-10 py-12 px-6 bg-transparent">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-5xl md:text-6xl font-black mb-16 text-center" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
             <span className="block bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent" style={{
@@ -384,7 +384,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="relative z-10 py-16 px-6 bg-transparent">
+      <section id="features" className="relative z-10 py-12 px-6 bg-transparent">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-3 gap-10">
             {[
@@ -430,7 +430,7 @@ export default function Home() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="relative z-10 py-16 px-6 bg-transparent">
+      <section id="pricing" className="relative z-10 py-12 px-6 bg-transparent">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
             <h2 className="text-6xl md:text-7xl font-black mb-6" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
@@ -517,7 +517,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 py-20 px-6 border-t border-white/10 backdrop-blur-2xl bg-black/20">
+      <footer className="relative z-10 py-12 px-6 border-t border-white/10 backdrop-blur-2xl bg-black/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center text-white/40 text-sm">
             <p>2025 <a href="https://nanokit.io" className="hover:text-white transition-colors">Nanokit.io</a></p>
