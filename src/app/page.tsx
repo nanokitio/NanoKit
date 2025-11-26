@@ -152,22 +152,22 @@ export default function Home() {
 
       {/* Animated Vertical Lines */}
       <div className="fixed inset-0 z-[0] overflow-hidden pointer-events-none">
-        {/* Line 1 - Turquoise (Left) */}
+        {/* Line 1 - Turquoise */}
         <div
           className="absolute top-0 w-1 bg-gradient-to-b from-[#4FC3FF] to-[#4FC3FF]/20"
           style={{
-            left: '20%',
+            right: '120px',
             height: '100%',
             animation: 'drawLine 2s ease-out forwards',
             boxShadow: '0 0 20px rgba(79, 195, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
           }}
         />
         
-        {/* Line 2 - Fuchsia (Center) */}
+        {/* Line 2 - Fuchsia */}
         <div
           className="absolute top-0 w-1 bg-gradient-to-b from-[#FF76FF] to-[#FF76FF]/20"
           style={{
-            left: '50%',
+            right: '80px',
             height: '100%',
             animation: 'drawLine 2s ease-out 0.3s forwards',
             animationFillMode: 'both',
@@ -175,11 +175,11 @@ export default function Home() {
           }}
         />
         
-        {/* Line 3 - Purple-Turquoise (Right) */}
+        {/* Line 3 - Purple-Turquoise */}
         <div
           className="absolute top-0 w-1 bg-gradient-to-b from-[#B94AFF] to-[#4FC3FF]/20"
           style={{
-            left: '80%',
+            right: '40px',
             height: '100%',
             animation: 'drawLine 2s ease-out 0.6s forwards',
             animationFillMode: 'both',
