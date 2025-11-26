@@ -8,20 +8,60 @@ import { useState, useEffect } from 'react'
 import { Menu, X, ArrowUp, Sparkles, Palette, Rocket } from 'lucide-react'
 
 export default function Home() {
-  const [stars, setStars] = useState<Array<{size: number, brightness: number, top: number, left: number}>>([]);
+  const [stars, setStars] = useState<Array<{size: number, brightness: number, top: number, left: number, color: string}>>([]);
+  const [constellations, setConstellations] = useState<Array<{x1: number, y1: number, x2: number, y2: number}>>([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    // Generate stars only on client side to avoid hydration mismatch
-    const starArray = [...Array(150)].map(() => ({
-      size: Math.random() * 2.5 + 0.5,
-      brightness: Math.random() * 0.7 + 0.3,
+    // Vintage color palette for stars
+    const vintageColors = [
+      'rgba(255, 255, 255, 1)',      // White
+      'rgba(173, 216, 230, 1)',      // Light Blue
+      'rgba(255, 250, 205, 1)',      // Lemon Chiffon
+      'rgba(221, 160, 221, 1)',      // Plum
+      'rgba(176, 224, 230, 1)',      // Powder Blue
+    ];
+
+    // Generate more stars for a denser field
+    const starArray = [...Array(250)].map(() => ({
+      size: Math.random() * 3 + 0.5,
+      brightness: Math.random() * 0.6 + 0.4,
       top: Math.random() * 100,
       left: Math.random() * 100,
+      color: vintageColors[Math.floor(Math.random() * vintageColors.length)]
     }));
     setStars(starArray);
+
+    // Create constellation lines connecting random stars
+    const constellationLines: Array<{x1: number, y1: number, x2: number, y2: number}> = [];
+    const mainStars = starArray.filter(star => star.size > 2).slice(0, 30); // Use brighter stars
+    
+    for (let i = 0; i < mainStars.length - 1; i++) {
+      // Connect each star to 1-2 nearby stars
+      const connections = Math.random() > 0.5 ? 1 : 2;
+      for (let j = 0; j < connections && i + j + 1 < mainStars.length; j++) {
+        const star1 = mainStars[i];
+        const star2 = mainStars[i + j + 1];
+        
+        // Only connect if stars are reasonably close
+        const distance = Math.sqrt(
+          Math.pow(star1.left - star2.left, 2) + 
+          Math.pow(star1.top - star2.top, 2)
+        );
+        
+        if (distance < 15) { // Max distance threshold
+          constellationLines.push({
+            x1: star1.left,
+            y1: star1.top,
+            x2: star2.left,
+            y2: star2.top
+          });
+        }
+      }
+    }
+    setConstellations(constellationLines);
 
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -38,8 +78,28 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden relative" style={{ fontFamily: 'Space Grotesk, system-ui, sans-serif' }}>
-      {/* Starfield background - static stars */}
+      {/* Vintage Starfield background with constellations */}
       <div className="absolute inset-0 overflow-hidden" style={{ zIndex: -1 }}>
+        {/* Constellation lines */}
+        <svg className="absolute inset-0 w-full h-full" style={{ opacity: 0.3 }}>
+          {constellations.map((line, i) => (
+            <line
+              key={i}
+              x1={`${line.x1}%`}
+              y1={`${line.y1}%`}
+              x2={`${line.x2}%`}
+              y2={`${line.y2}%`}
+              stroke="rgba(173, 216, 230, 0.5)"
+              strokeWidth="0.5"
+              strokeDasharray="2,3"
+              style={{
+                filter: 'drop-shadow(0 0 2px rgba(173, 216, 230, 0.3))'
+              }}
+            />
+          ))}
+        </svg>
+
+        {/* Stars with vintage colors */}
         {stars.map((star, i) => (
           <div
             key={i}
@@ -49,8 +109,9 @@ export default function Home() {
               height: star.size + 'px',
               top: star.top + '%',
               left: star.left + '%',
-              backgroundColor: `rgba(255, 255, 255, ${star.brightness})`,
-              boxShadow: `0 0 ${star.size * 3}px rgba(255, 255, 255, ${star.brightness * 0.8})`,
+              backgroundColor: star.color,
+              boxShadow: `0 0 ${star.size * 4}px ${star.color.replace('1)', '0.6)')}, 0 0 ${star.size * 2}px ${star.color.replace('1)', '0.8)')}`,
+              opacity: star.brightness,
             }}
           />
         ))}
