@@ -211,14 +211,13 @@ export default function Home() {
         />
       )}
 
-      {/* Animated Vertical Lines */}
+      {/* Animated Vertical Lines - Fixed at screen edges with safe margins */}
       <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
-        {/* RIGHT SIDE LINES */}
+        {/* RIGHT SIDE LINES - Always respect safe margin from edge */}
         {/* Line 1 - Turquoise */}
         <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#4FC3FF] to-[#4FC3FF]/20"
+          className="absolute top-0 w-1 bg-gradient-to-b from-[#4FC3FF] to-[#4FC3FF]/20 right-[max(24px,calc((100vw-80rem)/2+120px))] lg:right-[max(32px,calc((100vw-80rem)/2+120px))]"
           style={{
-            right: '120px',
             height: '100%',
             animation: 'drawLine 2s ease-out forwards',
             boxShadow: '0 0 20px rgba(79, 195, 255, 0.6), 0 0 40px rgba(79, 195, 255, 0.4)'
@@ -227,9 +226,8 @@ export default function Home() {
         
         {/* Line 2 - Fuchsia */}
         <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#FF76FF] to-[#FF76FF]/20"
+          className="absolute top-0 w-1 bg-gradient-to-b from-[#FF76FF] to-[#FF76FF]/20 right-[max(24px,calc((100vw-80rem)/2+80px))] lg:right-[max(32px,calc((100vw-80rem)/2+80px))]"
           style={{
-            right: '80px',
             height: '100%',
             animation: 'drawLine 2s ease-out 0.3s forwards',
             animationFillMode: 'both',
@@ -239,9 +237,8 @@ export default function Home() {
         
         {/* Line 3 - Purple-Turquoise */}
         <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#B94AFF] to-[#4FC3FF]/20"
+          className="absolute top-0 w-1 bg-gradient-to-b from-[#B94AFF] to-[#4FC3FF]/20 right-[max(24px,calc((100vw-80rem)/2+40px))] lg:right-[max(32px,calc((100vw-80rem)/2+40px))]"
           style={{
-            right: '40px',
             height: '100%',
             animation: 'drawLine 2s ease-out 0.6s forwards',
             animationFillMode: 'both',
@@ -249,12 +246,11 @@ export default function Home() {
           }}
         />
 
-        {/* LEFT SIDE LINES */}
+        {/* LEFT SIDE LINES - Mirror positioning */}
         {/* Line 4 - Purple-Turquoise */}
         <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#B94AFF] to-[#4FC3FF]/20"
+          className="absolute top-0 w-1 bg-gradient-to-b from-[#B94AFF] to-[#4FC3FF]/20 left-[max(24px,calc((100vw-80rem)/2+40px))] lg:left-[max(32px,calc((100vw-80rem)/2+40px))]"
           style={{
-            left: '40px',
             height: '100%',
             animation: 'drawLine 2s ease-out forwards',
             animationFillMode: 'both',
@@ -264,9 +260,8 @@ export default function Home() {
         
         {/* Line 5 - Fuchsia */}
         <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#FF76FF] to-[#FF76FF]/20"
+          className="absolute top-0 w-1 bg-gradient-to-b from-[#FF76FF] to-[#FF76FF]/20 left-[max(24px,calc((100vw-80rem)/2+80px))] lg:left-[max(32px,calc((100vw-80rem)/2+80px))]"
           style={{
-            left: '80px',
             height: '100%',
             animation: 'drawLine 2s ease-out 0.3s forwards',
             animationFillMode: 'both',
@@ -276,9 +271,8 @@ export default function Home() {
         
         {/* Line 6 - Turquoise */}
         <div
-          className="absolute top-0 w-1 bg-gradient-to-b from-[#4FC3FF] to-[#4FC3FF]/20"
+          className="absolute top-0 w-1 bg-gradient-to-b from-[#4FC3FF] to-[#4FC3FF]/20 left-[max(24px,calc((100vw-80rem)/2+120px))] lg:left-[max(32px,calc((100vw-80rem)/2+120px))]"
           style={{
-            left: '120px',
             height: '100%',
             animation: 'drawLine 2s ease-out 0.6s forwards',
             animationFillMode: 'both',
