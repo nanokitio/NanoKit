@@ -1048,9 +1048,10 @@ export default function SiteEditorPage() {
   const getPreviewUrl = () => {
     if (!site) return ''
     
-    // Build preview URL with current values
+    // Build preview URL with current values - use /preview for client-side rendering with inline editing
     const params = new URLSearchParams({
       templateId,
+      brandName,
       headline,
       subheadline: subheadline || '',
       cta,
@@ -1066,11 +1067,10 @@ export default function SiteEditorPage() {
       wheelValues: wheelValues || '',  // Wheel values for Fortune Wheel templates
       backgroundColor,  // Background customization
       backgroundImage: backgroundImage || '',
-      preview: '1',  // Flag to disable blur in editor iframe
       editable: '1',  // Flag to enable inline editing
     })
     
-    return `/sites/${slug}?${params.toString()}`
+    return `/preview?${params.toString()}`
   }
 
   if (loading) {

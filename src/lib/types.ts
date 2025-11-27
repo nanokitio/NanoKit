@@ -108,6 +108,13 @@ export interface BrandConfig {
   // Team members - simple fields
   featuredPlayer?: string  // e.g., "Ale Miranda"
   sportDirector?: string   // e.g., "Nicolás Cantudo"
+  // Gaming template specific fields
+  popupTitle?: string
+  popupMessage?: string
+  popupPrize?: string
+  gameBalance?: number
+  customLogo?: string | null
+  wheelValues?: string
   // Inline editing flag
   editable?: boolean  // Enables inline text editing in the editor
 }
