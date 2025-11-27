@@ -1,5 +1,6 @@
 'use client'
 
+import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Template6 } from '@/templates/t6'
 import { Template7 } from '@/templates/t7'
@@ -11,7 +12,7 @@ import { Template17 } from '@/templates/t17'
 import { Template18 } from '@/templates/t18'
 import { BrandConfig } from '@/lib/types'
 
-export default function PreviewPage() {
+function PreviewContent() {
   const searchParams = useSearchParams()
   
   // Get all parameters from URL
@@ -90,5 +91,17 @@ export default function PreviewPage() {
     <div className="w-full h-screen overflow-auto">
       {renderTemplate()}
     </div>
+  )
+}
+
+export default function PreviewPage() {
+  return (
+    <Suspense fallback={
+      <div className="w-full h-screen flex items-center justify-center bg-gray-950">
+        <div className="text-white">Loading...</div>
+      </div>
+    }>
+      <PreviewContent />
+    </Suspense>
   )
 }
