@@ -59,7 +59,7 @@ export function EditableText({
   }
 
   if (disabled) {
-    return children ? <>{children}</> : <span className={className}>{value}</span>
+    return children ? <>{children}</> : <span className={className} style={{ whiteSpace: multiline ? 'pre-line' : 'normal' }}>{value}</span>
   }
 
   if (isEditing) {
@@ -109,9 +109,10 @@ export function EditableText({
       className="relative inline-block group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      style={{ whiteSpace: multiline ? 'pre-line' : 'normal' }}
     >
       {/* The actual content */}
-      {children ? children : <span className={className}>{value || placeholder}</span>}
+      {children ? children : <span className={className} style={{ whiteSpace: multiline ? 'pre-line' : 'normal' }}>{value || placeholder}</span>}
       
       {/* Edit button - appears on hover */}
       {isHovered && (

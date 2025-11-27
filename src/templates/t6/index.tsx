@@ -13,6 +13,23 @@ export function Template6({ brand }: Template6Props) {
   const [showWinModal, setShowWinModal] = React.useState(false);
   const [isSpinning, setIsSpinning] = React.useState(false);
 
+  // Local editable text states
+  const [timerText, setTimerText] = React.useState('BONUS EXPIRES: 05:55');
+  const [maxWinText, setMaxWinText] = React.useState('MAX WIN');
+  const [maxWinAmount, setMaxWinAmount] = React.useState('$5,000');
+  const [minWinText, setMinWinText] = React.useState('MIN WIN');
+  const [minWinAmount, setMinWinAmount] = React.useState('$1,000');
+  const [feature1Text, setFeature1Text] = React.useState('INSTANT\nPAYOUTS');
+  const [feature2Text, setFeature2Text] = React.useState('WELCOME\nBONUS');
+  const [feature3Text, setFeature3Text] = React.useState('24/7\nSUPPORT');
+  const [spinButtonText, setSpinButtonText] = React.useState('EXECUTE SPIN');
+  const [processingText, setProcessingText] = React.useState('PROCESSING');
+  const [winModalTitle, setWinModalTitle] = React.useState('JACKPOT ACHIEVED');
+  const [winModalPrize, setWinModalPrize] = React.useState('$1,000');
+  const [winModalBonus, setWinModalBonus] = React.useState('BONUS: 50 FREE EXECUTIONS');
+  const [winModalButton, setWinModalButton] = React.useState('CLAIM REWARDS');
+  const [legalText, setLegalText] = React.useState('18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY');
+
   // Function to send inline edits to parent (editor)
   const handleInlineEdit = (field: string, value: string) => {
     if (brand.editable && window.parent) {
@@ -103,7 +120,14 @@ export function Template6({ brand }: Template6Props) {
           {/* Retro Timer */}
           <div className="inline-flex items-center gap-3 bg-gradient-to-r from-pink-500/20 to-cyan-500/20 backdrop-blur-sm border border-pink-400/50 text-pink-300 px-6 py-3 rounded-lg font-mono text-sm synth-border animate-border-pulse">
             <span className="text-yellow-400 animate-pulse">▲</span>
-            <span className="tracking-widest">BONUS EXPIRES: 05:55</span>
+            <span className="tracking-widest">
+              <EditableText 
+                value={timerText}
+                onChange={(value) => { setTimerText(value); handleInlineEdit('timerText', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              />
+            </span>
             <span className="text-yellow-400 animate-pulse">▲</span>
           </div>
         </header>
@@ -117,11 +141,37 @@ export function Template6({ brand }: Template6Props) {
           <div className="prize-display flex justify-center gap-6 mb-8">
             <div className="prize-item bg-gradient-to-br from-green-400/20 to-cyan-400/20 border border-green-400/60 rounded-lg p-4 text-center backdrop-blur-sm synth-prize animate-prize-glow-1">
               <div className="text-2xl mb-2 text-green-400">◆</div>
-              <div className="text-green-300 font-mono text-sm tracking-wider">MAX WIN<br />$5,000</div>
+              <div className="text-green-300 font-mono text-sm tracking-wider">
+                <EditableText 
+                  value={maxWinText}
+                  onChange={(value) => { setMaxWinText(value); handleInlineEdit('maxWinText', value); }}
+                  disabled={!brand.editable}
+                  className="inline"
+                /><br />
+                <EditableText 
+                  value={maxWinAmount}
+                  onChange={(value) => { setMaxWinAmount(value); handleInlineEdit('maxWinAmount', value); }}
+                  disabled={!brand.editable}
+                  className="inline"
+                />
+              </div>
             </div>
             <div className="prize-item bg-gradient-to-br from-purple-400/20 to-pink-400/20 border border-purple-400/60 rounded-lg p-4 text-center backdrop-blur-sm synth-prize animate-prize-glow-2">
               <div className="text-2xl mb-2 text-purple-400">★</div>
-              <div className="text-purple-300 font-mono text-sm tracking-wider">MIN WIN<br />$1,000</div>
+              <div className="text-purple-300 font-mono text-sm tracking-wider">
+                <EditableText 
+                  value={minWinText}
+                  onChange={(value) => { setMinWinText(value); handleInlineEdit('minWinText', value); }}
+                  disabled={!brand.editable}
+                  className="inline"
+                /><br />
+                <EditableText 
+                  value={minWinAmount}
+                  onChange={(value) => { setMinWinAmount(value); handleInlineEdit('minWinAmount', value); }}
+                  disabled={!brand.editable}
+                  className="inline"
+                />
+              </div>
             </div>
           </div>
 
@@ -159,7 +209,21 @@ export function Template6({ brand }: Template6Props) {
               }`}
             >
               <span className="tracking-widest">
-                {isSpinning ? '◆ PROCESSING ◆' : '▲ EXECUTE SPIN ▲'}
+                {isSpinning ? (
+                  <>◆ <EditableText 
+                    value={processingText}
+                    onChange={(value) => { setProcessingText(value); handleInlineEdit('processingText', value); }}
+                    disabled={!brand.editable}
+                    className="inline"
+                  /> ◆</>
+                ) : (
+                  <>▲ <EditableText 
+                    value={spinButtonText}
+                    onChange={(value) => { setSpinButtonText(value); handleInlineEdit('spinButtonText', value); }}
+                    disabled={!brand.editable}
+                    className="inline"
+                  /> ▲</>
+                )}
               </span>
             </button>
           </div>
@@ -169,15 +233,39 @@ export function Template6({ brand }: Template6Props) {
         <div className="features flex flex-wrap justify-center gap-6 mb-8">
           <div className="feature-item bg-gradient-to-br from-cyan-900/30 to-purple-900/30 backdrop-blur-sm border border-cyan-400/50 rounded-lg p-4 text-center min-w-[140px] synth-feature animate-feature-glow-1">
             <div className="text-2xl mb-2 text-cyan-400">◆</div>
-            <div className="text-cyan-300 font-mono text-sm tracking-wide">INSTANT<br />PAYOUTS</div>
+            <div className="text-cyan-300 font-mono text-sm tracking-wide">
+              <EditableText 
+                value={feature1Text}
+                onChange={(value) => { setFeature1Text(value); handleInlineEdit('feature1Text', value); }}
+                disabled={!brand.editable}
+                multiline
+                className="inline"
+              />
+            </div>
           </div>
           <div className="feature-item bg-gradient-to-br from-pink-900/30 to-purple-900/30 backdrop-blur-sm border border-pink-400/50 rounded-lg p-4 text-center min-w-[140px] synth-feature animate-feature-glow-2">
             <div className="text-2xl mb-2 text-pink-400">▲</div>
-            <div className="text-pink-300 font-mono text-sm tracking-wide">WELCOME<br />BONUS</div>
+            <div className="text-pink-300 font-mono text-sm tracking-wide">
+              <EditableText 
+                value={feature2Text}
+                onChange={(value) => { setFeature2Text(value); handleInlineEdit('feature2Text', value); }}
+                disabled={!brand.editable}
+                multiline
+                className="inline"
+              />
+            </div>
           </div>
           <div className="feature-item bg-gradient-to-br from-yellow-900/30 to-orange-900/30 backdrop-blur-sm border border-yellow-400/50 rounded-lg p-4 text-center min-w-[140px] synth-feature animate-feature-glow-3">
             <div className="text-2xl mb-2 text-yellow-400">●</div>
-            <div className="text-yellow-300 font-mono text-sm tracking-wide">24/7<br />SUPPORT</div>
+            <div className="text-yellow-300 font-mono text-sm tracking-wide">
+              <EditableText 
+                value={feature3Text}
+                onChange={(value) => { setFeature3Text(value); handleInlineEdit('feature3Text', value); }}
+                disabled={!brand.editable}
+                multiline
+                className="inline"
+              />
+            </div>
           </div>
         </div>
 
@@ -197,7 +285,14 @@ export function Template6({ brand }: Template6Props) {
               /> ★
             </span>
           </button>
-          <p className="text-cyan-200/60 text-sm mt-6 font-mono tracking-wide">18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY</p>
+          <p className="text-cyan-200/60 text-sm mt-6 font-mono tracking-wide">
+            <EditableText 
+              value={legalText}
+              onChange={(value) => { setLegalText(value); handleInlineEdit('legalText', value); }}
+              disabled={!brand.editable}
+              className="inline"
+            />
+          </p>
         </div>
       </div>
 
@@ -205,14 +300,38 @@ export function Template6({ brand }: Template6Props) {
       {showWinModal && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
           <div className="win-content bg-gradient-to-br from-cyan-900/80 to-purple-900/80 backdrop-blur-xl border-2 border-pink-400/60 p-8 rounded-2xl text-center shadow-2xl max-w-md mx-4 synth-modal animate-modal-glow">
-            <h2 className="text-3xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4 tracking-wider">◆ JACKPOT ACHIEVED ◆</h2>
-            <p className="text-xl text-cyan-300 mb-2 font-mono">CREDIT TRANSFER: <span className="font-bold text-2xl text-green-400 animate-pulse">$1,000</span></p>
-            <p className="text-pink-300 mb-6 font-mono tracking-wide">★ BONUS: 50 FREE EXECUTIONS ★</p>
+            <h2 className="text-3xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4 tracking-wider">
+              ◆ <EditableText 
+                value={winModalTitle}
+                onChange={(value) => { setWinModalTitle(value); handleInlineEdit('winModalTitle', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              /> ◆
+            </h2>
+            <p className="text-xl text-cyan-300 mb-2 font-mono">CREDIT TRANSFER: <span className="font-bold text-2xl text-green-400 animate-pulse">
+              <EditableText 
+                value={winModalPrize}
+                onChange={(value) => { setWinModalPrize(value); handleInlineEdit('winModalPrize', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              />
+            </span></p>
+            <p className="text-pink-300 mb-6 font-mono tracking-wide">★ <EditableText 
+              value={winModalBonus}
+              onChange={(value) => { setWinModalBonus(value); handleInlineEdit('winModalBonus', value); }}
+              disabled={!brand.editable}
+              className="inline"
+            /> ★</p>
             <button 
               className="bg-gradient-to-r from-green-500 to-cyan-500 hover:from-green-400 hover:to-cyan-400 text-white font-mono font-bold py-4 px-8 rounded-lg text-lg shadow-lg backdrop-blur-sm border border-green-400/50 transform hover:scale-105 transition-all duration-300 mb-3 w-full animate-claim-glow tracking-widest"
               onClick={() => brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
             >
-              ▲ CLAIM REWARDS ▲
+              ▲ <EditableText 
+                value={winModalButton}
+                onChange={(value) => { setWinModalButton(value); handleInlineEdit('winModalButton', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              /> ▲
             </button>
             <button 
               className="block mx-auto text-cyan-300/70 hover:text-cyan-300 text-sm font-mono tracking-wide"
