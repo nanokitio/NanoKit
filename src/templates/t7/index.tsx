@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { BrandConfig, TemplateProps } from '../../lib/types'
 import { generateCSSVariables } from '@/lib/colors'
+import { EditableText } from '@/components/EditableText'
 
 export function Template7({ brand }: TemplateProps) {
   const { brandName, logoUrl, colors, copy } = brand
@@ -13,6 +14,30 @@ export function Template7({ brand }: TemplateProps) {
   const [showJackpot, setShowJackpot] = useState(false)
   const [reels, setReels] = useState(['💎', '🍑', '🍑', '🍑', '🍑', '🔔', '⭐', '⭐', '🍇'])
   const [loading, setLoading] = useState(true)
+  
+  // Local editable text states
+  const [loadingTitle, setLoadingTitle] = useState('BONANZA BILLION')
+  const [loadingText, setLoadingText] = useState('Loading your casino experience...')
+  const [mainTitle, setMainTitle] = useState('BONANZA BILLION')
+  const [slotTitle, setSlotTitle] = useState('BONANZA BILLION')
+  const [slotSubtitle, setSlotSubtitle] = useState('SLOTS')
+  const [controlsTitle, setControlsTitle] = useState('GAME CONTROLS')
+  const [betText, setBetText] = useState('BET: $10')
+  const [balanceText, setBalanceText] = useState('BALANCE: $1,000')
+  const [spinText, setSpinText] = useState('SPIN TO WIN')
+  const [spinningText, setSpinningText] = useState('SPINNING...')
+  const [jackpotTitle, setJackpotTitle] = useState('JACKPOT!')
+  const [jackpotMessage, setJackpotMessage] = useState('Congratulations! You hit the JACKPOT!')
+  const [jackpotPrize, setJackpotPrize] = useState('$1,000 BONUS!')
+  const [jackpotButton, setJackpotButton] = useState('CLAIM $1000 BONUS NOW!')
+  const [legalText, setLegalText] = useState('18+ • Gamble Responsibly • Terms Apply')
+  
+  // Function to send inline edits to parent (editor)
+  const handleInlineEdit = (field: string, value: string) => {
+    if (brand.editable && window.parent) {
+      window.parent.postMessage({ type: 'inlineEdit', field, value }, '*')
+    }
+  }
 
   const symbols = ['🍑', '🍋', '🔔', '💎', '⭐', '🍀', '💰', '🍇']
 
@@ -101,9 +126,21 @@ export function Template7({ brand }: TemplateProps) {
             </div>
           </div>
           <h1 className="text-4xl font-black text-yellow-400 mb-4 animate-pulse">
-            💎 BONANZA BILLION 💎
+            💎 <EditableText 
+              value={loadingTitle}
+              onChange={(value) => { setLoadingTitle(value); handleInlineEdit('loadingTitle', value); }}
+              disabled={!brand.editable}
+              className="inline"
+            /> 💎
           </h1>
-          <p className="text-cyan-300 text-xl font-bold">Loading your casino experience...</p>
+          <p className="text-cyan-300 text-xl font-bold">
+            <EditableText 
+              value={loadingText}
+              onChange={(value) => { setLoadingText(value); handleInlineEdit('loadingText', value); }}
+              disabled={!brand.editable}
+              className="inline"
+            />
+          </p>
         </div>
       </div>
     )
@@ -198,12 +235,22 @@ export function Template7({ brand }: TemplateProps) {
         
         <h1 className="text-5xl font-black text-yellow-400 flex items-center justify-center gap-3 neon-text-yellow mb-6 drop-shadow-2xl">
           <span className="text-6xl">💎</span>
-          BONANZA BILLION
+          <EditableText 
+            value={mainTitle}
+            onChange={(value) => { setMainTitle(value); handleInlineEdit('mainTitle', value); }}
+            disabled={!brand.editable}
+            className="inline"
+          />
           <span className="text-6xl">💎</span>
         </h1>
         <p className="text-2xl font-bold text-cyan-300 flex items-center justify-center gap-2 neon-text-blue drop-shadow-lg">
           <span className="text-3xl">⭐</span>
-          {headline || 'WIN BIG WITH BONANZA BILLION SLOTS!'}
+          <EditableText 
+            value={headline || 'WIN BIG WITH BONANZA BILLION SLOTS!'}
+            onChange={(value) => handleInlineEdit('headline', value)}
+            disabled={!brand.editable}
+            className="inline"
+          />
           <span className="text-3xl">⭐</span>
         </p>
       </div>
@@ -214,8 +261,22 @@ export function Template7({ brand }: TemplateProps) {
         {/* Slot Machine Container */}
         <div className="bg-gradient-to-b from-slate-800 to-slate-900 rounded-3xl p-6 shadow-2xl" style={{ borderWidth: '4px', borderStyle: 'solid', borderColor: colors.primary || '#fbbf24' }}>
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-black text-yellow-400 mb-1">BONANZA BILLION</h2>
-            <h3 className="text-xl font-bold text-yellow-400">SLOTS</h3>
+            <h2 className="text-2xl font-black text-yellow-400 mb-1">
+              <EditableText 
+                value={slotTitle}
+                onChange={(value) => { setSlotTitle(value); handleInlineEdit('slotTitle', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              />
+            </h2>
+            <h3 className="text-xl font-bold text-yellow-400">
+              <EditableText 
+                value={slotSubtitle}
+                onChange={(value) => { setSlotSubtitle(value); handleInlineEdit('slotSubtitle', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              />
+            </h3>
           </div>
 
           {/* 3x3 Slot Grid */}
@@ -235,17 +296,38 @@ export function Template7({ brand }: TemplateProps) {
         {/* Game Controls Panel */}
         <div className="bg-gradient-to-b from-slate-800 to-slate-900 rounded-3xl p-6 shadow-2xl min-w-[280px]" style={{ borderWidth: '4px', borderStyle: 'solid', borderColor: colors.primary || '#fbbf24' }}>
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-black text-yellow-400">GAME CONTROLS</h2>
+            <h2 className="text-2xl font-black text-yellow-400">
+              <EditableText 
+                value={controlsTitle}
+                onChange={(value) => { setControlsTitle(value); handleInlineEdit('controlsTitle', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              />
+            </h2>
           </div>
 
           {/* Bet Display */}
           <div className="bg-slate-700/80 rounded-xl p-4 mb-4 shadow-lg" style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: colors.secondary || '#06b6d4' }}>
-            <div className="text-yellow-400 font-bold text-center text-lg">BET: $10</div>
+            <div className="text-yellow-400 font-bold text-center text-lg">
+              <EditableText 
+                value={betText}
+                onChange={(value) => { setBetText(value); handleInlineEdit('betText', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              />
+            </div>
           </div>
 
           {/* Balance Display */}
           <div className="bg-slate-700/80 rounded-xl p-4 mb-6 shadow-lg" style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: colors.secondary || '#06b6d4' }}>
-            <div className="text-yellow-400 font-bold text-center text-lg">BALANCE: $1,000</div>
+            <div className="text-yellow-400 font-bold text-center text-lg">
+              <EditableText 
+                value={balanceText}
+                onChange={(value) => { setBalanceText(value); handleInlineEdit('balanceText', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              />
+            </div>
           </div>
 
           {/* Spin Button */}
@@ -260,7 +342,21 @@ export function Template7({ brand }: TemplateProps) {
             onClick={spinReels}
             disabled={spinning}
           >
-            {spinning ? '🎰 SPINNING...' : '🎰 SPIN TO WIN'}
+            {spinning ? (
+              <>🎰 <EditableText 
+                value={spinningText}
+                onChange={(value) => { setSpinningText(value); handleInlineEdit('spinningText', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              /></>
+            ) : (
+              <>🎰 <EditableText 
+                value={spinText}
+                onChange={(value) => { setSpinText(value); handleInlineEdit('spinText', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              /></>
+            )}
           </button>
         </div>
       </main>
@@ -269,11 +365,12 @@ export function Template7({ brand }: TemplateProps) {
       <div className="relative z-10 text-center py-8">
         <div className="mx-auto bg-gradient-to-r from-gray-800/90 to-gray-900/90 backdrop-blur-sm rounded-lg px-6 py-3 border border-gray-600/50 shadow-xl max-w-fit">
           <p className="text-yellow-300 text-sm font-semibold tracking-wide flex items-center justify-center gap-2">
-            <span className="text-red-400 font-black">18+</span>
-            <span className="text-gray-300">•</span>
-            <span>Gamble Responsibly</span>
-            <span className="text-gray-300">•</span>
-            <span>Terms Apply</span>
+            <EditableText 
+              value={legalText}
+              onChange={(value) => { setLegalText(value); handleInlineEdit('legalText', value); }}
+              disabled={!brand.editable}
+              className="inline"
+            />
           </p>
         </div>
       </div>
@@ -281,14 +378,40 @@ export function Template7({ brand }: TemplateProps) {
       {showJackpot && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="bg-gradient-to-br from-yellow-400 to-orange-500 p-8 rounded-2xl text-center shadow-2xl max-w-md mx-4 jackpot-bounce">
-            <h2 className="text-3xl font-black text-black mb-4">🎉 JACKPOT! 🎉</h2>
-            <p className="text-xl text-black mb-2">Congratulations! You hit the JACKPOT!</p>
-            <p className="text-2xl font-bold text-black mb-6">$1,000 BONUS!</p>
+            <h2 className="text-3xl font-black text-black mb-4">
+              🎉 <EditableText 
+                value={jackpotTitle}
+                onChange={(value) => { setJackpotTitle(value); handleInlineEdit('jackpotTitle', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              /> 🎉
+            </h2>
+            <p className="text-xl text-black mb-2">
+              <EditableText 
+                value={jackpotMessage}
+                onChange={(value) => { setJackpotMessage(value); handleInlineEdit('jackpotMessage', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              />
+            </p>
+            <p className="text-2xl font-bold text-black mb-6">
+              <EditableText 
+                value={jackpotPrize}
+                onChange={(value) => { setJackpotPrize(value); handleInlineEdit('jackpotPrize', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              />
+            </p>
             <button 
               className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transform hover:scale-105 transition-all duration-200 mb-4"
               onClick={() => brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
             >
-              🎁 CLAIM $1000 BONUS NOW!
+              🎁 <EditableText 
+                value={jackpotButton}
+                onChange={(value) => { setJackpotButton(value); handleInlineEdit('jackpotButton', value); }}
+                disabled={!brand.editable}
+                className="inline"
+              />
             </button>
             <button 
               className="block mx-auto text-black/70 hover:text-black text-sm underline"
