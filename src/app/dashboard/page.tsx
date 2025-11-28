@@ -387,24 +387,35 @@ export default function DashboardPage() {
       </div>
 
       {/* Header */}
-      <header className="relative z-50 bg-dark-surface/80 backdrop-blur-xl border-b border-neon-primary/20 shadow-neon">
+      <header className="relative z-50 bg-dark-surface/80 backdrop-blur-xl shadow-neon" style={{ border: 'none' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center space-x-6">
               <NanoKitLogo size="header" href="/dashboard" />
-              <div className="border-l border-neon-primary/30 pl-6">
-                <h2 className="text-2xl font-bold text-white font-inter">
-                  Dashboard
-                </h2>
-                <p className="text-sm text-text-muted font-inter mt-1">
-                  Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-semibold">
-                    {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'Creator'}
-                  </span> — Powering Up...
-                </p>
+              <div className="flex items-center gap-4">
+                {/* Botón M del User Menu */}
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg hover:scale-110 transition-transform duration-200 shadow-lg shadow-purple-500/30"
+                  title="User Menu"
+                >
+                  {(user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'U')[0].toUpperCase()}
+                </button>
+                {/* Dashboard y Welcome a la derecha del botón M */}
+                <div className="flex flex-col">
+                  <h2 className="text-2xl font-bold text-white font-inter leading-tight">
+                    Dashboard
+                  </h2>
+                  <p className="text-sm text-text-muted font-inter mt-0.5">
+                    Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-semibold">
+                      {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'Creator'}
+                    </span> — Powering Up...
+                  </p>
+                </div>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="relative user-menu-container">
+              <div className="relative user-menu-container" style={{ display: 'none' }}>
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
                   className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg hover:scale-110 transition-transform duration-200 shadow-lg shadow-purple-500/30"
@@ -414,9 +425,9 @@ export default function DashboardPage() {
                 </button>
                 
                 {showUserMenu && (
-                  <div className="absolute right-0 mt-2 w-72 bg-slate-800/95 backdrop-blur-xl border border-cyan-500/30 rounded-xl shadow-2xl shadow-cyan-500/20 z-[9999] overflow-hidden">
+                  <div className="absolute left-0 mt-2 w-72 bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl shadow-cyan-500/20 z-[9999] overflow-hidden" style={{ border: 'none' }}>
                     {/* User Info Header */}
-                    <div className="p-4 border-b border-slate-700/50 bg-gradient-to-r from-slate-800 to-slate-700">
+                    <div className="p-4 bg-gradient-to-r from-slate-800 to-slate-700" style={{ border: 'none' }}>
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
                           {(user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'U')[0].toUpperCase()}
@@ -507,7 +518,7 @@ export default function DashboardPage() {
                     </div>
                     
                     {/* Log Out */}
-                    <div className="border-t border-slate-700/50">
+                    <div style={{ border: 'none' }}>
                       <button
                         onClick={() => {
                           setShowUserMenu(false)
@@ -541,7 +552,7 @@ export default function DashboardPage() {
         {!sites || sites.length === 0 ? (
           // Empty State
           <div className="text-center py-12">
-            <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-12 shadow-2xl shadow-purple-500/10">
+            <div className="bg-slate-900/60 backdrop-blur-xl rounded-2xl p-12 shadow-2xl shadow-purple-500/10" style={{ border: 'none' }}>
               <div className="mx-auto w-20 h-20 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-400 rounded-2xl flex items-center justify-center mb-6">
                 <div className="text-white font-black text-3xl">⚡</div>
               </div>
@@ -594,7 +605,8 @@ export default function DashboardPage() {
                       setSearchQuery(e.target.value)
                       setCurrentPage(1) // Reset to first page on search
                     }}
-                    className="w-full px-4 py-3 pl-12 bg-slate-900/60 border border-slate-700/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 backdrop-blur-sm transition-all duration-300"
+                    className="w-full px-4 py-3 pl-12 bg-slate-900/60 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 backdrop-blur-sm transition-all duration-300"
+                    style={{ border: 'none' }}
                   />
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-cyan-400">
                     <Search className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 8px rgba(34, 211, 238, 0.6))' }} />
@@ -603,7 +615,7 @@ export default function DashboardPage() {
               </div>
               
               {/* Filter Pills - Horizontal Layout */}
-              <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+              <div className="bg-slate-900/60 backdrop-blur-xl rounded-2xl p-6 shadow-xl" style={{ border: 'none' }}>
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   {/* View Mode Filters */}
                   <div className="flex items-center space-x-3">
@@ -628,9 +640,10 @@ export default function DashboardPage() {
                           onClick={() => setViewMode(mode)}
                           className={`group relative px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
                             isActive 
-                              ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 text-white shadow-lg shadow-cyan-500/20' 
-                              : 'bg-slate-800/50 border-2 border-slate-700/50 text-slate-300 hover:border-slate-600 hover:bg-slate-700/50'
+                              ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white shadow-lg shadow-cyan-500/20' 
+                              : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50'
                           }`}
+                          style={{ border: 'none' }}
                         >
                           <span className="flex items-center space-x-2">
                             <span className="text-lg">{icons[mode]}</span>
@@ -653,9 +666,10 @@ export default function DashboardPage() {
                     onClick={() => setShowArchived(!showArchived)}
                     className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
                       showArchived
-                        ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 text-white shadow-lg shadow-cyan-500/20'
-                        : 'bg-slate-800/50 border-2 border-slate-700/50 text-slate-300 hover:border-slate-600 hover:bg-slate-700/50'
+                        ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white shadow-lg shadow-cyan-500/20'
+                        : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50'
                     }`}
+                    style={{ border: 'none' }}
                   >
                     <span className="flex items-center space-x-2">
                       {showArchived ? <Archive className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 6px rgba(168, 85, 247, 0.5))' }} /> : <Archive className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 6px rgba(100, 116, 139, 0.5))' }} />}
@@ -667,20 +681,21 @@ export default function DashboardPage() {
             </div>
 
             <div className="mt-8 flow-root">
-              <div className="relative z-20 bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl shadow-purple-500/10">
+              <div className="relative z-20 bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-2xl shadow-purple-500/10" style={{ border: 'none' }}>
                 {/* Column Menu */}
-                <div className="flex justify-end p-4 border-b border-slate-700/50">
+                <div className="flex justify-end p-4" style={{ border: 'none' }}>
                   <div className="relative column-menu-container">
                     <button
                       onClick={() => setShowColumnMenu(!showColumnMenu)}
-                      className="p-2 rounded-xl bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:border-slate-600 hover:bg-slate-700/50 transition-all duration-300"
+                      className="p-2 rounded-xl bg-slate-800/50 text-slate-300 hover:bg-slate-700/50 transition-all duration-300"
+                      style={{ border: 'none' }}
                       title="Manage columns"
                     >
                       ⋮
                     </button>
                     
                     {showColumnMenu && (
-                      <div className="absolute right-0 mt-2 w-56 bg-slate-800/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl z-[100] p-3">
+                      <div className="absolute right-0 mt-2 w-56 bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl z-[100] p-3" style={{ border: 'none' }}>
                         <div className="text-xs font-bold text-cyan-300 uppercase mb-3">SHOW/HIDE COLUMNS</div>
                         {Object.entries({
                           template: 'Template',
@@ -704,7 +719,7 @@ export default function DashboardPage() {
                 </div>
                 
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-slate-700/50">
+                  <table className="min-w-full">
                     <thead className="bg-gradient-to-r from-slate-800/50 to-slate-700/50">
                       <tr>
                         <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
@@ -735,14 +750,15 @@ export default function DashboardPage() {
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-700/30">
+                    <tbody>
                       {getPaginatedSites().map((site) => (
                         <tr key={site.id} className="hover:bg-slate-800/30 transition-colors duration-200">
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
                               {site.logo_url && (
                                 <img
-                                  className="h-10 w-10 rounded-full mr-4 border-2 border-cyan-400/30"
+                                  className="h-10 w-10 rounded-full mr-4"
+                                  style={{ border: 'none' }}
                                   src={site.logo_url}
                                   alt=""
                                 />
@@ -759,7 +775,7 @@ export default function DashboardPage() {
                           </td>
                           {visibleColumns.template && (
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-cyan-300" style={{ border: 'none' }}>
                                 Template {site.template_id.toUpperCase()}
                               </span>
                             </td>
@@ -767,11 +783,12 @@ export default function DashboardPage() {
                           {visibleColumns.status && (
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span
-                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
+                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                                   site.status === 'published'
-                                    ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 border-green-500/30'
-                                    : 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 border-yellow-500/30'
+                                    ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300'
+                                    : 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300'
                                 }`}
+                                style={{ border: 'none' }}
                               >
                                 {site.status}
                               </span>
@@ -854,7 +871,8 @@ export default function DashboardPage() {
                   <button
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="px-4 py-2 rounded-xl bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:border-slate-600 hover:bg-slate-700/50 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="px-4 py-2 rounded-xl bg-slate-800/50 text-slate-300 hover:bg-slate-700/50 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                    style={{ border: 'none' }}
                   >
                     ← Previous
                   </button>
@@ -866,9 +884,10 @@ export default function DashboardPage() {
                         onClick={() => setCurrentPage(page)}
                         className={`w-10 h-10 rounded-xl font-semibold transition-all duration-300 ${
                           currentPage === page
-                            ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-2 border-cyan-400/50 text-white'
-                            : 'bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:border-slate-600'
+                            ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white'
+                            : 'bg-slate-800/50 text-slate-300'
                         }`}
+                        style={{ border: 'none' }}
                       >
                         {page}
                       </button>
@@ -878,7 +897,8 @@ export default function DashboardPage() {
                   <button
                     onClick={() => setCurrentPage(Math.min(getTotalPages(), currentPage + 1))}
                     disabled={currentPage === getTotalPages()}
-                    className="px-4 py-2 rounded-xl bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:border-slate-600 hover:bg-slate-700/50 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="px-4 py-2 rounded-xl bg-slate-800/50 text-slate-300 hover:bg-slate-700/50 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                    style={{ border: 'none' }}
                   >
                     Next →
                   </button>
@@ -897,9 +917,9 @@ export default function DashboardPage() {
       {/* Delete Confirmation Modal */}
       {showDeleteModal && siteToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-8 max-w-md w-full shadow-2xl shadow-red-500/10">
+          <div className="bg-slate-900/95 backdrop-blur-xl rounded-2xl p-8 max-w-md w-full shadow-2xl shadow-red-500/10" style={{ border: 'none' }}>
             <div className="text-center">
-              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-500/20 border border-red-500/30 mb-6">
+              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-500/20 mb-6" style={{ border: 'none' }}>
                 <svg className="h-8 w-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
@@ -921,7 +941,8 @@ export default function DashboardPage() {
                 <Button
                   onClick={handleDeleteCancel}
                   variant="outline"
-                  className="flex-1 border-slate-600 bg-slate-800/50 text-slate-300 hover:bg-slate-700 hover:text-white hover:border-slate-500"
+                  className="flex-1 bg-slate-800/50 text-slate-300 hover:bg-slate-700 hover:text-white"
+                  style={{ border: 'none' }}
                 >
                   Cancel
                 </Button>
