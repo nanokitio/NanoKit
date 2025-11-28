@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react'
 import { BrandConfig } from '@/lib/types'
-import { EditableText } from '@/components/EditableText'
 
 interface Template9Props {
   brand: BrandConfig
@@ -10,20 +9,6 @@ interface Template9Props {
 
 function Template9({ brand }: Template9Props) {
   const [showWinModal, setShowWinModal] = useState(false)
-  
-  // Local editable text states
-  const [winTitle, setWinTitle] = useState('WINNER!')
-  const [winMessage, setWinMessage] = useState("Congratulations! You've won!")
-  const [prizeLabel, setPrizeLabel] = useState('YOUR BONUS:')
-  const [prizeAmount, setPrizeAmount] = useState('$1,000 + 50 FREE SPINS')
-  const [footerText, setFooterText] = useState('18+ | Play Responsibly')
-  
-  // Function to send inline edits to parent (editor)
-  const handleInlineEdit = (field: string, value: string) => {
-    if (brand.editable && window.parent) {
-      window.parent.postMessage({ type: 'inlineEdit', field, value }, '*')
-    }
-  }
 
   const handleClaimBonus = () => {
     if (brand.ctaUrl) {
@@ -115,14 +100,7 @@ function Template9({ brand }: Template9Props) {
     <div className="fisherman-game-wrapper">
       {/* Editable Title */}
       <div className="game-title">
-        <h1>
-          <EditableText 
-            value={brand.copy?.headline || 'YOUR TITLE HERE'}
-            onChange={(value) => handleInlineEdit('headline', value)}
-            disabled={!brand.editable}
-            className="inline"
-          />
-        </h1>
+        <h1>{brand.copy?.headline || 'YOUR TITLE HERE'}</h1>
       </div>
 
       {/* Casino Brand Logo - Perfect for iGaming Affiliates */}
@@ -153,14 +131,7 @@ function Template9({ brand }: Template9Props) {
       {/* Footer */}
       <div className="footer">
         <div className="footer-content">
-          <p>
-            <EditableText 
-              value={footerText}
-              onChange={(value) => { setFooterText(value); handleInlineEdit('footerText', value); }}
-              disabled={!brand.editable}
-              className="inline"
-            /> | <a href="#" onClick={(e) => { e.preventDefault(); alert('Terms and Conditions'); }}>Terms & Conditions</a> | <a href="#" onClick={(e) => { e.preventDefault(); alert('Privacy Policy'); }}>Privacy Policy</a>
-          </p>
+          <p>18+ | Play Responsibly | <a href="#" onClick={(e) => { e.preventDefault(); alert('Terms and Conditions'); }}>Terms & Conditions</a> | <a href="#" onClick={(e) => { e.preventDefault(); alert('Privacy Policy'); }}>Privacy Policy</a></p>
         </div>
       </div>
       
@@ -177,47 +148,14 @@ function Template9({ brand }: Template9Props) {
             <div className="nail nail-bl"></div>
             <div className="nail nail-br"></div>
             <div className="win-icon">🎉</div>
-            <h2 className="win-title">
-              <EditableText 
-                value={winTitle}
-                onChange={(value) => { setWinTitle(value); handleInlineEdit('winTitle', value); }}
-                disabled={!brand.editable}
-                className="inline"
-              />
-            </h2>
-            <p className="win-message">
-              <EditableText 
-                value={winMessage}
-                onChange={(value) => { setWinMessage(value); handleInlineEdit('winMessage', value); }}
-                disabled={!brand.editable}
-                className="inline"
-              />
-            </p>
+            <h2 className="win-title">WINNER!</h2>
+            <p className="win-message">Congratulations! You've won!</p>
             <div className="win-prize">
-              <span className="prize-label">
-                <EditableText 
-                  value={prizeLabel}
-                  onChange={(value) => { setPrizeLabel(value); handleInlineEdit('prizeLabel', value); }}
-                  disabled={!brand.editable}
-                  className="inline"
-                />
-              </span>
-              <span className="prize-amount">
-                <EditableText 
-                  value={prizeAmount}
-                  onChange={(value) => { setPrizeAmount(value); handleInlineEdit('prizeAmount', value); }}
-                  disabled={!brand.editable}
-                  className="inline"
-                />
-              </span>
+              <span className="prize-label">YOUR BONUS:</span>
+              <span className="prize-amount">$1,000 + 50 FREE SPINS</span>
             </div>
             <button className="claim-bonus-btn" onClick={handleClaimBonus}>
-              🎁 <EditableText 
-                value={brand.copy?.cta || 'CLAIM BONUS NOW!'}
-                onChange={(value) => handleInlineEdit('cta', value)}
-                disabled={!brand.editable}
-                className="inline"
-              />
+              🎁 {brand.copy?.cta || 'CLAIM BONUS NOW!'}
             </button>
           </div>
         </div>

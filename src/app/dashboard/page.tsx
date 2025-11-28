@@ -401,17 +401,12 @@ export default function DashboardPage() {
                 >
                   {(user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'U')[0].toUpperCase()}
                 </button>
-                {/* Dashboard y Welcome a la derecha del botón M */}
-                <div className="flex flex-col">
-                  <h2 className="text-2xl font-bold text-white font-inter leading-tight">
-                    Dashboard
-                  </h2>
-                  <p className="text-sm text-text-muted font-inter mt-0.5">
-                    Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-semibold">
-                      {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'Creator'}
-                    </span> — Powering Up...
-                  </p>
-                </div>
+                {/* Welcome text al lado del avatar M */}
+                <p className="text-sm text-text-muted font-inter">
+                  Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-semibold">
+                    {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'Creator'}
+                  </span> — Powering Up...
+                </p>
               </div>
             </div>
             <div className="flex items-center space-x-4">

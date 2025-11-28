@@ -210,35 +210,11 @@ export default function SiteEditorPage() {
     }
   ]
 
-  // Listen for close message from iframe AND inline edits
+  // Listen for close message from iframe
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data === 'closePopup') {
         setIsPopupOpen(false)
-      }
-      // Handle inline text edits from template
-      if (event.data.type === 'inlineEdit') {
-        const { field, value } = event.data
-        switch(field) {
-          case 'headline':
-            setHeadline(value)
-            break
-          case 'subheadline':
-            setSubheadline(value)
-            break
-          case 'cta':
-            setCta(value)
-            break
-          case 'popupTitle':
-            setPopupTitle(value)
-            break
-          case 'popupMessage':
-            setPopupMessage(value)
-            break
-          case 'popupPrize':
-            setPopupPrize(value)
-            break
-        }
       }
     }
     
@@ -293,7 +269,8 @@ export default function SiteEditorPage() {
       setResponsibleGamingUrl(data.responsible_gaming_url || '')
       setBackgroundColor(data.background_color || '#1a1a2e')
       setBackgroundImage(data.background_image || '')
-      // Team member fields removed - not used
+      setFeaturedPlayer(data.featured_player || '')
+      setSportDirector(data.sport_director || '')
       setBrandName(data.brand_name || 'My New Asset')
     } catch (error) {
       console.error('Error loading site:', error)
@@ -477,7 +454,9 @@ export default function SiteEditorPage() {
         updateData.background_color = backgroundColor
         updateData.background_image = backgroundImage || null
         
-        // Team member fields removed - not used
+        // Save team member names
+        updateData.featured_player = featuredPlayer || null
+        updateData.sport_director = sportDirector || null
       } catch (e) {
         console.warn('Some optional fields not available in schema:', e)
       }
@@ -1048,10 +1027,9 @@ export default function SiteEditorPage() {
   const getPreviewUrl = () => {
     if (!site) return ''
     
-    // Build preview URL with current values - use /preview for client-side rendering with inline editing
+    // Build preview URL with current values
     const params = new URLSearchParams({
       templateId,
-      brandName,
       headline,
       subheadline: subheadline || '',
       cta,
@@ -1067,10 +1045,12 @@ export default function SiteEditorPage() {
       wheelValues: wheelValues || '',  // Wheel values for Fortune Wheel templates
       backgroundColor,  // Background customization
       backgroundImage: backgroundImage || '',
-      editable: '1',  // Flag to enable inline editing
+      featuredPlayer: featuredPlayer || '',  // Team member names
+      sportDirector: sportDirector || '',
+      preview: '1',  // Flag to disable blur in editor iframe
     })
     
-    return `/preview?${params.toString()}`
+    return `/sites/${slug}?${params.toString()}`
   }
 
   if (loading) {
@@ -1652,6 +1632,44 @@ export default function SiteEditorPage() {
                           )}
                         </div>
                       )}
+                    </div>
+
+                    {/* Team Members Section - Simple fields */}
+                    <div className="border-t border-gray-700 pt-6 space-y-4">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Users size={20} className="text-blue-400" style={{ filter: 'drop-shadow(0 0 6px rgba(96, 165, 250, 0.6))' }} />
+                        <h4 className="text-sm font-bold text-white">Team Members</h4>
+                      </div>
+                      
+                      {/* Featured Player */}
+                      <div>
+                        <label className="block text-sm font-medium text-white mb-2">
+                          Featured Player
+                        </label>
+                        <input
+                          type="text"
+                          value={featuredPlayer}
+                          onChange={(e) => setFeaturedPlayer(e.target.value)}
+                          className="w-full px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                          placeholder="e.g., Ale Miranda"
+                        />
+                        <p className="text-xs text-gray-500 mt-1.5">Name of featured player (optional)</p>
+                      </div>
+
+                      {/* Sport Director */}
+                      <div>
+                        <label className="block text-sm font-medium text-white mb-2">
+                          Sport Director
+                        </label>
+                        <input
+                          type="text"
+                          value={sportDirector}
+                          onChange={(e) => setSportDirector(e.target.value)}
+                          className="w-full px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                          placeholder="e.g., Nicolás Cantudo"
+                        />
+                        <p className="text-xs text-gray-500 mt-1.5">Name of sport director (optional)</p>
+                      </div>
                     </div>
 
                     {/* Custom Logo for Fortune Wheel */}
