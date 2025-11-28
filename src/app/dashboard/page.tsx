@@ -387,7 +387,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Header */}
-      <header className="relative z-50 bg-dark-surface/80 backdrop-blur-xl shadow-neon" style={{ border: 'none' }}>
+      <header className="relative z-50 bg-dark-surface/80 backdrop-blur-xl border-b border-neon-primary/20 shadow-neon">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center space-x-6">
