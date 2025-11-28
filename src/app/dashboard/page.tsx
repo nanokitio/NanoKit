@@ -392,135 +392,133 @@ export default function DashboardPage() {
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center space-x-6">
               <NanoKitLogo size="header" href="/dashboard" />
-              <div className="flex items-center gap-4">
-                {/* Welcome text primero */}
-                <p className="text-sm text-text-muted font-inter">
-                  Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-semibold">
-                    {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'Creator'}
-                  </span> — Powering Up...
-                </p>
-                {/* Botón M del User Menu después */}
-                <div className="relative user-menu-container">
-                  <button
-                    onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg hover:scale-110 transition-transform duration-200 shadow-lg shadow-purple-500/30"
-                    title="User Menu"
-                  >
-                    {(user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'U')[0].toUpperCase()}
-                  </button>
-                  
-                  {showUserMenu && (
-                    <div className="absolute left-0 mt-2 w-72 bg-slate-800/95 backdrop-blur-xl border border-cyan-500/30 rounded-xl shadow-2xl shadow-cyan-500/20 z-[9999] overflow-hidden">
-                      {/* User Info Header */}
-                      <div className="p-4 border-b border-slate-700/50 bg-gradient-to-r from-slate-800 to-slate-700">
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                            {(user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'U')[0].toUpperCase()}
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <p className="text-sm font-semibold text-white truncate">
-                                {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'User'}
-                              </p>
-                              <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 text-xs font-medium rounded-full border border-cyan-500/30">
-                                Owner
-                              </span>
-                            </div>
-                            <p className="text-xs text-slate-400 truncate mt-0.5">
-                              {organization?.name || 'NanoKit Account'}
+            </div>
+            <div className="flex items-center gap-4">
+              {/* Welcome text primero */}
+              <p className="text-sm text-text-muted font-inter">
+                Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-semibold">
+                  {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'Creator'}
+                </span> — Powering Up...
+              </p>
+              {/* Botón M del User Menu después */}
+              <div className="relative user-menu-container">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg hover:scale-110 transition-transform duration-200 shadow-lg shadow-purple-500/30"
+                  title="User Menu"
+                >
+                  {(user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'U')[0].toUpperCase()}
+                </button>
+                
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-72 bg-slate-800/95 backdrop-blur-xl border border-cyan-500/30 rounded-xl shadow-2xl shadow-cyan-500/20 z-[9999] overflow-hidden">
+                    {/* User Info Header */}
+                    <div className="p-4 border-b border-slate-700/50 bg-gradient-to-r from-slate-800 to-slate-700">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                          {(user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'U')[0].toUpperCase()}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-semibold text-white truncate">
+                              {user?.user_metadata?.preferred_name || user?.email?.split('@')[0] || 'User'}
                             </p>
+                            <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 text-xs font-medium rounded-full border border-cyan-500/30">
+                              Owner
+                            </span>
                           </div>
+                          <p className="text-xs text-slate-400 truncate mt-0.5">
+                            {organization?.name || 'NanoKit Account'}
+                          </p>
                         </div>
                       </div>
-                      
-                      {/* Menu Items */}
-                      <div className="py-2">
-                        <button
-                          onClick={() => {
-                            setShowUserMenu(false)
-                            router.push('/profile')
-                          }}
-                          className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-cyan-400 transition-all flex items-center justify-between group"
-                        >
-                          <div className="flex items-center gap-3">
-                            <User className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 211, 238, 0.5))' }} />
-                            <span className="font-medium">Profile</span>
-                          </div>
-                        </button>
-                        
-                        <button
-                          onClick={() => {
-                            setShowUserMenu(false)
-                            router.push('/subscription')
-                          }}
-                          className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-purple-400 transition-all flex items-center justify-between group"
-                        >
-                          <div className="flex items-center gap-3">
-                            <Settings className="w-5 h-5 text-purple-400 group-hover:text-purple-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(168, 85, 247, 0.5))' }} />
-                            <span className="font-medium">Account & Subscription</span>
-                          </div>
-                        </button>
-                        
-                        <button
-                          onClick={() => {
-                            setShowUserMenu(false)
-                            router.push('/referral')
-                          }}
-                          className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-green-400 transition-all flex items-center justify-between group"
-                        >
-                          <div className="flex items-center gap-3">
-                            <Gift className="w-5 h-5 text-green-400 group-hover:text-green-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 197, 94, 0.5))' }} />
-                            <span className="font-medium">My Referral</span>
-                          </div>
-                        </button>
-                        
-                        <button
-                          onClick={() => {
-                            setShowUserMenu(false)
-                            router.push('/support')
-                          }}
-                          className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-cyan-400 transition-all flex items-center justify-between group"
-                        >
-                          <div className="flex items-center gap-3">
-                            <HelpCircle className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 211, 238, 0.5))' }} />
-                            <span className="font-medium">Support</span>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 transition-colors" />
-                        </button>
-                        
-                        <button
-                          onClick={() => {
-                            setShowUserMenu(false)
-                            router.push('/feedback')
-                          }}
-                          className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-yellow-400 transition-all flex items-center justify-between group"
-                        >
-                          <div className="flex items-center gap-3">
-                            <MessageSquare className="w-5 h-5 text-yellow-400 group-hover:text-yellow-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(234, 179, 8, 0.5))' }} />
-                            <span className="font-medium">Quick Feedback</span>
-                          </div>
-                        </button>
-                      </div>
-                      
-                      {/* Log Out */}
-                      <div className="border-t border-slate-700/50">
-                        <button
-                          onClick={() => {
-                            setShowUserMenu(false)
-                            handleSignOut()
-                          }}
-                          className="w-full px-4 py-3 text-left text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all flex items-center gap-3 group"
-                        >
-                          <LogOut className="w-5 h-5 text-red-400 group-hover:text-red-300 transition-colors" style={{ filter: 'drop-shadow(0 0 8px rgba(239, 68, 68, 0.6))' }} />
-                          <span className="font-medium">Log Out</span>
-                        </button>
-                      </div>
                     </div>
-                  )}
-                </div>
+                    
+                    {/* Menu Items */}
+                    <div className="py-2">
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false)
+                          router.push('/profile')
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-cyan-400 transition-all flex items-center justify-between group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <User className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 211, 238, 0.5))' }} />
+                          <span className="font-medium">Profile</span>
+                        </div>
+                      </button>
+                      
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false)
+                          router.push('/subscription')
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-purple-400 transition-all flex items-center justify-between group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Settings className="w-5 h-5 text-purple-400 group-hover:text-purple-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(168, 85, 247, 0.5))' }} />
+                          <span className="font-medium">Account & Subscription</span>
+                        </div>
+                      </button>
+                      
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false)
+                          router.push('/referral')
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-green-400 transition-all flex items-center justify-between group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Gift className="w-5 h-5 text-green-400 group-hover:text-green-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 197, 94, 0.5))' }} />
+                          <span className="font-medium">My Referral</span>
+                        </div>
+                      </button>
+                      
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false)
+                          router.push('/support')
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-cyan-400 transition-all flex items-center justify-between group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <HelpCircle className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 211, 238, 0.5))' }} />
+                          <span className="font-medium">Support</span>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 transition-colors" />
+                      </button>
+                      
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false)
+                          router.push('/feedback')
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-yellow-400 transition-all flex items-center justify-between group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <MessageSquare className="w-5 h-5 text-yellow-400 group-hover:text-yellow-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(234, 179, 8, 0.5))' }} />
+                          <span className="font-medium">Quick Feedback</span>
+                        </div>
+                      </button>
+                    </div>
+                    
+                    {/* Log Out */}
+                    <div className="border-t border-slate-700/50">
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false)
+                          handleSignOut()
+                        }}
+                        className="w-full px-4 py-3 text-left text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all flex items-center gap-3 group"
+                      >
+                        <LogOut className="w-5 h-5 text-red-400 group-hover:text-red-300 transition-colors" style={{ filter: 'drop-shadow(0 0 8px rgba(239, 68, 68, 0.6))' }} />
+                        <span className="font-medium">Log Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-            <div className="flex items-center space-x-4">
             </div>
           </div>
         </div>
