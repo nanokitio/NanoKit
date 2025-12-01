@@ -78,10 +78,10 @@ export function HostedPrelanders() {
 
   if (loading) {
     return (
-      <div className="bg-gradient-to-br from-slate-900/50 to-slate-800/50 backdrop-blur-sm rounded-xl border border-cyan-500/20 p-6">
+      <div className="bg-[#0f1729]/80 backdrop-blur-sm rounded-xl border border-slate-700/30 p-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-4 bg-slate-700/50 rounded w-1/4"></div>
-          <div className="h-20 bg-slate-700/50 rounded"></div>
+          <div className="h-6 bg-slate-700/50 rounded w-1/3"></div>
+          <div className="h-24 bg-slate-700/30 rounded"></div>
         </div>
       </div>
     )
@@ -89,35 +89,35 @@ export function HostedPrelanders() {
 
   if (deployments.length === 0) {
     return (
-      <div className="bg-gradient-to-br from-slate-900/50 to-slate-800/50 backdrop-blur-sm rounded-xl border border-cyan-500/20 p-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-cyan-500/10 rounded-lg">
-            <Globe className="w-5 h-5 text-cyan-400" />
+      <div className="bg-[#0f1729]/80 backdrop-blur-sm rounded-xl border border-slate-700/30 p-8">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2.5 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
+            <Globe className="w-6 h-6 text-cyan-400" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Hosted Prelanders</h3>
-            <p className="text-sm text-gray-400">AWS-hosted prelanders with live URLs</p>
+            <h3 className="text-xl font-bold text-white">Hosted Prelanders</h3>
+            <p className="text-sm text-slate-400">AWS-hosted prelanders with live URLs</p>
           </div>
         </div>
-        <div className="text-center py-8 text-gray-400">
-          <Globe className="w-12 h-12 mx-auto mb-3 opacity-50" />
-          <p>No hosted prelanders yet</p>
-          <p className="text-sm mt-1">Use "Host with Us" to deploy your first prelander</p>
+        <div className="text-center py-12 text-slate-400 bg-slate-900/40 rounded-lg border border-slate-700/20">
+          <Globe className="w-16 h-16 mx-auto mb-4 opacity-30 text-slate-500" />
+          <p className="text-base font-medium text-slate-300 mb-1">No hosted prelanders yet</p>
+          <p className="text-sm">Use "Host with Us" to deploy your first prelander</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="bg-gradient-to-br from-slate-900/50 to-slate-800/50 backdrop-blur-sm rounded-xl border border-cyan-500/20 p-6">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-[#0f1729]/80 backdrop-blur-sm rounded-xl border border-slate-700/30 p-8">
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-cyan-500/10 rounded-lg">
-            <Globe className="w-5 h-5 text-cyan-400" />
+          <div className="p-2.5 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
+            <Globe className="w-6 h-6 text-cyan-400" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Hosted Prelanders</h3>
-            <p className="text-sm text-gray-400">{deployments.length} active deployment{deployments.length !== 1 ? 's' : ''}</p>
+            <h3 className="text-xl font-bold text-white">Hosted Prelanders</h3>
+            <p className="text-sm text-slate-400">{deployments.length} active deployment{deployments.length !== 1 ? 's' : ''}</p>
           </div>
         </div>
       </div>

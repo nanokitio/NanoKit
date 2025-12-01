@@ -630,6 +630,11 @@ export default function DashboardPage() {
             <p>Debug: User: {user?.id || 'none'}</p>
           </div>
         )}
+
+        {/* Hosted Prelanders Section - Moved to top for better visibility */}
+        <div className="mb-8">
+          <HostedPrelanders />
+        </div>
         
         {!sites || sites.length === 0 ? (
           // Empty State
@@ -989,11 +994,6 @@ export default function DashboardPage() {
             </div>
           </div>
         )}
-        
-        {/* Hosted Prelanders Section */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-8">
-          <HostedPrelanders />
-        </div>
       </main>
 
       {/* Delete Confirmation Modal */}
