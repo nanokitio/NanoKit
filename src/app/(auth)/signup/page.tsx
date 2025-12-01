@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -17,8 +17,27 @@ export default function SignupPage() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const [showEmailForm, setShowEmailForm] = useState(false)
+  const [userCountry, setUserCountry] = useState('Costa Rica')
   // const router = useRouter()
   const supabase = createClient()
+
+  // Detect user country based on IP (optional)
+  useEffect(() => {
+    const fetchUserCountry = async () => {
+      try {
+        const response = await fetch('https://ipapi.co/json/')
+        const data = await response.json()
+        if (data.country_name) {
+          setUserCountry(data.country_name)
+        }
+      } catch (error) {
+        console.log('Could not detect country, using default')
+        // Keep default Costa Rica
+      }
+    }
+    
+    fetchUserCountry()
+  }, [])
 
   const handleOAuthSignup = async (provider: 'google' | 'facebook' | 'apple') => {
     setLoading(true)
@@ -301,7 +320,7 @@ export default function SignupPage() {
                 </button>
 
                 <p className="text-xs text-slate-400 text-center mt-6">
-                  By continuing with an account, you agree to our{' '}
+                  By continuing with an account located in <span className="font-semibold text-slate-300">{userCountry}</span>, you agree to our{' '}
                   <a href="/terms" className="text-cyan-400 hover:text-cyan-300 underline">
                     Terms of Service
                   </a>{' '}
@@ -309,6 +328,13 @@ export default function SignupPage() {
                   <a href="/privacy" className="text-cyan-400 hover:text-cyan-300 underline">
                     Privacy Policy
                   </a>.
+                </p>
+                
+                <p className="text-xs text-slate-500 text-center mt-2">
+                  Already have an account?{' '}
+                  <Link href="/login" className="text-pink-400 hover:text-pink-300 font-semibold">
+                    Log in
+                  </Link>
                 </p>
               </div>
             ) : (
