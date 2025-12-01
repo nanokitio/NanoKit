@@ -368,13 +368,109 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-purple-950/30 to-black text-white flex items-center justify-center font-inter">
-        <div className="text-center">
-          <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-2xl shadow-purple-500/50 animate-pulse">
-            <div className="text-white font-black text-3xl">⚡</div>
-          </div>
-          <p className="text-xl text-slate-300 font-inter">Setting Up Your Nano Kit</p>
+      <div className="min-h-screen bg-gradient-to-br from-black via-purple-950/30 to-black text-white flex items-center justify-center font-inter relative overflow-hidden">
+        {/* Animated grid background */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'linear-gradient(rgba(6, 182, 212, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.2) 1px, transparent 1px)',
+            backgroundSize: '50px 50px',
+            animation: 'gridMove 20s linear infinite'
+          }}></div>
         </div>
+        
+        <div className="text-center relative z-10">
+          {/* Synth-style icon container */}
+          <div className="relative w-32 h-32 mx-auto mb-8">
+            {/* Outer rotating ring */}
+            <div className="absolute inset-0 rounded-full border-2 border-cyan-400/30" style={{
+              animation: 'spin 3s linear infinite'
+            }}></div>
+            
+            {/* Middle pulsing ring */}
+            <div className="absolute inset-2 rounded-full border-2 border-purple-500/40" style={{
+              animation: 'pulse 2s ease-in-out infinite'
+            }}></div>
+            
+            {/* Inner glowing ring */}
+            <div className="absolute inset-4 rounded-full border-2 border-pink-400/50 shadow-[0_0_20px_rgba(236,72,153,0.5)]" style={{
+              animation: 'pulse 1.5s ease-in-out infinite reverse'
+            }}></div>
+            
+            {/* Center icon - lightning bolt with synth styling */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <svg viewBox="0 0 24 24" className="w-12 h-12" style={{
+                filter: 'drop-shadow(0 0 10px rgba(6, 182, 212, 0.8)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.6))',
+                animation: 'pulse 1s ease-in-out infinite'
+              }}>
+                <path 
+                  d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" 
+                  fill="url(#gradient1)"
+                  stroke="url(#gradient2)"
+                  strokeWidth="0.5"
+                />
+                <defs>
+                  <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#06b6d4', stopOpacity: 1 }} />
+                    <stop offset="50%" style={{ stopColor: '#a855f7', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#ec4899', stopOpacity: 1 }} />
+                  </linearGradient>
+                  <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#06b6d4', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#ec4899', stopOpacity: 1 }} />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            
+            {/* Corner accents */}
+            <div className="absolute -top-2 -left-2 w-4 h-4 border-l-2 border-t-2 border-cyan-400" style={{
+              animation: 'pulse 2s ease-in-out infinite'
+            }}></div>
+            <div className="absolute -top-2 -right-2 w-4 h-4 border-r-2 border-t-2 border-purple-400" style={{
+              animation: 'pulse 2s ease-in-out infinite 0.5s'
+            }}></div>
+            <div className="absolute -bottom-2 -left-2 w-4 h-4 border-l-2 border-b-2 border-purple-400" style={{
+              animation: 'pulse 2s ease-in-out infinite 1s'
+            }}></div>
+            <div className="absolute -bottom-2 -right-2 w-4 h-4 border-r-2 border-b-2 border-pink-400" style={{
+              animation: 'pulse 2s ease-in-out infinite 1.5s'
+            }}></div>
+          </div>
+          
+          {/* Loading text with glitch effect */}
+          <p className="text-2xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400" style={{
+            animation: 'pulse 2s ease-in-out infinite',
+            textShadow: '0 0 20px rgba(6, 182, 212, 0.5), 0 0 40px rgba(168, 85, 247, 0.3)'
+          }}>
+            Setting Up Your Nano Kit
+          </p>
+          
+          {/* Loading dots animation */}
+          <div className="flex justify-center gap-2 mt-4">
+            {[0, 1, 2].map((i) => (
+              <div 
+                key={i}
+                className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-purple-400"
+                style={{
+                  animation: `pulse 1.5s ease-in-out infinite ${i * 0.3}s`,
+                  boxShadow: '0 0 10px rgba(6, 182, 212, 0.8)'
+                }}
+              ></div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Add keyframes for grid animation */}
+        <style jsx>{`
+          @keyframes gridMove {
+            0% {
+              transform: translateY(0);
+            }
+            100% {
+              transform: translateY(50px);
+            }
+          }
+        `}</style>
       </div>
     )
   }
