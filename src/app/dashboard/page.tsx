@@ -8,8 +8,7 @@ import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/utils'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import { Site } from '@/lib/types'
-import { CreditCard, FileText, LogOut, Search, BarChart3, Rocket, Download, Archive, Eye, Edit, Trash2, Zap, User, Settings, Gift, HelpCircle, MessageSquare, ChevronRight } from 'lucide-react'
-import { HostedPrelanders } from '@/components/HostedPrelanders'
+import { CreditCard, FileText, LogOut, Search, BarChart3, Rocket, Download, Archive, Eye, Edit, Trash2, Zap, User, Settings, Gift, HelpCircle, MessageSquare, ChevronRight, ArrowUpDown, Globe } from 'lucide-react'
 
 interface SiteWithVisits extends Site {
   visits?: { count: number }[]
@@ -34,10 +33,13 @@ export default function DashboardPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [showColumnMenu, setShowColumnMenu] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [sortBy, setSortBy] = useState<'name' | 'template' | 'status' | 'downloads' | 'hosted' | 'creationDate'>('creationDate')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [visibleColumns, setVisibleColumns] = useState({
     template: true,
     status: true,
     downloads: true,
+    hosted: true,
     creationDate: true
   })
   const sitesPerPage = 6
@@ -343,11 +345,63 @@ export default function DashboardPage() {
     return filtered
   }
   
+  const toggleSort = (column: 'name' | 'template' | 'status' | 'downloads' | 'hosted' | 'creationDate') => {
+    if (sortBy === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortBy(column)
+      setSortOrder('desc')
+    }
+  }
+
+  const getSortedSites = (sitesToSort: SiteWithVisits[]) => {
+    return [...sitesToSort].sort((a, b) => {
+      let aValue: any
+      let bValue: any
+      
+      switch (sortBy) {
+        case 'name':
+          aValue = a.brand_name?.toLowerCase() || ''
+          bValue = b.brand_name?.toLowerCase() || ''
+          break
+        case 'template':
+          aValue = a.template_id || ''
+          bValue = b.template_id || ''
+          break
+        case 'status':
+          aValue = a.status || ''
+          bValue = b.status || ''
+          break
+        case 'downloads':
+          aValue = a.download_count || 0
+          bValue = b.download_count || 0
+          break
+        case 'hosted':
+          aValue = a.deployment_count || 0
+          bValue = b.deployment_count || 0
+          break
+        case 'creationDate':
+          aValue = new Date(a.created_at).getTime()
+          bValue = new Date(b.created_at).getTime()
+          break
+        default:
+          return 0
+      }
+      
+      if (sortOrder === 'asc') {
+        return aValue > bValue ? 1 : aValue < bValue ? -1 : 0
+      } else {
+        return aValue < bValue ? 1 : aValue > bValue ? -1 : 0
+      }
+    })
+  }
+
   const getPaginatedSites = () => {
     const filtered = getFilteredSites()
+    const sorted = getSortedSites(filtered)
     const startIndex = (currentPage - 1) * sitesPerPage
     const endIndex = startIndex + sitesPerPage
-    return filtered.slice(startIndex, endIndex)
+    return sorted.slice(startIndex, endIndex)
   }
   
   const getTotalPages = () => {
@@ -631,11 +685,6 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Hosted Prelanders Section - Moved to top for better visibility */}
-        <div className="mb-8">
-          <HostedPrelanders />
-        </div>
-        
         {!sites || sites.length === 0 ? (
           // Empty State
           <div className="text-center py-12">
@@ -788,6 +837,7 @@ export default function DashboardPage() {
                           template: 'Template',
                           status: 'Status',
                           downloads: 'Downloads',
+                          hosted: 'Hosted',
                           creationDate: 'Creation Date'
                         }).map(([key, label]) => (
                           <label key={key} className="flex items-center gap-2 py-2 px-2 hover:bg-slate-700/50 rounded-lg cursor-pointer transition-colors">
@@ -810,26 +860,67 @@ export default function DashboardPage() {
                     <thead className="bg-gradient-to-r from-slate-800/50 to-slate-700/50">
                       <tr>
                         <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
-                          Site
+                          <button 
+                            onClick={() => toggleSort('name')}
+                            className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
+                          >
+                            Site
+                            {sortBy === 'name' && <ArrowUpDown className="w-3 h-3" />}
+                          </button>
                         </th>
                         {visibleColumns.template && (
                           <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
-                            Template
+                            <button 
+                              onClick={() => toggleSort('template')}
+                              className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
+                            >
+                              Template
+                              {sortBy === 'template' && <ArrowUpDown className="w-3 h-3" />}
+                            </button>
                           </th>
                         )}
                         {visibleColumns.status && (
                           <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
-                            Status
+                            <button 
+                              onClick={() => toggleSort('status')}
+                              className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
+                            >
+                              Status
+                              {sortBy === 'status' && <ArrowUpDown className="w-3 h-3" />}
+                            </button>
                           </th>
                         )}
                         {visibleColumns.downloads && (
                           <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
-                            Downloads
+                            <button 
+                              onClick={() => toggleSort('downloads')}
+                              className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
+                            >
+                              Downloads
+                              {sortBy === 'downloads' && <ArrowUpDown className="w-3 h-3" />}
+                            </button>
+                          </th>
+                        )}
+                        {visibleColumns.hosted && (
+                          <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                            <button 
+                              onClick={() => toggleSort('hosted')}
+                              className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
+                            >
+                              Hosted
+                              {sortBy === 'hosted' && <ArrowUpDown className="w-3 h-3" />}
+                            </button>
                           </th>
                         )}
                         {visibleColumns.creationDate && (
                           <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
-                            Creation Date
+                            <button 
+                              onClick={() => toggleSort('creationDate')}
+                              className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
+                            >
+                              Creation Date
+                              {sortBy === 'creationDate' && <ArrowUpDown className="w-3 h-3" />}
+                            </button>
                           </th>
                         )}
                         <th className="px-6 py-4 text-center text-xs font-medium text-cyan-300 uppercase tracking-wide">
@@ -887,6 +978,18 @@ export default function DashboardPage() {
                                 <span className="flex items-center gap-2">
                                   <Download className="w-4 h-4 text-cyan-400" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.5))' }} />
                                   {site.download_count || 1}
+                                </span>
+                              ) : (
+                                <span className="text-gray-500">-</span>
+                              )}
+                            </td>
+                          )}
+                          {visibleColumns.hosted && (
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                              {(site.deployment_count || 0) > 0 ? (
+                                <span className="flex items-center gap-2">
+                                  <Globe className="w-4 h-4 text-purple-400" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
+                                  <span className="text-purple-300">{site.deployment_count}</span>
                                 </span>
                               ) : (
                                 <span className="text-gray-500">-</span>
