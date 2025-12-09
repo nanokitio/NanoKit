@@ -331,9 +331,9 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section id="home" className="relative z-10 min-h-screen pt-32 pb-32 px-6">
+      <section id="home" className="relative z-10 pt-20 pb-24 px-6">
         <div className="relative max-w-6xl mx-auto text-center z-10">
-          <h1 className="text-7xl md:text-9xl font-black leading-[0.95] mb-10 animate-fadeInUp" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight mb-8 animate-fadeInUp" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
             <span className="block text-white drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
               Where AI-crafted
             </span>
@@ -345,11 +345,11 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="text-2xl md:text-3xl text-[#EAF1FF]/80 max-w-4xl mx-auto mb-14 leading-relaxed animate-fadeInUp" style={{ animationDelay: '0.2s', fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-xl md:text-2xl text-[#EAF1FF]/80 max-w-4xl mx-auto mb-10 leading-relaxed animate-fadeInUp" style={{ animationDelay: '0.2s', fontFamily: 'Inter, sans-serif' }}>
             From Idea to Live Page in 60 Seconds
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-20 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-12 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
             <Link href="/signup">
               <Button className="group relative overflow-hidden px-14 py-7 rounded-2xl text-xl font-black transition-all duration-300 hover:scale-105 hover:-translate-y-1 shadow-[0_0_60px_rgba(185,74,255,0.5)] hover:shadow-[0_0_80px_rgba(79,195,255,0.6)]">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF]" />
