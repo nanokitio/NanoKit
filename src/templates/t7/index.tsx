@@ -3,11 +3,16 @@
 import React, { useState, useEffect } from 'react'
 import { BrandConfig, TemplateProps } from '../../lib/types'
 import { generateCSSVariables } from '@/lib/colors'
+import { EditableText } from '@/components/EditableText'
+import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 export function Template7({ brand }: TemplateProps) {
   const { brandName, logoUrl, colors, copy } = brand
-  const { headline, subheadline, cta } = copy
+  const { isEditMode, notifyChange } = useInlineEdit()
   
+  const [headlineText, setHeadlineText] = useState(copy.headline || 'WIN BIG WITH BONANZA BILLION SLOTS!')
+  const [subheadlineText, setSubheadlineText] = useState(copy.subheadline || '')
+  const [ctaText, setCtaText] = useState(copy.cta || 'CLAIM $1000 BONUS NOW!')
   const [spinning, setSpinning] = useState(false)
   const [spinCount, setSpinCount] = useState(0)
   const [showJackpot, setShowJackpot] = useState(false)
@@ -201,11 +206,29 @@ export function Template7({ brand }: TemplateProps) {
           BONANZA BILLION
           <span className="text-6xl">💎</span>
         </h1>
-        <p className="text-2xl font-bold text-cyan-300 flex items-center justify-center gap-2 neon-text-blue drop-shadow-lg">
-          <span className="text-3xl">⭐</span>
-          {headline || 'WIN BIG WITH BONANZA BILLION SLOTS!'}
-          <span className="text-3xl">⭐</span>
-        </p>
+        {isEditMode ? (
+          <div className="text-2xl font-bold text-cyan-300 flex items-center justify-center gap-2 neon-text-blue drop-shadow-lg">
+            <span className="text-3xl">⭐</span>
+            <EditableText
+              value={headlineText}
+              onChange={(val) => {
+                setHeadlineText(val)
+                notifyChange('headline', val)
+              }}
+              as="span"
+              className="text-2xl font-bold text-cyan-300"
+              placeholder="WIN BIG WITH BONANZA BILLION SLOTS!"
+              style={{ display: 'inline' }}
+            />
+            <span className="text-3xl">⭐</span>
+          </div>
+        ) : (
+          <p className="text-2xl font-bold text-cyan-300 flex items-center justify-center gap-2 neon-text-blue drop-shadow-lg">
+            <span className="text-3xl">⭐</span>
+            {headlineText}
+            <span className="text-3xl">⭐</span>
+          </p>
+        )}
       </div>
 
       {/* Main Game Area */}
@@ -286,9 +309,22 @@ export function Template7({ brand }: TemplateProps) {
             <p className="text-2xl font-bold text-black mb-6">$1,000 BONUS!</p>
             <button 
               className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transform hover:scale-105 transition-all duration-200 mb-4"
-              onClick={() => brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
+              onClick={() => !isEditMode && brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
             >
-              🎁 CLAIM $1000 BONUS NOW!
+              {isEditMode ? (
+                <EditableText
+                  value={ctaText}
+                  onChange={(val) => {
+                    setCtaText(val)
+                    notifyChange('cta', val)
+                  }}
+                  as="span"
+                  placeholder="CLAIM BONUS NOW!"
+                  style={{ color: 'inherit', fontWeight: 'inherit' }}
+                />
+              ) : (
+                `🎁 ${ctaText}`
+              )}
             </button>
             <button 
               className="block mx-auto text-black/70 hover:text-black text-sm underline"

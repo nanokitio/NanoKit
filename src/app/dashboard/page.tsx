@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/utils'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import { Site } from '@/lib/types'
-import { CreditCard, FileText, LogOut, Search, BarChart3, Rocket, Download, Archive, Eye, Edit, Trash2, Zap, User, Settings, Gift, HelpCircle, MessageSquare, ChevronRight, ArrowUpDown, Globe } from 'lucide-react'
+import { CreditCard, FileText, LogOut, Search, BarChart3, Rocket, Download, Archive, Eye, Edit, Trash2, Zap, User, Settings, Gift, HelpCircle, MessageSquare, ChevronRight, ArrowUpDown, Globe, ChevronUp, ChevronDown } from 'lucide-react'
 
 interface SiteWithVisits extends Site {
   visits?: { count: number }[]
@@ -334,11 +334,15 @@ export default function DashboardPage() {
       // 'all' mode shows all non-archived sites (or all archived if showArchived is true)
     }
     
-    // Apply search filter
+    // Apply search filter - search across multiple fields
     if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
       filtered = filtered.filter(site => 
-        site.brand_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        site.slug?.toLowerCase().includes(searchQuery.toLowerCase())
+        site.brand_name?.toLowerCase().includes(query) ||
+        site.slug?.toLowerCase().includes(query) ||
+        site.template_id?.toLowerCase().includes(query) ||
+        site.status?.toLowerCase().includes(query) ||
+        formatDate(site.created_at).toLowerCase().includes(query)
       )
     }
     
@@ -735,7 +739,7 @@ export default function DashboardPage() {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search by name..."
+                    placeholder="Search by name, template, status, or date..."
                     value={searchQuery}
                     onChange={(e) => {
                       setSearchQuery(e.target.value)
@@ -747,6 +751,18 @@ export default function DashboardPage() {
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-cyan-400">
                     <Search className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 8px rgba(34, 211, 238, 0.6))' }} />
                   </div>
+                  {searchQuery && (
+                    <button
+                      onClick={() => {
+                        setSearchQuery('')
+                        setCurrentPage(1)
+                      }}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                      title="Clear search"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
               </div>
               
@@ -865,7 +881,11 @@ export default function DashboardPage() {
                             className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
                           >
                             Site
-                            {sortBy === 'name' && <ArrowUpDown className="w-3 h-3" />}
+                            {sortBy === 'name' ? (
+                              sortOrder === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
+                            ) : (
+                              <ChevronDown className="w-4 h-4 opacity-30" />
+                            )}
                           </button>
                         </th>
                         {visibleColumns.template && (
@@ -875,7 +895,11 @@ export default function DashboardPage() {
                               className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
                             >
                               Template
-                              {sortBy === 'template' && <ArrowUpDown className="w-3 h-3" />}
+                              {sortBy === 'template' ? (
+                                sortOrder === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
+                              ) : (
+                                <ChevronDown className="w-4 h-4 opacity-30" />
+                              )}
                             </button>
                           </th>
                         )}
@@ -886,7 +910,11 @@ export default function DashboardPage() {
                               className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
                             >
                               Status
-                              {sortBy === 'status' && <ArrowUpDown className="w-3 h-3" />}
+                              {sortBy === 'status' ? (
+                                sortOrder === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
+                              ) : (
+                                <ChevronDown className="w-4 h-4 opacity-30" />
+                              )}
                             </button>
                           </th>
                         )}
@@ -897,7 +925,11 @@ export default function DashboardPage() {
                               className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
                             >
                               Downloads
-                              {sortBy === 'downloads' && <ArrowUpDown className="w-3 h-3" />}
+                              {sortBy === 'downloads' ? (
+                                sortOrder === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
+                              ) : (
+                                <ChevronDown className="w-4 h-4 opacity-30" />
+                              )}
                             </button>
                           </th>
                         )}
@@ -908,7 +940,11 @@ export default function DashboardPage() {
                               className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
                             >
                               Hosted
-                              {sortBy === 'hosted' && <ArrowUpDown className="w-3 h-3" />}
+                              {sortBy === 'hosted' ? (
+                                sortOrder === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
+                              ) : (
+                                <ChevronDown className="w-4 h-4 opacity-30" />
+                              )}
                             </button>
                           </th>
                         )}
@@ -919,7 +955,11 @@ export default function DashboardPage() {
                               className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
                             >
                               Creation Date
-                              {sortBy === 'creationDate' && <ArrowUpDown className="w-3 h-3" />}
+                              {sortBy === 'creationDate' ? (
+                                sortOrder === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
+                              ) : (
+                                <ChevronDown className="w-4 h-4 opacity-30" />
+                              )}
                             </button>
                           </th>
                         )}

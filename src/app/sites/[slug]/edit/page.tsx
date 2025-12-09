@@ -94,6 +94,37 @@ export default function SiteEditorPage() {
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
+  // Save state to history whenever key fields change
+  useEffect(() => {
+    const currentState = {
+      headline,
+      subheadline,
+      cta,
+      ctaUrl,
+      primaryColor,
+      secondaryColor,
+      accentColor,
+      logoUrl,
+      backgroundColor,
+      backgroundImage
+    }
+
+    // Don't save to history if we're navigating through history
+    if (historyIndex >= 0 && historyIndex < history.length - 1) {
+      return
+    }
+
+    // Only add to history if something actually changed
+    const lastState = history[history.length - 1]
+    if (lastState && JSON.stringify(lastState) === JSON.stringify(currentState)) {
+      return
+    }
+
+    // Add to history (limit to 50 states)
+    setHistory(prev => [...prev.slice(-49), currentState])
+    setHistoryIndex(prev => prev + 1)
+  }, [headline, subheadline, cta, ctaUrl, primaryColor, secondaryColor, accentColor, logoUrl, backgroundColor, backgroundImage])
+
   const toggleSection = (section: 'vertical' | 'template' | 'logo' | 'content' | 'colors' | 'legal') => {
     const isExpanding = !expandedSections[section]
     
@@ -210,11 +241,31 @@ export default function SiteEditorPage() {
     }
   ]
 
-  // Listen for close message from iframe
+  // Listen for messages from iframe (popup close and inline edits)
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data === 'closePopup') {
         setIsPopupOpen(false)
+      }
+      
+      // Handle inline content changes
+      if (event.data.type === 'CONTENT_CHANGE') {
+        const { field, value } = event.data
+        console.log('Inline edit received:', field, value)
+        
+        switch (field) {
+          case 'headline':
+            setHeadline(value)
+            break
+          case 'subheadline':
+            setSubheadline(value)
+            break
+          case 'cta':
+            setCta(value)
+            break
+          default:
+            console.warn('Unknown field:', field)
+        }
       }
     }
     
@@ -553,26 +604,40 @@ export default function SiteEditorPage() {
 
   const handleUndo = () => {
     if (historyIndex > 0) {
-      setHistoryIndex(historyIndex - 1)
-      // Restore previous state from history
-      const prevState = history[historyIndex - 1]
+      const newIndex = historyIndex - 1
+      setHistoryIndex(newIndex)
+      const prevState = history[newIndex]
       if (prevState) {
-        setHeadline(prevState.headline)
-        setSubheadline(prevState.subheadline)
-        setCta(prevState.cta)
-        // Add more fields as needed
+        setHeadline(prevState.headline || '')
+        setSubheadline(prevState.subheadline || '')
+        setCta(prevState.cta || '')
+        setCtaUrl(prevState.ctaUrl || '')
+        setPrimaryColor(prevState.primaryColor || '#4a90e2')
+        setSecondaryColor(prevState.secondaryColor || '#7b68ee')
+        setAccentColor(prevState.accentColor || '#ffd700')
+        setLogoUrl(prevState.logoUrl || '')
+        setBackgroundColor(prevState.backgroundColor || '#1a1a2e')
+        setBackgroundImage(prevState.backgroundImage || '')
       }
     }
   }
 
   const handleRedo = () => {
     if (historyIndex < history.length - 1) {
-      setHistoryIndex(historyIndex + 1)
-      const nextState = history[historyIndex + 1]
+      const newIndex = historyIndex + 1
+      setHistoryIndex(newIndex)
+      const nextState = history[newIndex]
       if (nextState) {
-        setHeadline(nextState.headline)
-        setSubheadline(nextState.subheadline)
-        setCta(nextState.cta)
+        setHeadline(nextState.headline || '')
+        setSubheadline(nextState.subheadline || '')
+        setCta(nextState.cta || '')
+        setCtaUrl(nextState.ctaUrl || '')
+        setPrimaryColor(nextState.primaryColor || '#4a90e2')
+        setSecondaryColor(nextState.secondaryColor || '#7b68ee')
+        setAccentColor(nextState.accentColor || '#ffd700')
+        setLogoUrl(nextState.logoUrl || '')
+        setBackgroundColor(nextState.backgroundColor || '#1a1a2e')
+        setBackgroundImage(nextState.backgroundImage || '')
       }
     }
   }
@@ -1048,6 +1113,7 @@ export default function SiteEditorPage() {
       featuredPlayer: featuredPlayer || '',  // Team member names
       sportDirector: sportDirector || '',
       preview: '1',  // Flag to disable blur in editor iframe
+      edit: '1',  // Enable inline editing mode
     })
     
     return `/sites/${slug}?${params.toString()}`
