@@ -3,16 +3,14 @@
 import React from 'react'
 import { BrandConfig } from '@/lib/types'
 import { EditableText } from '@/components/EditableText'
-import { EditableTextCanva } from '@/components/EditableTextCanva'
 import { useInlineEdit } from '@/hooks/useInlineEdit'
-import { DebugPanel } from '@/components/DebugPanel'
 
 interface Template6Props {
   brand: BrandConfig
 }
 
 export function Template6({ brand }: Template6Props) {
-  const { isEditMode, notifyChange, notifyStyleChange } = useInlineEdit()
+  const { isEditMode, notifyChange } = useInlineEdit()
   const [spinCount, setSpinCount] = React.useState(0);
   const [showWinModal, setShowWinModal] = React.useState(false);
   const [isSpinning, setIsSpinning] = React.useState(false);
@@ -43,29 +41,6 @@ export function Template6({ brand }: Template6Props) {
 
   return (
     <div className="min-h-screen bg-black font-mono relative overflow-hidden synth-container">
-      {/* Debug Panel - ALWAYS VISIBLE */}
-      <DebugPanel isEditMode={isEditMode} />
-      
-      {/* SUPER OBVIOUS EDIT MODE INDICATOR */}
-      <div style={{
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        background: isEditMode ? 'rgba(0, 255, 0, 0.9)' : 'rgba(255, 0, 0, 0.9)',
-        color: 'white',
-        padding: '40px 60px',
-        borderRadius: '20px',
-        zIndex: 99999,
-        fontSize: '48px',
-        fontWeight: 'bold',
-        border: '5px solid white',
-        boxShadow: '0 0 50px rgba(0,0,0,0.8)',
-        pointerEvents: 'none'
-      }}>
-        {isEditMode ? '✅ EDIT MODE ON' : '❌ EDIT MODE OFF'}
-      </div>
-      
       {/* Synth 90s Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/90 via-black to-cyan-900/90"></div>
       
@@ -105,25 +80,15 @@ export function Template6({ brand }: Template6Props) {
           
           <div className="synth-title-container mb-6">
             {isEditMode ? (
-              <EditableTextCanva
+              <EditableText
                 value={headline}
                 onChange={(val) => {
                   setHeadline(val)
                   notifyChange('headline', val)
                 }}
-                onStyleChange={(styles) => notifyStyleChange('headline', styles)}
                 as="h1"
                 className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 synth-glow animate-text-shimmer tracking-wider"
                 placeholder="YOUR TITLE HERE"
-                initialStyles={{
-                  fontSize: 48,
-                  fontFamily: 'Inter',
-                  isBold: true,
-                  isItalic: false,
-                  isUnderline: false,
-                  textAlign: 'center',
-                  color: '#ffffff'
-                }}
               />
             ) : (
               <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 mb-4 synth-glow animate-text-shimmer tracking-wider">
@@ -133,25 +98,15 @@ export function Template6({ brand }: Template6Props) {
             <div className="synth-underline"></div>
           </div>
           {isEditMode ? (
-            <EditableTextCanva
+            <EditableText
               value={subheadline}
               onChange={(val) => {
                 setSubheadline(val)
                 notifyChange('subheadline', val)
               }}
-              onStyleChange={(styles) => notifyStyleChange('subheadline', styles)}
               as="p"
-              className="text-cyan-100 font-light tracking-wide retro-text"
+              className="text-lg md:text-xl text-cyan-100 font-light tracking-wide retro-text"
               placeholder="Enter your subtitle..."
-              initialStyles={{
-                fontSize: 20,
-                fontFamily: 'Inter',
-                isBold: false,
-                isItalic: false,
-                isUnderline: false,
-                textAlign: 'center',
-                color: '#a5f3fc'
-              }}
             />
           ) : (
             <p className="text-lg md:text-xl text-cyan-100 mb-6 font-light tracking-wide retro-text">
