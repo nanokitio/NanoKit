@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Type, Check, X } from 'lucide-react'
+import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Type, Check, X, ChevronDown } from 'lucide-react'
 
 interface InlineEditableTextProps {
   value: string
@@ -15,6 +15,7 @@ interface InlineEditableTextProps {
 
 export interface TextStyles {
   fontSize: number
+  fontFamily?: string
   fontWeight: 'normal' | 'bold'
   fontStyle: 'normal' | 'italic'
   textDecoration: 'none' | 'underline'
@@ -22,6 +23,20 @@ export interface TextStyles {
 }
 
 const FONT_SIZES = [12, 14, 16, 18, 20, 24, 28, 32, 36, 42, 48, 56, 64, 72, 96]
+
+const FONTS = [
+  { name: 'Default', value: 'inherit' },
+  { name: 'Inter', value: 'var(--font-inter)' },
+  { name: 'Roboto', value: 'var(--font-roboto)' },
+  { name: 'Open Sans', value: 'var(--font-open-sans)' },
+  { name: 'Lato', value: 'var(--font-lato)' },
+  { name: 'Montserrat', value: 'var(--font-montserrat)' },
+  { name: 'Poppins', value: 'var(--font-poppins)' },
+  { name: 'Playfair', value: 'var(--font-playfair)' },
+  { name: 'Oswald', value: 'var(--font-oswald)' },
+  { name: 'Raleway', value: 'var(--font-raleway)' },
+  { name: 'Bebas Neue', value: 'var(--font-bebas)' },
+]
 
 export function InlineEditableText({
   value,
@@ -36,6 +51,7 @@ export function InlineEditableText({
   const [localValue, setLocalValue] = useState(value)
   const [textStyles, setTextStyles] = useState<TextStyles>(initialStyles || {
     fontSize: 16,
+    fontFamily: 'inherit',
     fontWeight: 'normal',
     fontStyle: 'normal',
     textDecoration: 'none',
@@ -43,6 +59,7 @@ export function InlineEditableText({
   })
   const [toolbarPosition, setToolbarPosition] = useState({ top: 0, left: 0 })
   const [showFontSizeDropdown, setShowFontSizeDropdown] = useState(false)
+  const [showFontFamilyDropdown, setShowFontFamilyDropdown] = useState(false)
   
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -113,10 +130,14 @@ export function InlineEditableText({
   const toggleUnderline = () => updateStyle('textDecoration', textStyles.textDecoration === 'underline' ? 'none' : 'underline')
   const setAlignment = (align: 'left' | 'center' | 'right') => updateStyle('textAlign', align)
   const setFontSize = (size: number) => { updateStyle('fontSize', size); setShowFontSizeDropdown(false) }
+  const setFontFamily = (font: string) => { updateStyle('fontFamily', font); setShowFontFamilyDropdown(false) }
+  
+  const currentFontName = FONTS.find(f => f.value === textStyles.fontFamily)?.name || 'Default'
 
   const textStyle: React.CSSProperties = {
     ...style,
     fontSize: `${textStyles.fontSize}px`,
+    fontFamily: textStyles.fontFamily || 'inherit',
     fontWeight: textStyles.fontWeight,
     fontStyle: textStyles.fontStyle,
     textDecoration: textStyles.textDecoration,
@@ -136,10 +157,37 @@ export function InlineEditableText({
           }}
           onMouseDown={(e) => e.preventDefault()}
         >
+          {/* Font Family */}
+          <div className="relative">
+            <button
+              onClick={() => { setShowFontFamilyDropdown(!showFontFamilyDropdown); setShowFontSizeDropdown(false) }}
+              className="flex items-center gap-1 px-2 py-1.5 text-white hover:bg-slate-700 rounded text-sm font-medium min-w-[90px] justify-between"
+            >
+              <span className="truncate">{currentFontName}</span>
+              <ChevronDown size={12} />
+            </button>
+            {showFontFamilyDropdown && (
+              <div className="absolute top-full left-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl py-1 max-h-60 overflow-y-auto z-20 min-w-[140px]">
+                {FONTS.map(font => (
+                  <button
+                    key={font.value}
+                    onClick={() => setFontFamily(font.value)}
+                    className={`w-full px-3 py-2 text-left text-sm hover:bg-slate-700 ${
+                      textStyles.fontFamily === font.value ? 'bg-blue-600 text-white' : 'text-slate-300'
+                    }`}
+                    style={{ fontFamily: font.value }}
+                  >
+                    {font.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Font Size */}
           <div className="relative">
             <button
-              onClick={() => setShowFontSizeDropdown(!showFontSizeDropdown)}
+              onClick={() => { setShowFontSizeDropdown(!showFontSizeDropdown); setShowFontFamilyDropdown(false) }}
               className="flex items-center gap-1 px-2 py-1.5 text-white hover:bg-slate-700 rounded text-sm font-medium min-w-[55px] justify-between"
             >
               <Type size={14} />
