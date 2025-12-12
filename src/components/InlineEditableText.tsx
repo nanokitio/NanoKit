@@ -290,12 +290,29 @@ export function InlineEditableText({
         <div
           onClick={handleClick}
           onMouseDown={(e) => { e.stopPropagation(); }}
-          className={`cursor-pointer outline outline-2 outline-dashed outline-cyan-400/50 hover:outline-cyan-400 outline-offset-2 rounded transition-all ${className}`}
-          style={{ ...textStyle, position: 'relative', zIndex: 100 }}
+          className={`cursor-pointer rounded transition-all ${className}`}
+          style={{ 
+            ...textStyle, 
+            position: 'relative', 
+            zIndex: 100,
+            border: '3px solid #06b6d4',
+            padding: '4px 8px',
+            backgroundColor: 'rgba(6, 182, 212, 0.1)'
+          }}
           title="✏️ Click to edit this text"
         >
           {localValue || placeholder}
-          <span className="absolute -top-3 -right-3 bg-cyan-500 text-white text-xs px-1.5 py-0.5 rounded-full shadow-lg">✏️</span>
+          <span style={{
+            position: 'absolute',
+            top: '-12px',
+            right: '-12px',
+            backgroundColor: '#06b6d4',
+            color: 'white',
+            fontSize: '12px',
+            padding: '2px 6px',
+            borderRadius: '9999px',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
+          }}>✏️</span>
         </div>
       )}
     </div>
