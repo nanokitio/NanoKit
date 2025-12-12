@@ -13,7 +13,16 @@ export function useInlineEdit() {
     const params = new URLSearchParams(window.location.search)
     const editParam = params.get('edit')
     
-    setIsEditMode(inIframe && editParam === '1')
+    const editMode = inIframe && editParam === '1'
+    
+    console.log('🔍 Inline Edit Debug:', {
+      inIframe,
+      editParam,
+      editMode,
+      url: window.location.href
+    })
+    
+    setIsEditMode(editMode)
   }, [])
 
   const notifyChange = (field: string, value: string | number) => {

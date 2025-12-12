@@ -41,6 +41,25 @@ export function Template6({ brand }: Template6Props) {
 
   return (
     <div className="min-h-screen bg-black font-mono relative overflow-hidden synth-container">
+      {/* Debug: Edit Mode Indicator */}
+      {isEditMode && (
+        <div style={{
+          position: 'fixed',
+          top: '10px',
+          right: '10px',
+          background: 'rgba(0, 255, 0, 0.9)',
+          color: 'black',
+          padding: '8px 16px',
+          borderRadius: '8px',
+          zIndex: 9999,
+          fontWeight: 'bold',
+          fontSize: '14px',
+          boxShadow: '0 4px 12px rgba(0, 255, 0, 0.5)'
+        }}>
+          ✏️ EDIT MODE ACTIVE
+        </div>
+      )}
+      
       {/* Synth 90s Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/90 via-black to-cyan-900/90"></div>
       
