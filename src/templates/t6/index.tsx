@@ -39,26 +39,37 @@ export function Template6({ brand }: Template6Props) {
     }, 2000);
   };
 
+  // Debug info
+  const debugInfo = React.useMemo(() => {
+    const inIframe = typeof window !== 'undefined' ? window.self !== window.top : false
+    const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+    const editParam = params?.get('edit')
+    return { inIframe, editParam, isEditMode }
+  }, [isEditMode])
+
   return (
     <div className="min-h-screen bg-black font-mono relative overflow-hidden synth-container">
-      {/* Debug: Edit Mode Indicator */}
-      {isEditMode && (
-        <div style={{
-          position: 'fixed',
-          top: '10px',
-          right: '10px',
-          background: 'rgba(0, 255, 0, 0.9)',
-          color: 'black',
-          padding: '8px 16px',
-          borderRadius: '8px',
-          zIndex: 9999,
-          fontWeight: 'bold',
-          fontSize: '14px',
-          boxShadow: '0 4px 12px rgba(0, 255, 0, 0.5)'
-        }}>
-          ✏️ EDIT MODE ACTIVE
-        </div>
-      )}
+      {/* Debug: Always Show Status */}
+      <div style={{
+        position: 'fixed',
+        top: '10px',
+        left: '10px',
+        background: isEditMode ? 'rgba(0, 255, 0, 0.95)' : 'rgba(255, 0, 0, 0.95)',
+        color: 'white',
+        padding: '12px 20px',
+        borderRadius: '8px',
+        zIndex: 9999,
+        fontWeight: 'bold',
+        fontSize: '12px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
+        fontFamily: 'monospace',
+        lineHeight: '1.6'
+      }}>
+        <div>🔍 DEBUG INFO:</div>
+        <div>In iframe: {debugInfo.inIframe ? '✅ YES' : '❌ NO'}</div>
+        <div>edit param: {debugInfo.editParam || '❌ MISSING'}</div>
+        <div>Edit mode: {isEditMode ? '✅ ACTIVE' : '❌ INACTIVE'}</div>
+      </div>
       
       {/* Synth 90s Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/90 via-black to-cyan-900/90"></div>

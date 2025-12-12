@@ -188,23 +188,39 @@ export function EditableText({
         cursor: 'pointer',
         position: 'relative',
         transition: 'all 0.2s ease',
-        outline: 'none'
+        outline: '2px dashed rgba(59, 130, 246, 0.5)',
+        outlineOffset: '4px',
+        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+        padding: '4px 8px',
+        borderRadius: '4px'
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.outline = '3px dashed rgba(59, 130, 246, 0.8)'
-        e.currentTarget.style.outlineOffset = '2px'
-        e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'
-        e.currentTarget.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.3)'
+        e.currentTarget.style.outline = '3px dashed rgba(59, 130, 246, 1)'
+        e.currentTarget.style.outlineOffset = '4px'
+        e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.15)'
+        e.currentTarget.style.boxShadow = '0 0 30px rgba(59, 130, 246, 0.5)'
+        e.currentTarget.style.transform = 'scale(1.02)'
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.outline = 'none'
-        e.currentTarget.style.backgroundColor = 'transparent'
+        e.currentTarget.style.outline = '2px dashed rgba(59, 130, 246, 0.5)'
+        e.currentTarget.style.outlineOffset = '4px'
+        e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.05)'
         e.currentTarget.style.boxShadow = 'none'
+        e.currentTarget.style.transform = 'scale(1)'
       }}
       title="✏️ Click to edit text and adjust font size"
     >
       <span style={{ position: 'relative', display: 'inline-block' }}>
         {value || placeholder}
+        <span style={{
+          position: 'absolute',
+          top: '-20px',
+          right: '-20px',
+          fontSize: '16px',
+          opacity: 0.7
+        }}>
+          ✏️
+        </span>
       </span>
     </Component>
   )
