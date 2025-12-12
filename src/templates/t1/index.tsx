@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { BrandConfig, TemplateRenderResult } from '@/lib/types'
 import { generateCSSVariables } from '@/lib/colors'
-import { SimpleEditableText } from '@/components/SimpleEditableText'
+import { EditableText } from '@/components/EditableText'
 import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 interface Template1Props {
@@ -43,7 +43,7 @@ export function Template1({ brand }: Template1Props) {
               className="bg-[var(--brand-primary)] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
               onClick={handleCTAClick}
             >
-              <SimpleEditableText
+              <EditableText
                 value={ctaText}
                 onChange={(val) => {
                   setCtaText(val)
@@ -59,7 +59,7 @@ export function Template1({ brand }: Template1Props) {
       {/* Hero Content */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <SimpleEditableText
+          <EditableText
             value={headline}
             onChange={(val) => {
               setHeadline(val)
@@ -69,7 +69,7 @@ export function Template1({ brand }: Template1Props) {
             className="text-5xl font-bold text-gray-900 mb-6"
             placeholder="Enter headline..."
           />
-          <SimpleEditableText
+          <EditableText
             value={subheadline}
             onChange={(val) => {
               setSubheadline(val)
@@ -84,7 +84,7 @@ export function Template1({ brand }: Template1Props) {
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-all duration-200"
               onClick={handleCTAClick}
             >
-              <SimpleEditableText
+              <EditableText
                 value={ctaText}
                 onChange={(val) => {
                   setCtaText(val)
@@ -169,7 +169,7 @@ export function Template1({ brand }: Template1Props) {
             </div>
             <p className="text-gray-400 mb-6">{brand.description}</p>
             <button className="bg-[var(--brand-primary)] text-white px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity" onClick={handleCTAClick}>
-              <SimpleEditableText
+              <EditableText
                 value={ctaText}
                 onChange={(val) => {
                   setCtaText(val)

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { BrandConfig, TemplateProps } from '../../lib/types'
 import { generateCSSVariables } from '@/lib/colors'
-import { SimpleEditableText } from '@/components/SimpleEditableText'
+import { EditableText } from '@/components/EditableText'
 import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 export function Template7({ brand }: TemplateProps) {
@@ -210,7 +210,7 @@ export function Template7({ brand }: TemplateProps) {
         </h1>
         <div className="text-2xl font-bold text-cyan-300 flex items-center justify-center gap-2 neon-text-blue drop-shadow-lg">
           <span className="text-3xl">⭐</span>
-          <SimpleEditableText
+          <EditableText
             value={headlineText}
             onChange={(val) => {
               setHeadlineText(val)
@@ -304,7 +304,7 @@ export function Template7({ brand }: TemplateProps) {
               className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transform hover:scale-105 transition-all duration-200 mb-4"
               onClick={() => !isEditMode && brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
             >
-              <SimpleEditableText
+              <EditableText
               value={ctaText}
               onChange={(val) => {
                 setCtaText(val)

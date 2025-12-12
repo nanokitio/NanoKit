@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { BrandConfig } from '@/lib/types'
-import { SimpleEditableText } from '@/components/SimpleEditableText'
+import { EditableText } from '@/components/EditableText'
 import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 interface Template14Props {
@@ -16,7 +16,7 @@ export function Template14({ brand }: Template14Props) {
   return (
     <div className="w-full h-screen bg-gradient-to-b from-blue-900 to-blue-600 flex items-center justify-center">
       <div className="text-center text-white p-8">
-        <SimpleEditableText
+        <EditableText
           value={headline}
           onChange={(val) => {
             setHeadline(val)
