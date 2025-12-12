@@ -145,7 +145,7 @@ export function InlineEditableText({
   }
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative" style={{ zIndex: 10 }}>
       {/* Floating Toolbar - Only when editing */}
       {isEditing && (
         <div
@@ -273,12 +273,13 @@ export function InlineEditableText({
               }
             }, 300)
           }}
-          className={`bg-transparent border-2 border-blue-500 rounded px-2 py-1 outline-none ${className}`}
+          className="bg-slate-800/90 border-2 border-blue-500 rounded px-2 py-1 outline-none text-white"
           style={{
             ...textStyle,
             minWidth: '100px',
             width: `${Math.max(100, localValue.length * 12)}px`,
-            color: 'inherit'
+            color: '#ffffff',
+            WebkitTextFillColor: '#ffffff'
           }}
           placeholder={placeholder}
         />
