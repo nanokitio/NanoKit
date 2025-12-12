@@ -3,12 +3,14 @@
 import React, { useState, useEffect } from 'react'
 import { BrandConfig, TemplateProps } from '../../lib/types'
 import { generateCSSVariables } from '@/lib/colors'
+import { InlineEditableText } from '@/components/InlineEditableText'
 
 export function Template7({ brand }: TemplateProps) {
   const { brandName, logoUrl, colors, copy } = brand
   
-  const headlineText = copy.headline || 'WIN BIG WITH BONANZA BILLION SLOTS!'
-  const ctaText = copy.cta || 'CLAIM $1000 BONUS NOW!'
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [headlineText, setHeadlineText] = useState(copy.headline || 'WIN BIG WITH BONANZA BILLION SLOTS!');
+  const [ctaText, setCtaText] = useState(copy.cta || 'CLAIM $1000 BONUS NOW!');
   const [spinning, setSpinning] = useState(false)
   const [spinCount, setSpinCount] = useState(0)
   const [showJackpot, setShowJackpot] = useState(false)
@@ -24,6 +26,21 @@ export function Template7({ brand }: TemplateProps) {
     }, 2500)
     return () => clearTimeout(timer)
   }, [])
+
+  // Check if in edit mode
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const inIframe = window.self !== window.top;
+    const editParam = params.get('edit') === '1' || params.get('preview') === '1';
+    setIsEditMode(inIframe && editParam);
+  }, []);
+
+  // Send changes to parent editor
+  const notifyChange = (field: string, value: string) => {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'CONTENT_CHANGE', field, value }, '*');
+    }
+  };
 
   const spinReels = () => {
     if (spinning) return
@@ -202,11 +219,19 @@ export function Template7({ brand }: TemplateProps) {
           BONANZA BILLION
           <span className="text-6xl">💎</span>
         </h1>
-        <p className="text-2xl font-bold text-cyan-300 flex items-center justify-center gap-2 neon-text-blue drop-shadow-lg">
+        <div className="text-2xl font-bold text-cyan-300 flex items-center justify-center gap-2 neon-text-blue drop-shadow-lg">
           <span className="text-3xl">⭐</span>
-          {headlineText}
+          {isEditMode ? (
+            <InlineEditableText
+              value={headlineText}
+              onChange={(val) => { setHeadlineText(val); notifyChange('headline', val); }}
+              className="font-bold text-cyan-300"
+              placeholder="Enter headline..."
+              initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+            />
+          ) : headlineText}
           <span className="text-3xl">⭐</span>
-        </p>
+        </div>
       </div>
 
       {/* Main Game Area */}
@@ -287,9 +312,16 @@ export function Template7({ brand }: TemplateProps) {
             <p className="text-2xl font-bold text-black mb-6">$1,000 BONUS!</p>
             <button 
               className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transform hover:scale-105 transition-all duration-200 mb-4"
-              onClick={() => brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
+              onClick={() => !isEditMode && brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
             >
-              🎁 {ctaText}
+              {isEditMode ? (
+                <InlineEditableText
+                  value={ctaText}
+                  onChange={(val) => { setCtaText(val); notifyChange('cta', val); }}
+                  placeholder="Button text..."
+                  initialStyles={{ fontSize: 18, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+                />
+              ) : `🎁 ${ctaText}`}
             </button>
             <button 
               className="block mx-auto text-black/70 hover:text-black text-sm underline"

@@ -1,20 +1,37 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { BrandConfig, TemplateRenderResult } from '@/lib/types'
 import { generateCSSVariables } from '@/lib/colors'
+import { InlineEditableText } from '@/components/InlineEditableText'
 
 interface Template1Props {
   brand: BrandConfig
 }
 
 export function Template1({ brand }: Template1Props) {
-  const headline = brand.copy.headline
-  const subheadline = brand.copy.subheadline
-  const ctaText = brand.copy.cta
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [headline, setHeadline] = useState(brand.copy.headline);
+  const [subheadline, setSubheadline] = useState(brand.copy.subheadline);
+  const [ctaText, setCtaText] = useState(brand.copy.cta);
+
+  // Check if in edit mode
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const inIframe = window.self !== window.top;
+    const editParam = params.get('edit') === '1' || params.get('preview') === '1';
+    setIsEditMode(inIframe && editParam);
+  }, []);
+
+  // Send changes to parent editor
+  const notifyChange = (field: string, value: string) => {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'CONTENT_CHANGE', field, value }, '*');
+    }
+  };
   
   const handleCTAClick = () => {
-    if (brand.ctaUrl) window.open(brand.ctaUrl, '_blank')
+    if (!isEditMode && brand.ctaUrl) window.open(brand.ctaUrl, '_blank')
   }
   
   return (
@@ -48,18 +65,41 @@ export function Template1({ brand }: Template1Props) {
       {/* Hero Content */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            {headline}
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            {subheadline}
-          </p>
+          {isEditMode ? (
+            <InlineEditableText
+              value={headline}
+              onChange={(val) => { setHeadline(val); notifyChange('headline', val); }}
+              className="text-5xl font-bold text-gray-900 mb-6"
+              placeholder="Enter your headline..."
+              initialStyles={{ fontSize: 48, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+            />
+          ) : (
+            <h1 className="text-5xl font-bold text-gray-900 mb-6">{headline}</h1>
+          )}
+          {isEditMode ? (
+            <InlineEditableText
+              value={subheadline}
+              onChange={(val) => { setSubheadline(val); notifyChange('subheadline', val); }}
+              className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto"
+              placeholder="Enter your subheadline..."
+              initialStyles={{ fontSize: 20, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+            />
+          ) : (
+            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">{subheadline}</p>
+          )}
           <div className="cta-section text-center mt-12">
             <button 
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-all duration-200"
               onClick={handleCTAClick}
             >
-              {ctaText}
+              {isEditMode ? (
+                <InlineEditableText
+                  value={ctaText}
+                  onChange={(val) => { setCtaText(val); notifyChange('cta', val); }}
+                  placeholder="Button text..."
+                  initialStyles={{ fontSize: 20, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+                />
+              ) : ctaText}
             </button>
           </div>
         </div>
