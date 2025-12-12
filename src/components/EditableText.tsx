@@ -5,6 +5,8 @@ import React, { useState, useRef, useEffect } from 'react'
 interface EditableTextProps {
   value: string
   onChange: (value: string) => void
+  onFontSizeChange?: (fontSize: number) => void
+  fontSize?: number
   className?: string
   placeholder?: string
   as?: 'h1' | 'h2' | 'h3' | 'p' | 'span' | 'div' | 'button'
@@ -16,6 +18,8 @@ interface EditableTextProps {
 export function EditableText({
   value,
   onChange,
+  onFontSizeChange,
+  fontSize: initialFontSize,
   className = '',
   placeholder = 'Click to edit...',
   as: Component = 'div',
@@ -25,12 +29,20 @@ export function EditableText({
 }: EditableTextProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [tempValue, setTempValue] = useState(value)
+  const [fontSize, setFontSize] = useState(initialFontSize || 16)
+  const [showFontSizeControl, setShowFontSizeControl] = useState(false)
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setTempValue(value)
   }, [value])
+
+  useEffect(() => {
+    if (initialFontSize) {
+      setFontSize(initialFontSize)
+    }
+  }, [initialFontSize])
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -42,6 +54,14 @@ export function EditableText({
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
     setIsEditing(true)
+    setShowFontSizeControl(true)
+  }
+
+  const handleFontSizeChange = (newSize: number) => {
+    setFontSize(newSize)
+    if (onFontSizeChange) {
+      onFontSizeChange(newSize)
+    }
   }
 
   const handleBlur = () => {
@@ -73,6 +93,53 @@ export function EditableText({
     const InputComponent = multiline ? 'textarea' : 'input'
     return (
       <div ref={containerRef} className="editable-text-container" style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
+        {/* Font Size Control */}
+        {showFontSizeControl && onFontSizeChange && (
+          <div style={{
+            position: 'absolute',
+            top: '-50px',
+            left: '0',
+            background: 'rgba(0, 0, 0, 0.9)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(59, 130, 246, 0.5)',
+            borderRadius: '8px',
+            padding: '8px 12px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            zIndex: 1000,
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)'
+          }}>
+            <span style={{ color: '#fff', fontSize: '12px', fontWeight: '600', minWidth: '60px' }}>Size: {fontSize}px</span>
+            <input
+              type="range"
+              min="8"
+              max="120"
+              value={fontSize}
+              onChange={(e) => handleFontSizeChange(Number(e.target.value))}
+              style={{
+                width: '150px',
+                accentColor: '#3b82f6',
+                cursor: 'pointer'
+              }}
+            />
+            <button
+              onClick={() => setShowFontSizeControl(false)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#fff',
+                cursor: 'pointer',
+                fontSize: '18px',
+                padding: '0 4px'
+              }}
+              title="Close"
+            >
+              ×
+            </button>
+          </div>
+        )}
+        
         <InputComponent
           ref={inputRef as any}
           type={multiline ? undefined : 'text'}
@@ -91,7 +158,7 @@ export function EditableText({
             border: '2px solid #3b82f6',
             borderRadius: '4px',
             padding: '8px 12px',
-            fontSize: 'inherit',
+            fontSize: `${fontSize}px`,
             fontFamily: 'inherit',
             fontWeight: 'inherit',
             lineHeight: 'inherit',
@@ -117,6 +184,7 @@ export function EditableText({
       onClick={handleClick}
       style={{
         ...style,
+        fontSize: `${fontSize}px`,
         cursor: 'pointer',
         position: 'relative',
         transition: 'all 0.2s ease',
@@ -125,13 +193,15 @@ export function EditableText({
       onMouseEnter={(e) => {
         e.currentTarget.style.outline = '3px dashed rgba(59, 130, 246, 0.8)'
         e.currentTarget.style.outlineOffset = '2px'
-        e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.05)'
+        e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'
+        e.currentTarget.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.3)'
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.outline = 'none'
         e.currentTarget.style.backgroundColor = 'transparent'
+        e.currentTarget.style.boxShadow = 'none'
       }}
-      title="✏️ Click to edit this text"
+      title="✏️ Click to edit text and adjust font size"
     >
       <span style={{ position: 'relative', display: 'inline-block' }}>
         {value || placeholder}

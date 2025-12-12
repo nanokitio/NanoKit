@@ -16,7 +16,7 @@ export function useInlineEdit() {
     setIsEditMode(inIframe && editParam === '1')
   }, [])
 
-  const notifyChange = (field: string, value: string) => {
+  const notifyChange = (field: string, value: string | number) => {
     if (isEditMode && window.parent) {
       window.parent.postMessage({
         type: 'CONTENT_CHANGE',
@@ -26,5 +26,15 @@ export function useInlineEdit() {
     }
   }
 
-  return { isEditMode, notifyChange }
+  const notifyFontSizeChange = (field: string, fontSize: number) => {
+    if (isEditMode && window.parent) {
+      window.parent.postMessage({
+        type: 'FONT_SIZE_CHANGE',
+        field,
+        fontSize
+      }, '*')
+    }
+  }
+
+  return { isEditMode, notifyChange, notifyFontSizeChange }
 }

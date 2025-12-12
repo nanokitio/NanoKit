@@ -8,11 +8,13 @@ import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 export function Template7({ brand }: TemplateProps) {
   const { brandName, logoUrl, colors, copy } = brand
-  const { isEditMode, notifyChange } = useInlineEdit()
+  const { isEditMode, notifyChange, notifyFontSizeChange } = useInlineEdit()
   
   const [headlineText, setHeadlineText] = useState(copy.headline || 'WIN BIG WITH BONANZA BILLION SLOTS!')
   const [subheadlineText, setSubheadlineText] = useState(copy.subheadline || '')
   const [ctaText, setCtaText] = useState(copy.cta || 'CLAIM $1000 BONUS NOW!')
+  const [headlineFontSize, setHeadlineFontSize] = useState(48)
+  const [ctaFontSize, setCtaFontSize] = useState(20)
   const [spinning, setSpinning] = useState(false)
   const [spinCount, setSpinCount] = useState(0)
   const [showJackpot, setShowJackpot] = useState(false)
@@ -215,8 +217,13 @@ export function Template7({ brand }: TemplateProps) {
                 setHeadlineText(val)
                 notifyChange('headline', val)
               }}
+              fontSize={headlineFontSize}
+              onFontSizeChange={(size) => {
+                setHeadlineFontSize(size)
+                notifyFontSizeChange('headlineFontSize', size)
+              }}
               as="span"
-              className="text-2xl font-bold text-cyan-300"
+              className="font-bold text-cyan-300"
               placeholder="WIN BIG WITH BONANZA BILLION SLOTS!"
               style={{ display: 'inline' }}
             />
@@ -317,6 +324,11 @@ export function Template7({ brand }: TemplateProps) {
                   onChange={(val) => {
                     setCtaText(val)
                     notifyChange('cta', val)
+                  }}
+                  fontSize={ctaFontSize}
+                  onFontSizeChange={(size) => {
+                    setCtaFontSize(size)
+                    notifyFontSizeChange('ctaFontSize', size)
                   }}
                   as="span"
                   placeholder="CLAIM BONUS NOW!"
