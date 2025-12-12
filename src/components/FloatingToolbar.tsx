@@ -4,7 +4,7 @@ import React from 'react'
 import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Type, Palette, MoreHorizontal } from 'lucide-react'
 
 interface FloatingToolbarProps {
-  position: { x: number; y: number }
+  position?: { x: number; y: number }
   fontSize: number
   onFontSizeChange: (size: number) => void
   fontFamily?: string
@@ -57,9 +57,9 @@ export function FloatingToolbar({
   return (
     <div
       style={{
-        position: 'fixed',
-        left: `${position.x}px`,
-        top: `${position.y - 60}px`,
+        position: position ? 'fixed' : 'absolute',
+        left: position ? `${position.x}px` : '0',
+        top: position ? `${position.y - 60}px` : '-60px',
         background: 'white',
         border: '1px solid #e5e7eb',
         borderRadius: '12px',

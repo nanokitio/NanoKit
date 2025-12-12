@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { BrandConfig } from '@/lib/types'
-import { EditableText } from '@/components/EditableText'
+import { EditableTextWithToolbar } from '@/components/EditableTextWithToolbar'
 import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 interface Template6Props {
@@ -79,9 +79,9 @@ export function Template6({ brand }: Template6Props) {
           )}
           
           <div className="synth-title-container mb-6">
-            <EditableText
+            <EditableTextWithToolbar
               value={headline}
-              onChange={(val) => {
+              onChange={(val: string) => {
                 setHeadline(val)
                 notifyChange('headline', val)
               }}
@@ -91,9 +91,9 @@ export function Template6({ brand }: Template6Props) {
             />
             <div className="synth-underline"></div>
           </div>
-          <EditableText
+          <EditableTextWithToolbar
             value={subheadline}
-            onChange={(val) => {
+            onChange={(val: string) => {
               setSubheadline(val)
               notifyChange('subheadline', val)
             }}
@@ -190,9 +190,9 @@ export function Template6({ brand }: Template6Props) {
             className="cta-button bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white font-mono font-black text-xl md:text-2xl py-6 px-12 rounded-lg shadow-2xl backdrop-blur-sm border-2 border-pink-400/60 transform hover:scale-110 transition-all duration-300 synth-cta animate-cta-glow"
             onClick={() => !isEditMode && brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
           >
-            <EditableText
+            <EditableTextWithToolbar
               value={ctaText}
-              onChange={(val) => {
+              onChange={(val: string) => {
                 setCtaText(val)
                 notifyChange('cta', val)
               }}
