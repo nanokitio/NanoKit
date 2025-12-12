@@ -1,14 +1,13 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Type } from 'lucide-react'
+import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Type, Check, X } from 'lucide-react'
 
 interface InlineEditableTextProps {
   value: string
   onChange: (value: string) => void
   onStyleChange?: (styles: TextStyles) => void
   className?: string
-  as?: 'h1' | 'h2' | 'h3' | 'p' | 'span' | 'div' | 'button'
   placeholder?: string
   style?: React.CSSProperties
   initialStyles?: TextStyles
@@ -29,13 +28,11 @@ export function InlineEditableText({
   onChange,
   onStyleChange,
   className = '',
-  as: Component = 'div',
   placeholder = 'Click to edit...',
   style,
   initialStyles
 }: InlineEditableTextProps) {
   const [isEditing, setIsEditing] = useState(false)
-  const [showToolbar, setShowToolbar] = useState(false)
   const [localValue, setLocalValue] = useState(value)
   const [textStyles, setTextStyles] = useState<TextStyles>(initialStyles || {
     fontSize: 16,
@@ -47,74 +44,61 @@ export function InlineEditableText({
   const [toolbarPosition, setToolbarPosition] = useState({ top: 0, left: 0 })
   const [showFontSizeDropdown, setShowFontSizeDropdown] = useState(false)
   
-  const contentRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   const toolbarRef = useRef<HTMLDivElement>(null)
 
   // Sync with external value
   useEffect(() => {
-    setLocalValue(value)
-  }, [value])
+    if (!isEditing) {
+      setLocalValue(value)
+    }
+  }, [value, isEditing])
 
   // Position toolbar above the element
   useEffect(() => {
-    if (showToolbar && contentRef.current) {
-      const rect = contentRef.current.getBoundingClientRect()
+    if (isEditing && containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect()
       setToolbarPosition({
-        top: rect.top - 50,
-        left: rect.left + rect.width / 2 - 150
+        top: rect.top - 55,
+        left: rect.left + rect.width / 2 - 175
       })
     }
-  }, [showToolbar, isEditing])
+  }, [isEditing])
 
-  // Close toolbar when clicking outside
+  // Focus input when editing starts
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        contentRef.current && 
-        !contentRef.current.contains(e.target as Node) &&
-        toolbarRef.current &&
-        !toolbarRef.current.contains(e.target as Node)
-      ) {
-        setShowToolbar(false)
-        setIsEditing(false)
-        setShowFontSizeDropdown(false)
-        // Save on blur
-        if (localValue !== value) {
-          onChange(localValue)
-        }
-      }
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus()
+      inputRef.current.select()
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [localValue, value, onChange])
+  }, [isEditing])
 
   const handleClick = () => {
-    setIsEditing(true)
-    setShowToolbar(true)
-    // Focus the editable element
-    setTimeout(() => {
-      if (contentRef.current) {
-        contentRef.current.focus()
-      }
-    }, 0)
+    if (!isEditing) {
+      setIsEditing(true)
+    }
   }
 
-  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
-    const newValue = e.currentTarget.textContent || ''
-    setLocalValue(newValue)
+  const handleSave = () => {
+    setIsEditing(false)
+    setShowFontSizeDropdown(false)
+    onChange(localValue)
+  }
+
+  const handleCancel = () => {
+    setIsEditing(false)
+    setShowFontSizeDropdown(false)
+    setLocalValue(value)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter') {
       e.preventDefault()
-      setIsEditing(false)
-      setShowToolbar(false)
-      onChange(localValue)
+      handleSave()
     }
     if (e.key === 'Escape') {
-      setIsEditing(false)
-      setShowToolbar(false)
-      setLocalValue(value) // Reset to original
+      handleCancel()
     }
   }
 
@@ -124,69 +108,49 @@ export function InlineEditableText({
     onStyleChange?.(newStyles)
   }
 
-  const toggleBold = () => {
-    updateStyle('fontWeight', textStyles.fontWeight === 'bold' ? 'normal' : 'bold')
-  }
+  const toggleBold = () => updateStyle('fontWeight', textStyles.fontWeight === 'bold' ? 'normal' : 'bold')
+  const toggleItalic = () => updateStyle('fontStyle', textStyles.fontStyle === 'italic' ? 'normal' : 'italic')
+  const toggleUnderline = () => updateStyle('textDecoration', textStyles.textDecoration === 'underline' ? 'none' : 'underline')
+  const setAlignment = (align: 'left' | 'center' | 'right') => updateStyle('textAlign', align)
+  const setFontSize = (size: number) => { updateStyle('fontSize', size); setShowFontSizeDropdown(false) }
 
-  const toggleItalic = () => {
-    updateStyle('fontStyle', textStyles.fontStyle === 'italic' ? 'normal' : 'italic')
-  }
-
-  const toggleUnderline = () => {
-    updateStyle('textDecoration', textStyles.textDecoration === 'underline' ? 'none' : 'underline')
-  }
-
-  const setAlignment = (align: 'left' | 'center' | 'right') => {
-    updateStyle('textAlign', align)
-  }
-
-  const setFontSize = (size: number) => {
-    updateStyle('fontSize', size)
-    setShowFontSizeDropdown(false)
-  }
-
-  const combinedStyle: React.CSSProperties = {
+  const textStyle: React.CSSProperties = {
     ...style,
     fontSize: `${textStyles.fontSize}px`,
     fontWeight: textStyles.fontWeight,
     fontStyle: textStyles.fontStyle,
     textDecoration: textStyles.textDecoration,
     textAlign: textStyles.textAlign,
-    outline: isEditing ? '2px solid #3b82f6' : 'none',
-    outlineOffset: '4px',
-    cursor: 'text',
-    minWidth: '50px',
-    transition: 'outline 0.2s ease'
   }
 
   return (
-    <>
-      {/* Floating Toolbar */}
-      {showToolbar && (
+    <div ref={containerRef} className="relative inline-block">
+      {/* Floating Toolbar - Only when editing */}
+      {isEditing && (
         <div
           ref={toolbarRef}
-          className="fixed z-[10000] bg-slate-900/95 backdrop-blur-sm border border-slate-700 rounded-lg shadow-2xl p-2 flex items-center gap-1"
+          className="fixed z-[10000] bg-slate-900 border border-slate-600 rounded-lg shadow-2xl p-2 flex items-center gap-1"
           style={{
             top: Math.max(10, toolbarPosition.top),
-            left: Math.max(10, toolbarPosition.left),
+            left: Math.max(10, Math.min(toolbarPosition.left, window.innerWidth - 370)),
           }}
         >
-          {/* Font Size Dropdown */}
+          {/* Font Size */}
           <div className="relative">
             <button
               onClick={() => setShowFontSizeDropdown(!showFontSizeDropdown)}
-              className="flex items-center gap-1 px-2 py-1.5 text-white hover:bg-slate-700 rounded text-sm font-medium min-w-[60px] justify-between"
+              className="flex items-center gap-1 px-2 py-1.5 text-white hover:bg-slate-700 rounded text-sm font-medium min-w-[55px] justify-between"
             >
               <Type size={14} />
               <span>{textStyles.fontSize}</span>
             </button>
             {showFontSizeDropdown && (
-              <div className="absolute top-full left-0 mt-1 bg-slate-800 border border-slate-700 rounded-lg shadow-xl py-1 max-h-48 overflow-y-auto z-10">
+              <div className="absolute top-full left-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl py-1 max-h-48 overflow-y-auto z-20 min-w-[80px]">
                 {FONT_SIZES.map(size => (
                   <button
                     key={size}
                     onClick={() => setFontSize(size)}
-                    className={`w-full px-4 py-1.5 text-left text-sm hover:bg-slate-700 ${
+                    className={`w-full px-3 py-1.5 text-left text-sm hover:bg-slate-700 ${
                       textStyles.fontSize === size ? 'bg-blue-600 text-white' : 'text-slate-300'
                     }`}
                   >
@@ -197,118 +161,77 @@ export function InlineEditableText({
             )}
           </div>
 
-          <div className="w-px h-6 bg-slate-700 mx-1" />
+          <div className="w-px h-6 bg-slate-600 mx-1" />
 
           {/* Bold */}
-          <button
-            onClick={toggleBold}
-            className={`p-1.5 rounded hover:bg-slate-700 ${
-              textStyles.fontWeight === 'bold' ? 'bg-blue-600 text-white' : 'text-slate-300'
-            }`}
-            title="Bold"
-          >
+          <button onClick={toggleBold} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.fontWeight === 'bold' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Bold">
             <Bold size={16} />
           </button>
 
           {/* Italic */}
-          <button
-            onClick={toggleItalic}
-            className={`p-1.5 rounded hover:bg-slate-700 ${
-              textStyles.fontStyle === 'italic' ? 'bg-blue-600 text-white' : 'text-slate-300'
-            }`}
-            title="Italic"
-          >
+          <button onClick={toggleItalic} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.fontStyle === 'italic' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Italic">
             <Italic size={16} />
           </button>
 
           {/* Underline */}
-          <button
-            onClick={toggleUnderline}
-            className={`p-1.5 rounded hover:bg-slate-700 ${
-              textStyles.textDecoration === 'underline' ? 'bg-blue-600 text-white' : 'text-slate-300'
-            }`}
-            title="Underline"
-          >
+          <button onClick={toggleUnderline} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.textDecoration === 'underline' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Underline">
             <Underline size={16} />
           </button>
 
-          <div className="w-px h-6 bg-slate-700 mx-1" />
+          <div className="w-px h-6 bg-slate-600 mx-1" />
 
           {/* Alignment */}
-          <button
-            onClick={() => setAlignment('left')}
-            className={`p-1.5 rounded hover:bg-slate-700 ${
-              textStyles.textAlign === 'left' ? 'bg-blue-600 text-white' : 'text-slate-300'
-            }`}
-            title="Align Left"
-          >
+          <button onClick={() => setAlignment('left')} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.textAlign === 'left' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Left">
             <AlignLeft size={16} />
           </button>
-          <button
-            onClick={() => setAlignment('center')}
-            className={`p-1.5 rounded hover:bg-slate-700 ${
-              textStyles.textAlign === 'center' ? 'bg-blue-600 text-white' : 'text-slate-300'
-            }`}
-            title="Align Center"
-          >
+          <button onClick={() => setAlignment('center')} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.textAlign === 'center' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Center">
             <AlignCenter size={16} />
           </button>
-          <button
-            onClick={() => setAlignment('right')}
-            className={`p-1.5 rounded hover:bg-slate-700 ${
-              textStyles.textAlign === 'right' ? 'bg-blue-600 text-white' : 'text-slate-300'
-            }`}
-            title="Align Right"
-          >
+          <button onClick={() => setAlignment('right')} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.textAlign === 'right' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Right">
             <AlignRight size={16} />
+          </button>
+
+          <div className="w-px h-6 bg-slate-600 mx-1" />
+
+          {/* Save/Cancel */}
+          <button onClick={handleSave} className="p-1.5 rounded hover:bg-green-600 text-green-400 hover:text-white" title="Save (Enter)">
+            <Check size={16} />
+          </button>
+          <button onClick={handleCancel} className="p-1.5 rounded hover:bg-red-600 text-red-400 hover:text-white" title="Cancel (Esc)">
+            <X size={16} />
           </button>
         </div>
       )}
 
-      {/* Editable Content */}
-      <div
-        ref={contentRef}
-        contentEditable={isEditing}
-        suppressContentEditableWarning
-        onClick={handleClick}
-        onInput={handleInput}
-        onKeyDown={handleKeyDown}
-        className={`inline-editable-text ${className} ${isEditing ? 'editing' : ''}`}
-        style={combinedStyle}
-        data-placeholder={placeholder}
-      >
-        {localValue || placeholder}
-      </div>
-
-      {/* Hover indicator styles */}
-      <style jsx global>{`
-        .inline-editable-text {
-          position: relative;
-          border-radius: 4px;
-          transition: all 0.2s ease;
-        }
-        .inline-editable-text:not(.editing):hover {
-          outline: 2px dashed rgba(59, 130, 246, 0.5) !important;
-          outline-offset: 4px;
-          cursor: text;
-        }
-        .inline-editable-text:not(.editing):hover::after {
-          content: '✏️';
-          position: absolute;
-          top: -8px;
-          right: -8px;
-          font-size: 14px;
-          opacity: 0.8;
-        }
-        .inline-editable-text.editing {
-          background: rgba(59, 130, 246, 0.05);
-        }
-        .inline-editable-text:empty::before {
-          content: attr(data-placeholder);
-          color: rgba(255,255,255,0.4);
-          pointer-events: none;
-        }
-      `}</style>
-    </>
+      {/* Display or Edit Mode */}
+      {isEditing ? (
+        <input
+          ref={inputRef}
+          type="text"
+          value={localValue}
+          onChange={(e) => setLocalValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={() => setTimeout(handleSave, 200)}
+          className={`bg-transparent border-2 border-blue-500 rounded px-2 py-1 outline-none ${className}`}
+          style={{
+            ...textStyle,
+            minWidth: '100px',
+            width: `${Math.max(100, localValue.length * 12)}px`,
+            color: 'inherit'
+          }}
+          placeholder={placeholder}
+        />
+      ) : (
+        <div
+          onClick={handleClick}
+          className={`cursor-text hover:outline hover:outline-2 hover:outline-dashed hover:outline-blue-400 hover:outline-offset-4 rounded transition-all ${className}`}
+          style={textStyle}
+          title="Click to edit"
+        >
+          {localValue || placeholder}
+          <span className="absolute -top-2 -right-2 text-sm opacity-0 hover:opacity-100 transition-opacity">✏️</span>
+        </div>
+      )}
+    </div>
   )
 }
