@@ -216,7 +216,13 @@ export function Template7({ brand }: TemplateProps) {
         
         <h1 className="text-5xl font-black text-yellow-400 flex items-center justify-center gap-3 neon-text-yellow mb-6 drop-shadow-2xl">
           <span className="text-6xl">💎</span>
-          BONANZA BILLION
+          <InlineEditableText
+            value={brandName || 'BONANZA BILLION'}
+            onChange={(val) => { notifyChange('brandName', val); }}
+            className="font-black text-yellow-400"
+            placeholder="Brand name..."
+            initialStyles={{ fontSize: 48, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+          />
           <span className="text-6xl">💎</span>
         </h1>
         <div className="text-2xl font-bold text-cyan-300 flex items-center justify-center gap-2 neon-text-blue drop-shadow-lg">
