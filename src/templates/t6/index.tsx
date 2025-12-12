@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { BrandConfig } from '@/lib/types'
-import { EditableTextWithToolbar } from '@/components/EditableTextWithToolbar'
+import { SimpleEditableText } from '@/components/SimpleEditableText'
 import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 interface Template6Props {
@@ -79,7 +79,7 @@ export function Template6({ brand }: Template6Props) {
           )}
           
           <div className="synth-title-container mb-6">
-            <EditableTextWithToolbar
+            <SimpleEditableText
               value={headline}
               onChange={(val: string) => {
                 setHeadline(val)
@@ -91,7 +91,7 @@ export function Template6({ brand }: Template6Props) {
             />
             <div className="synth-underline"></div>
           </div>
-          <EditableTextWithToolbar
+          <SimpleEditableText
             value={subheadline}
             onChange={(val: string) => {
               setSubheadline(val)
@@ -190,7 +190,7 @@ export function Template6({ brand }: Template6Props) {
             className="cta-button bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white font-mono font-black text-xl md:text-2xl py-6 px-12 rounded-lg shadow-2xl backdrop-blur-sm border-2 border-pink-400/60 transform hover:scale-110 transition-all duration-300 synth-cta animate-cta-glow"
             onClick={() => !isEditMode && brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
           >
-            <EditableTextWithToolbar
+            <SimpleEditableText
               value={ctaText}
               onChange={(val: string) => {
                 setCtaText(val)
