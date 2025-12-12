@@ -7,7 +7,7 @@ interface EditableTextProps {
   onChange: (value: string) => void
   className?: string
   placeholder?: string
-  as?: 'h1' | 'h2' | 'h3' | 'p' | 'span' | 'div'
+  as?: 'h1' | 'h2' | 'h3' | 'p' | 'span' | 'div' | 'button'
   multiline?: boolean
   maxLength?: number
   style?: React.CSSProperties

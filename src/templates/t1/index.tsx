@@ -1,12 +1,23 @@
+'use client'
+
 import React from 'react'
 import { BrandConfig, TemplateRenderResult } from '@/lib/types'
 import { generateCSSVariables } from '@/lib/colors'
+import { EditableText } from '@/components/EditableText'
+import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 interface Template1Props {
   brand: BrandConfig
 }
 
 export function Template1({ brand }: Template1Props) {
+  const { isEditMode, notifyChange } = useInlineEdit()
+  
+  const handleCTAClick = () => {
+    if (isEditMode) return
+    if (brand.ctaUrl) window.open(brand.ctaUrl, '_blank')
+  }
+  
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -25,11 +36,21 @@ export function Template1({ brand }: Template1Props) {
                 {brand.brandName}
               </span>
             </div>
-            <button
-              className="bg-[var(--brand-primary)] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
-            >
-              {brand.copy.cta}
-            </button>
+            {isEditMode ? (
+              <EditableText
+                value={brand.copy.cta}
+                onChange={(value) => notifyChange('cta', value)}
+                className="bg-[var(--brand-primary)] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                as="button"
+              />
+            ) : (
+              <button
+                className="bg-[var(--brand-primary)] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                onClick={handleCTAClick}
+              >
+                {brand.copy.cta}
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -37,19 +58,46 @@ export function Template1({ brand }: Template1Props) {
       {/* Hero Content */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            {brand.copy.headline}
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            {brand.copy.subheadline}
-          </p>
+          {isEditMode ? (
+            <EditableText
+              value={brand.copy.headline}
+              onChange={(value) => notifyChange('headline', value)}
+              className="text-5xl font-bold text-gray-900 mb-6"
+              as="h1"
+            />
+          ) : (
+            <h1 className="text-5xl font-bold text-gray-900 mb-6">
+              {brand.copy.headline}
+            </h1>
+          )}
+          {isEditMode ? (
+            <EditableText
+              value={brand.copy.subheadline}
+              onChange={(value) => notifyChange('subheadline', value)}
+              className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto"
+              as="p"
+            />
+          ) : (
+            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+              {brand.copy.subheadline}
+            </p>
+          )}
           <div className="cta-section text-center mt-12">
-            <button 
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-all duration-200"
-              onClick={() => brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
-            >
-              {brand.copy.cta}
-            </button>
+            {isEditMode ? (
+              <EditableText
+                value={brand.copy.cta}
+                onChange={(value) => notifyChange('cta', value)}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                as="button"
+              />
+            ) : (
+              <button 
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                onClick={handleCTAClick}
+              >
+                {brand.copy.cta}
+              </button>
+            )}
           </div>
         </div>
       </section>
@@ -125,9 +173,18 @@ export function Template1({ brand }: Template1Props) {
               <span className="text-xl font-bold">{brand.brandName}</span>
             </div>
             <p className="text-gray-400 mb-6">{brand.description}</p>
-            <button className="bg-[var(--brand-primary)] text-white px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">
-              {brand.copy.cta}
-            </button>
+            {isEditMode ? (
+              <EditableText
+                value={brand.copy.cta}
+                onChange={(value) => notifyChange('cta', value)}
+                className="bg-[var(--brand-primary)] text-white px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                as="button"
+              />
+            ) : (
+              <button className="bg-[var(--brand-primary)] text-white px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity" onClick={handleCTAClick}>
+                {brand.copy.cta}
+              </button>
+            )}
           </div>
         </div>
       </footer>

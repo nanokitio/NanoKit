@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { BrandConfig } from '@/lib/types'
+import { EditableText } from '@/components/EditableText'
+import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 interface Template9Props {
   brand: BrandConfig
@@ -9,8 +11,12 @@ interface Template9Props {
 
 function Template9({ brand }: Template9Props) {
   const [showWinModal, setShowWinModal] = useState(false)
+  const { isEditMode, notifyChange } = useInlineEdit()
 
   const handleClaimBonus = () => {
+    // Don't navigate in edit mode
+    if (isEditMode) return
+    
     if (brand.ctaUrl) {
       window.open(brand.ctaUrl, '_blank')
     }
@@ -100,7 +106,16 @@ function Template9({ brand }: Template9Props) {
     <div className="fisherman-game-wrapper">
       {/* Editable Title */}
       <div className="game-title">
-        <h1>{brand.copy?.headline || 'YOUR TITLE HERE'}</h1>
+        {isEditMode ? (
+          <EditableText
+            value={brand.copy?.headline || 'YOUR TITLE HERE'}
+            onChange={(value) => notifyChange('headline', value)}
+            className="editable-headline"
+            as="h1"
+          />
+        ) : (
+          <h1>{brand.copy?.headline || 'YOUR TITLE HERE'}</h1>
+        )}
       </div>
 
       {/* Casino Brand Logo - Perfect for iGaming Affiliates */}
@@ -154,9 +169,18 @@ function Template9({ brand }: Template9Props) {
               <span className="prize-label">YOUR BONUS:</span>
               <span className="prize-amount">$1,000 + 50 FREE SPINS</span>
             </div>
-            <button className="claim-bonus-btn" onClick={handleClaimBonus}>
-              🎁 {brand.copy?.cta || 'CLAIM BONUS NOW!'}
-            </button>
+            {isEditMode ? (
+              <EditableText
+                value={brand.copy?.cta || 'CLAIM BONUS NOW!'}
+                onChange={(value) => notifyChange('cta', value)}
+                className="editable-cta"
+                as="button"
+              />
+            ) : (
+              <button className="claim-bonus-btn" onClick={handleClaimBonus}>
+                🎁 {brand.copy?.cta || 'CLAIM BONUS NOW!'}
+              </button>
+            )}
           </div>
         </div>
       )}

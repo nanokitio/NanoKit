@@ -1,12 +1,16 @@
 'use client'
 
 import { BrandConfig } from '@/lib/types'
+import { EditableText } from '@/components/EditableText'
+import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 interface Template18Props {
   brand: BrandConfig
 }
 
 export function Template18({ brand }: Template18Props) {
+  const { isEditMode, notifyChange } = useInlineEdit()
+  
   return (
     <div className="w-full h-screen bg-gradient-to-br from-red-700 via-red-600 to-red-700 flex items-center justify-center relative overflow-hidden">
       {/* Radial burst background effect */}
@@ -17,17 +21,42 @@ export function Template18({ brand }: Template18Props) {
       <div className="text-center text-white p-8 relative z-10">
         <div className="bg-gradient-to-b from-yellow-500 via-yellow-400 to-yellow-500 rounded-2xl p-8 border-4 border-orange-500 shadow-2xl max-w-md mx-auto">
           <div className="bg-gradient-to-b from-red-700 via-red-600 to-red-700 rounded-xl p-6 border-2 border-yellow-400">
-            <h1 className="text-5xl font-black mb-2 text-yellow-400" style={{
-              textShadow: '3px 3px 0px #ff6600, 5px 5px 10px rgba(0, 0, 0, 0.5)',
-              letterSpacing: '3px'
-            }}>
-              {brand.copy?.headline || 'BIG CASH'}
-            </h1>
-            <p className="text-xl font-bold mb-4 text-yellow-400" style={{
-              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)'
-            }}>
-              {brand.copy?.subheadline || 'WIN UP TO $100,000!'}
-            </p>
+            {isEditMode ? (
+              <EditableText
+                value={brand.copy?.headline || 'BIG CASH'}
+                onChange={(value) => notifyChange('headline', value)}
+                className="text-5xl font-black mb-2 text-yellow-400"
+                as="h1"
+                style={{
+                  textShadow: '3px 3px 0px #ff6600, 5px 5px 10px rgba(0, 0, 0, 0.5)',
+                  letterSpacing: '3px'
+                }}
+              />
+            ) : (
+              <h1 className="text-5xl font-black mb-2 text-yellow-400" style={{
+                textShadow: '3px 3px 0px #ff6600, 5px 5px 10px rgba(0, 0, 0, 0.5)',
+                letterSpacing: '3px'
+              }}>
+                {brand.copy?.headline || 'BIG CASH'}
+              </h1>
+            )}
+            {isEditMode ? (
+              <EditableText
+                value={brand.copy?.subheadline || 'WIN UP TO $100,000!'}
+                onChange={(value) => notifyChange('subheadline', value)}
+                className="text-xl font-bold mb-4 text-yellow-400"
+                as="p"
+                style={{
+                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)'
+                }}
+              />
+            ) : (
+              <p className="text-xl font-bold mb-4 text-yellow-400" style={{
+                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)'
+              }}>
+                {brand.copy?.subheadline || 'WIN UP TO $100,000!'}
+              </p>
+            )}
             
             <div className="bg-red-800/30 rounded-lg p-4 mb-4">
               <p className="text-white font-bold mb-2 text-sm">YOUR NUMBERS</p>
