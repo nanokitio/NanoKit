@@ -268,7 +268,7 @@ export function InlineEditableText({
             }
             // Small delay to allow toolbar clicks
             setTimeout(() => {
-              if (!showFontSizeDropdown) {
+              if (!showFontSizeDropdown && !showFontFamilyDropdown) {
                 handleSave()
               }
             }, 300)
