@@ -2293,8 +2293,8 @@ export default function SiteEditorPage() {
             </div>
 
             {previewMode === 'live' ? (
-              // Live Preview with iframe - Disable protection in Canva mode
-              <ScreenshotProtection disabled={canvaMode}>
+              // Live Preview with iframe - Protection disabled for inline editing
+              <ScreenshotProtection disabled={true}>
                 <div 
                   className={`bg-white rounded-lg shadow-2xl overflow-hidden mx-auto transition-all ${
                     viewMode === 'mobile' ? 'max-w-[375px]' : 'max-w-full'
@@ -2313,7 +2313,7 @@ export default function SiteEditorPage() {
               // Template Preview Mode
               <div className="space-y-4">
                 {/* Large Template Preview - Live with customizations */}
-                <ScreenshotProtection disabled={canvaMode}>
+                <ScreenshotProtection disabled={true}>
                   <div className="bg-gray-900 rounded-lg p-3 border border-gray-700">
                     <div 
                       className={`relative bg-white rounded-lg overflow-hidden shadow-2xl mx-auto transition-all ${
