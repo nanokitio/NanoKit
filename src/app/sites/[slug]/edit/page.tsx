@@ -2326,19 +2326,18 @@ export default function SiteEditorPage() {
             )}
           </div>
         </div>
-      </div>
-      
-      {/* Tour Guide */}
-      {showTour && (
-        <EditorTour 
-          steps={tourSteps} 
-          onComplete={handleTourComplete}
-          onSkip={handleTourSkip}
-        />
-      )}
+        
+        {/* Tour Guide */}
+        {showTour && (
+          <EditorTour 
+            steps={tourSteps} 
+            onComplete={handleTourComplete}
+            onSkip={handleTourSkip}
+          />
+        )}
 
-      {/* Enhanced Download Modal */}
-      {showDownloadModal && (
+        {/* Enhanced Download Modal */}
+        {showDownloadModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-300 p-4">
           <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-xl max-w-3xl w-full max-h-[90vh] border-2 border-neon-primary/30 shadow-2xl shadow-neon-primary/20 relative overflow-hidden flex flex-col">
             
