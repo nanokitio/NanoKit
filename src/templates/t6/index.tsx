@@ -43,8 +43,28 @@ export function Template6({ brand }: Template6Props) {
 
   return (
     <div className="min-h-screen bg-black font-mono relative overflow-hidden synth-container">
-      {/* Debug Panel */}
+      {/* Debug Panel - ALWAYS VISIBLE */}
       <DebugPanel isEditMode={isEditMode} />
+      
+      {/* SUPER OBVIOUS EDIT MODE INDICATOR */}
+      <div style={{
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        background: isEditMode ? 'rgba(0, 255, 0, 0.9)' : 'rgba(255, 0, 0, 0.9)',
+        color: 'white',
+        padding: '40px 60px',
+        borderRadius: '20px',
+        zIndex: 99999,
+        fontSize: '48px',
+        fontWeight: 'bold',
+        border: '5px solid white',
+        boxShadow: '0 0 50px rgba(0,0,0,0.8)',
+        pointerEvents: 'none'
+      }}>
+        {isEditMode ? '✅ EDIT MODE ON' : '❌ EDIT MODE OFF'}
+      </div>
       
       {/* Synth 90s Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/90 via-black to-cyan-900/90"></div>
