@@ -124,7 +124,7 @@ export function InlineEditableText({
   }
 
   return (
-    <div ref={containerRef} className="relative inline-block">
+    <div ref={containerRef} className="relative">
       {/* Floating Toolbar - Only when editing */}
       {isEditing && (
         <div

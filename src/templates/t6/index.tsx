@@ -111,16 +111,18 @@ export function Template6({ brand }: Template6Props) {
             />
             <div className="synth-underline"></div>
           </div>
-          <InlineEditableText
-            value={subheadline}
-            onChange={(val) => {
-              setSubheadline(val);
-              notifyChange('subheadline', val);
-            }}
-            className="text-lg md:text-xl text-cyan-100 mb-6 font-light tracking-wide"
-            placeholder="Enter your subheadline..."
-            initialStyles={{ fontSize: 20, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
-          />
+          <div className="w-full mb-6">
+            <InlineEditableText
+              value={subheadline}
+              onChange={(val) => {
+                setSubheadline(val);
+                notifyChange('subheadline', val);
+              }}
+              className="text-lg md:text-xl text-cyan-100 font-light tracking-wide"
+              placeholder="Enter your subheadline..."
+              initialStyles={{ fontSize: 20, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+            />
+          </div>
           
           {/* Retro Timer */}
           <div className="inline-flex items-center gap-3 bg-gradient-to-r from-pink-500/20 to-cyan-500/20 backdrop-blur-sm border border-pink-400/50 text-pink-300 px-6 py-3 rounded-lg font-mono text-sm synth-border animate-border-pulse">
