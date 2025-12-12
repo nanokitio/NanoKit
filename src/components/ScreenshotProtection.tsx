@@ -5,10 +5,12 @@ import { createClient } from '@/lib/supabase/client'
 
 interface ScreenshotProtectionProps {
   children: React.ReactNode
+  disabled?: boolean  // Disable protection for edit mode
 }
 
 export default function ScreenshotProtection({ 
-  children
+  children,
+  disabled = false
 }: ScreenshotProtectionProps) {
   const [isBlocked, setIsBlocked] = useState(false)
   const blockOverlayRef = useRef<HTMLDivElement>(null)
@@ -25,6 +27,12 @@ export default function ScreenshotProtection({
   }, [])
 
   useEffect(() => {
+    // Skip if disabled (edit mode)
+    if (disabled) {
+      console.log('[EDIT MODE] Screenshot protection disabled')
+      return
+    }
+    
     // Skip all protections in development mode
     if (process.env.NODE_ENV !== 'production') {
       console.log('[DEV MODE] Screenshot protection disabled for debugging')
@@ -205,6 +213,11 @@ export default function ScreenshotProtection({
   }, [])
 
 
+  // If disabled, just return children without protection
+  if (disabled) {
+    return <>{children}</>
+  }
+
   return (
     <div className="relative select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
       {/* Content */}
@@ -247,47 +260,49 @@ export default function ScreenshotProtection({
         </div>
       </div>
 
-      {/* Global CSS protection */}
-      <style jsx global>{`
-        body {
-          -webkit-user-select: none !important;
-          -moz-user-select: none !important;
-          -ms-user-select: none !important;
-          user-select: none !important;
-        }
-        
-        * {
-          -webkit-user-select: none !important;
-          -moz-user-select: none !important;
-          -ms-user-select: none !important;
-          user-select: none !important;
-        }
-        
-        img {
-          -webkit-user-drag: none !important;
-          -khtml-user-drag: none !important;
-          -moz-user-drag: none !important;
-          -o-user-drag: none !important;
-          user-drag: none !important;
-          pointer-events: none !important;
-        }
+      {/* Global CSS protection - Only apply if not disabled */}
+      {!disabled && (
+        <style jsx global>{`
+          body {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+          }
+          
+          * {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+          }
+          
+          img {
+            -webkit-user-drag: none !important;
+            -khtml-user-drag: none !important;
+            -moz-user-drag: none !important;
+            -o-user-drag: none !important;
+            user-drag: none !important;
+            pointer-events: none !important;
+          }
 
-        ::selection {
-          background: transparent !important;
-          color: inherit !important;
-        }
+          ::selection {
+            background: transparent !important;
+            color: inherit !important;
+          }
 
-        ::-moz-selection {
-          background: transparent !important;
-          color: inherit !important;
-        }
+          ::-moz-selection {
+            background: transparent !important;
+            color: inherit !important;
+          }
 
-        /* Hide scrollbars to prevent iframe detection */
-        ::-webkit-scrollbar {
-          width: 0px;
-          background: transparent;
-        }
-      `}</style>
+          /* Hide scrollbars to prevent iframe detection */
+          ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+          }
+        `}</style>
+      )}
     </div>
   )
 }

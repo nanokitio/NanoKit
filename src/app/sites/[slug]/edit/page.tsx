@@ -1257,13 +1257,21 @@ export default function SiteEditorPage() {
           currentTemplate={templateId}
           onTemplateChange={(newTemplateId) => setTemplateId(newTemplateId)}
         >
-          {/* Template Preview in Canva Mode */}
-          <iframe
-            key={`canva-${templateId}-${viewMode}`}
-            src={getPreviewUrl()}
-            className="w-full h-full border-0"
-            title="Template Preview"
-          />
+          {/* Template Preview in Canva Mode - Fully Interactive */}
+          <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+            <iframe
+              key={`canva-${templateId}-${viewMode}`}
+              src={getPreviewUrl()}
+              className="w-full h-full border-0"
+              title="Template Preview"
+              style={{
+                pointerEvents: 'auto',
+                border: 'none',
+                background: 'white'
+              }}
+              allow="clipboard-read; clipboard-write"
+            />
+          </div>
         </CanvaEditorLayout>
       ) : (
         /* Classic Editor */
@@ -2285,8 +2293,8 @@ export default function SiteEditorPage() {
             </div>
 
             {previewMode === 'live' ? (
-              // Live Preview with iframe
-              <ScreenshotProtection>
+              // Live Preview with iframe - Disable protection in Canva mode
+              <ScreenshotProtection disabled={canvaMode}>
                 <div 
                   className={`bg-white rounded-lg shadow-2xl overflow-hidden mx-auto transition-all ${
                     viewMode === 'mobile' ? 'max-w-[375px]' : 'max-w-full'
@@ -2305,7 +2313,7 @@ export default function SiteEditorPage() {
               // Template Preview Mode
               <div className="space-y-4">
                 {/* Large Template Preview - Live with customizations */}
-                <ScreenshotProtection>
+                <ScreenshotProtection disabled={canvaMode}>
                   <div className="bg-gray-900 rounded-lg p-3 border border-gray-700">
                     <div 
                       className={`relative bg-white rounded-lg overflow-hidden shadow-2xl mx-auto transition-all ${
