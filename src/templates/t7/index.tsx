@@ -5,6 +5,7 @@ import { BrandConfig, TemplateProps } from '../../lib/types'
 import { generateCSSVariables } from '@/lib/colors'
 import { EditableText } from '@/components/EditableText'
 import { useInlineEdit } from '@/hooks/useInlineEdit'
+import { DebugPanel } from '@/components/DebugPanel'
 
 export function Template7({ brand }: TemplateProps) {
   const { brandName, logoUrl, colors, copy } = brand
@@ -129,6 +130,9 @@ export function Template7({ brand }: TemplateProps) {
         backgroundRepeat: 'no-repeat'
       } as React.CSSProperties}
     >
+      {/* Debug Panel */}
+      <DebugPanel isEditMode={isEditMode} />
+      
       {/* Neon Text Styles */}
       <style jsx>{`
         .neon-text-yellow {

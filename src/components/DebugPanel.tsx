@@ -1,0 +1,48 @@
+'use client'
+
+import React from 'react'
+
+interface DebugPanelProps {
+  isEditMode: boolean
+}
+
+export function DebugPanel({ isEditMode }: DebugPanelProps) {
+  const debugInfo = React.useMemo(() => {
+    if (typeof window === 'undefined') {
+      return { inIframe: false, editParam: null, isEditMode: false }
+    }
+    
+    const inIframe = window.self !== window.top
+    const params = new URLSearchParams(window.location.search)
+    const editParam = params.get('edit')
+    
+    return { inIframe, editParam, isEditMode }
+  }, [isEditMode])
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: '10px',
+      left: '10px',
+      background: isEditMode ? 'rgba(0, 255, 0, 0.95)' : 'rgba(255, 0, 0, 0.95)',
+      color: 'white',
+      padding: '12px 20px',
+      borderRadius: '8px',
+      zIndex: 9999,
+      fontWeight: 'bold',
+      fontSize: '12px',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
+      fontFamily: 'monospace',
+      lineHeight: '1.6',
+      maxWidth: '250px'
+    }}>
+      <div style={{ marginBottom: '8px', fontSize: '14px' }}>🔍 DEBUG INFO:</div>
+      <div>In iframe: {debugInfo.inIframe ? '✅ YES' : '❌ NO'}</div>
+      <div>edit param: {debugInfo.editParam || '❌ MISSING'}</div>
+      <div>Edit mode: {isEditMode ? '✅ ACTIVE' : '❌ INACTIVE'}</div>
+      <div style={{ marginTop: '8px', fontSize: '10px', opacity: 0.8 }}>
+        URL: {typeof window !== 'undefined' ? window.location.pathname : 'N/A'}
+      </div>
+    </div>
+  )
+}
