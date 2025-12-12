@@ -1,12 +1,24 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import { BrandConfig, TemplateRenderResult } from '@/lib/types'
 import { generateCSSVariables } from '@/lib/colors'
+import { InlineEditableText } from '@/components/InlineEditableText'
 
 interface Template5Props {
   brand: BrandConfig
 }
 
 export function Template5({ brand }: Template5Props) {
+  const [headline, setHeadline] = useState(brand.copy.headline);
+  const [subheadline, setSubheadline] = useState(brand.copy.subheadline);
+
+  const notifyChange = (field: string, value: string) => {
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'CONTENT_CHANGE', field, value }, '*');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black relative overflow-hidden">
       {/* Header */}
@@ -23,12 +35,24 @@ export function Template5({ brand }: Template5Props) {
             🏆 {brand.brandName} 🏆
           </h1>
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2 font-mono">
-          {brand.copy.headline}
-        </h2>
-        <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
-          {brand.copy.subheadline}
-        </p>
+        <div className="text-2xl font-bold text-white mb-2 font-mono">
+          <InlineEditableText
+            value={headline}
+            onChange={(val) => { setHeadline(val); notifyChange('headline', val); }}
+            className="text-white"
+            placeholder="Enter headline..."
+            initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+          />
+        </div>
+        <div className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
+          <InlineEditableText
+            value={subheadline}
+            onChange={(val) => { setSubheadline(val); notifyChange('subheadline', val); }}
+            className="text-gray-300"
+            placeholder="Enter subheadline..."
+            initialStyles={{ fontSize: 18, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+          />
+        </div>
         
         {/* Bonus Timer */}
         <div className="inline-flex items-center bg-red-600 text-white px-4 py-2 rounded-full font-bold animate-pulse">

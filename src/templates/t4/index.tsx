@@ -3,10 +3,19 @@
 import React, { useState } from 'react'
 import { BrandConfig, TemplateProps } from '../../lib/types'
 import { generateCSSVariables } from '@/lib/colors'
+import { InlineEditableText } from '@/components/InlineEditableText'
 
 export function Template4({ brand }: TemplateProps) {
   const { brandName, logoUrl, colors, copy } = brand
-  const { headline, subheadline, cta } = copy
+  const [headline, setHeadline] = useState(copy.headline);
+  const [subheadline, setSubheadline] = useState(copy.subheadline);
+  const [ctaText, setCtaText] = useState(copy.cta);
+
+  const notifyChange = (field: string, value: string) => {
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'CONTENT_CHANGE', field, value }, '*');
+    }
+  };
   
   const [spinning, setSpinning] = useState(false)
   const [spinCount, setSpinCount] = useState(0)
@@ -70,9 +79,15 @@ export function Template4({ brand }: TemplateProps) {
         <h1 className="text-4xl md:text-6xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent mb-2">
           {brandName || 'BONANZA BILLION'}
         </h1>
-        <p className="text-xl text-yellow-300 font-bold">
-          {headline || 'Spin the Reels & Win Billion Dollar Jackpots!'}
-        </p>
+        <div className="text-xl text-yellow-300 font-bold">
+          <InlineEditableText
+            value={headline || 'Spin the Reels & Win Billion Dollar Jackpots!'}
+            onChange={(val) => { setHeadline(val); notifyChange('headline', val); }}
+            className="text-yellow-300"
+            placeholder="Enter headline..."
+            initialStyles={{ fontSize: 20, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+          />
+        </div>
       </header>
 
       {/* Main Slot Machine */}
@@ -149,12 +164,16 @@ export function Template4({ brand }: TemplateProps) {
 
           {/* CTA Section */}
           <div className="text-center">
-            <button 
-              className="bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-black text-xl px-8 py-4 rounded-full shadow-lg transform hover:scale-105 transition-all duration-200"
-              onClick={() => brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
+            <div 
+              className="inline-block bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-black text-xl px-8 py-4 rounded-full shadow-lg transform hover:scale-105 transition-all duration-200 cursor-pointer"
             >
-              {cta || '🎁 CLAIM $1000 BONUS NOW!'}
-            </button>
+              <InlineEditableText
+                value={ctaText || '🎁 CLAIM $1000 BONUS NOW!'}
+                onChange={(val) => { setCtaText(val); notifyChange('cta', val); }}
+                placeholder="Button text..."
+                initialStyles={{ fontSize: 20, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+              />
+            </div>
             <p className="text-gray-400 text-sm mt-4">
               18+ Only. Gamble Responsibly. Terms Apply.
             </p>

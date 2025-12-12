@@ -1,12 +1,25 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import { BrandConfig, TemplateRenderResult } from '@/lib/types'
 import { generateCSSVariables } from '@/lib/colors'
+import { InlineEditableText } from '@/components/InlineEditableText'
 
 interface Template2Props {
   brand: BrandConfig
 }
 
 export function Template2({ brand }: Template2Props) {
+  const [headline, setHeadline] = useState(brand.copy.headline);
+  const [subheadline, setSubheadline] = useState(brand.copy.subheadline);
+  const [ctaText, setCtaText] = useState(brand.copy.cta);
+
+  const notifyChange = (field: string, value: string) => {
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'CONTENT_CHANGE', field, value }, '*');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Modern Hero Section */}
@@ -38,23 +51,40 @@ export function Template2({ brand }: Template2Props) {
               </div>
               
               {/* Main Content */}
-              <h1 className="text-6xl lg:text-7xl font-black mb-6 leading-tight">
-                {brand.copy.headline}
-              </h1>
-              <p className="text-xl lg:text-2xl mb-10 opacity-90 leading-relaxed max-w-lg">
-                {brand.copy.subheadline}
-              </p>
+              <div className="mb-6">
+                <InlineEditableText
+                  value={headline}
+                  onChange={(val) => { setHeadline(val); notifyChange('headline', val); }}
+                  className="text-6xl lg:text-7xl font-black leading-tight text-white"
+                  placeholder="Enter headline..."
+                  initialStyles={{ fontSize: 72, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'left' }}
+                />
+              </div>
+              <div className="mb-10">
+                <InlineEditableText
+                  value={subheadline}
+                  onChange={(val) => { setSubheadline(val); notifyChange('subheadline', val); }}
+                  className="text-xl lg:text-2xl opacity-90 leading-relaxed max-w-lg text-white"
+                  placeholder="Enter subheadline..."
+                  initialStyles={{ fontSize: 24, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'left' }}
+                />
+              </div>
               
               {/* CTA Button */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="group bg-white text-[var(--brand-primary)] px-10 py-5 rounded-2xl text-lg font-bold hover:bg-gray-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:-translate-y-1">
+                <div className="group bg-white text-[var(--brand-primary)] px-10 py-5 rounded-2xl text-lg font-bold hover:bg-gray-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 cursor-pointer">
                   <span className="flex items-center justify-center">
-                    {brand.copy.cta}
+                    <InlineEditableText
+                      value={ctaText}
+                      onChange={(val) => { setCtaText(val); notifyChange('cta', val); }}
+                      placeholder="Button text..."
+                      initialStyles={{ fontSize: 18, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+                    />
                     <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
                   </span>
-                </button>
+                </div>
                 <button className="border-2 border-white/30 text-white px-8 py-5 rounded-2xl text-lg font-semibold hover:bg-white/10 transition-all duration-300 backdrop-blur-sm">
                   Learn More
                 </button>

@@ -1,12 +1,24 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import { BrandConfig, TemplateRenderResult } from '@/lib/types'
 import { generateCSSVariables } from '@/lib/colors'
+import { InlineEditableText } from '@/components/InlineEditableText'
 
 interface Template3Props {
   brand: BrandConfig
 }
 
 export function Template3({ brand }: Template3Props) {
+  const [headline, setHeadline] = useState(brand.copy.headline);
+  const [subheadline, setSubheadline] = useState(brand.copy.subheadline);
+
+  const notifyChange = (field: string, value: string) => {
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'CONTENT_CHANGE', field, value }, '*');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero with Form */}
@@ -24,8 +36,24 @@ export function Template3({ brand }: Template3Props) {
                 )}
                 <span className="text-xl font-bold">{brand.brandName}</span>
               </div>
-              <h1 className="text-4xl font-bold mb-4">{brand.copy.headline}</h1>
-              <p className="text-lg mb-6 opacity-90">{brand.copy.subheadline}</p>
+              <div className="mb-4">
+                <InlineEditableText
+                  value={headline}
+                  onChange={(val) => { setHeadline(val); notifyChange('headline', val); }}
+                  className="text-4xl font-bold text-white"
+                  placeholder="Enter headline..."
+                  initialStyles={{ fontSize: 36, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'left' }}
+                />
+              </div>
+              <div className="mb-6">
+                <InlineEditableText
+                  value={subheadline}
+                  onChange={(val) => { setSubheadline(val); notifyChange('subheadline', val); }}
+                  className="text-lg opacity-90 text-white"
+                  placeholder="Enter subheadline..."
+                  initialStyles={{ fontSize: 18, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'left' }}
+                />
+              </div>
               <div className="flex items-center space-x-4 text-sm">
                 <span className="flex items-center">
                   <svg className="w-4 h-4 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
