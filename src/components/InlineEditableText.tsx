@@ -91,7 +91,10 @@ export function InlineEditableText({
     }
   }, [isEditing])
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    console.log('InlineEditableText clicked!', { value: localValue, isEditing })
     if (!isEditing) {
       setIsEditing(true)
     }
@@ -286,12 +289,13 @@ export function InlineEditableText({
       ) : (
         <div
           onClick={handleClick}
-          className={`cursor-text hover:outline hover:outline-2 hover:outline-dashed hover:outline-blue-400 hover:outline-offset-4 rounded transition-all ${className}`}
-          style={textStyle}
-          title="Click to edit"
+          onMouseDown={(e) => { e.stopPropagation(); }}
+          className={`cursor-pointer outline outline-2 outline-dashed outline-cyan-400/50 hover:outline-cyan-400 outline-offset-2 rounded transition-all ${className}`}
+          style={{ ...textStyle, position: 'relative', zIndex: 100 }}
+          title="✏️ Click to edit this text"
         >
           {localValue || placeholder}
-          <span className="absolute -top-2 -right-2 text-sm opacity-0 hover:opacity-100 transition-opacity">✏️</span>
+          <span className="absolute -top-3 -right-3 bg-cyan-500 text-white text-xs px-1.5 py-0.5 rounded-full shadow-lg">✏️</span>
         </div>
       )}
     </div>
