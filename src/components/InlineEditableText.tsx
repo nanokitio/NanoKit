@@ -134,6 +134,7 @@ export function InlineEditableText({
             top: Math.max(10, toolbarPosition.top),
             left: Math.max(10, Math.min(toolbarPosition.left, window.innerWidth - 370)),
           }}
+          onMouseDown={(e) => e.preventDefault()}
         >
           {/* Font Size */}
           <div className="relative">
@@ -211,7 +212,19 @@ export function InlineEditableText({
           value={localValue}
           onChange={(e) => setLocalValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          onBlur={() => setTimeout(handleSave, 200)}
+          onBlur={(e) => {
+            // Don't close if clicking on toolbar
+            const toolbar = toolbarRef.current
+            if (toolbar && e.relatedTarget && toolbar.contains(e.relatedTarget as Node)) {
+              return
+            }
+            // Small delay to allow toolbar clicks
+            setTimeout(() => {
+              if (!showFontSizeDropdown) {
+                handleSave()
+              }
+            }, 300)
+          }}
           className={`bg-transparent border-2 border-blue-500 rounded px-2 py-1 outline-none ${className}`}
           style={{
             ...textStyle,
