@@ -72,13 +72,15 @@ export function InlineEditableText({
     }
   }, [value, isEditing])
 
-  // Position toolbar above the element
+  // Position toolbar above the element (with more space)
   useEffect(() => {
     if (isEditing && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect()
+      // Position toolbar 70px above the element, or at top of screen if not enough space
+      const toolbarTop = Math.max(10, rect.top - 70)
       setToolbarPosition({
-        top: rect.top - 55,
-        left: rect.left + rect.width / 2 - 175
+        top: toolbarTop,
+        left: Math.max(10, rect.left + rect.width / 2 - 200)
       })
     }
   }, [isEditing])
@@ -290,28 +292,26 @@ export function InlineEditableText({
         <div
           onClick={handleClick}
           onMouseDown={(e) => { e.stopPropagation(); }}
-          className={`cursor-pointer rounded transition-all ${className}`}
+          className={`cursor-pointer rounded transition-all hover:outline hover:outline-2 hover:outline-dashed hover:outline-cyan-400 ${className}`}
           style={{ 
             ...textStyle, 
             position: 'relative', 
-            zIndex: 100,
-            border: '3px solid #06b6d4',
-            padding: '4px 8px',
-            backgroundColor: 'rgba(6, 182, 212, 0.1)'
+            zIndex: 100
           }}
           title="✏️ Click to edit this text"
         >
           {localValue || placeholder}
           <span style={{
             position: 'absolute',
-            top: '-12px',
-            right: '-12px',
+            top: '-8px',
+            right: '-8px',
             backgroundColor: '#06b6d4',
             color: 'white',
-            fontSize: '12px',
-            padding: '2px 6px',
+            fontSize: '10px',
+            padding: '2px 5px',
             borderRadius: '9999px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
+            boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
+            opacity: 0.8
           }}>✏️</span>
         </div>
       )}
