@@ -99,40 +99,28 @@ export function Template6({ brand }: Template6Props) {
           )}
           
           <div className="synth-title-container mb-6">
-            {isEditMode ? (
-              <InlineEditableText
-                value={headline}
-                onChange={(val) => {
-                  setHeadline(val);
-                  notifyChange('headline', val);
-                }}
-                className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 mb-4 synth-glow tracking-wider"
-                placeholder="Enter your headline..."
-                initialStyles={{ fontSize: 48, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
-              />
-            ) : (
-              <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 mb-4 synth-glow animate-text-shimmer tracking-wider">
-                ◆ {headline} ◆
-              </h1>
-            )}
+            <InlineEditableText
+              value={headline}
+              onChange={(val) => {
+                setHeadline(val);
+                notifyChange('headline', val);
+              }}
+              className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 mb-4 synth-glow tracking-wider"
+              placeholder="Enter your headline..."
+              initialStyles={{ fontSize: 48, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+            />
             <div className="synth-underline"></div>
           </div>
-          {isEditMode ? (
-            <InlineEditableText
-              value={subheadline}
-              onChange={(val) => {
-                setSubheadline(val);
-                notifyChange('subheadline', val);
-              }}
-              className="text-lg md:text-xl text-cyan-100 mb-6 font-light tracking-wide"
-              placeholder="Enter your subheadline..."
-              initialStyles={{ fontSize: 20, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
-            />
-          ) : (
-            <p className="text-lg md:text-xl text-cyan-100 mb-6 font-light tracking-wide retro-text">
-              {subheadline}
-            </p>
-          )}
+          <InlineEditableText
+            value={subheadline}
+            onChange={(val) => {
+              setSubheadline(val);
+              notifyChange('subheadline', val);
+            }}
+            className="text-lg md:text-xl text-cyan-100 mb-6 font-light tracking-wide"
+            placeholder="Enter your subheadline..."
+            initialStyles={{ fontSize: 20, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+          />
           
           {/* Retro Timer */}
           <div className="inline-flex items-center gap-3 bg-gradient-to-r from-pink-500/20 to-cyan-500/20 backdrop-blur-sm border border-pink-400/50 text-pink-300 px-6 py-3 rounded-lg font-mono text-sm synth-border animate-border-pulse">
@@ -217,26 +205,21 @@ export function Template6({ brand }: Template6Props) {
 
         {/* Synth Call to Action */}
         <div className="cta-section text-center">
-          <button 
+          <div 
             id="playNowBtn"
-            className="cta-button bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white font-mono font-black text-xl md:text-2xl py-6 px-12 rounded-lg shadow-2xl backdrop-blur-sm border-2 border-pink-400/60 transform hover:scale-110 transition-all duration-300 synth-cta animate-cta-glow"
-            onClick={() => !isEditMode && brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
+            className="cta-button bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white font-mono font-black text-xl md:text-2xl py-6 px-12 rounded-lg shadow-2xl backdrop-blur-sm border-2 border-pink-400/60 transform hover:scale-110 transition-all duration-300 synth-cta animate-cta-glow cursor-pointer"
           >
-            {isEditMode ? (
-              <InlineEditableText
-                value={ctaText}
-                onChange={(val) => {
-                  setCtaText(val);
-                  notifyChange('cta', val);
-                }}
-                className="tracking-widest"
-                placeholder="Button text..."
-                initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
-              />
-            ) : (
-              <span className="tracking-widest">★ {ctaText} ★</span>
-            )}
-          </button>
+            <InlineEditableText
+              value={ctaText}
+              onChange={(val) => {
+                setCtaText(val);
+                notifyChange('cta', val);
+              }}
+              className="tracking-widest"
+              placeholder="Button text..."
+              initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+            />
+          </div>
           <p className="text-cyan-200/60 text-sm mt-6 font-mono tracking-wide">18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY</p>
         </div>
       </div>

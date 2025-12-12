@@ -221,15 +221,13 @@ export function Template7({ brand }: TemplateProps) {
         </h1>
         <div className="text-2xl font-bold text-cyan-300 flex items-center justify-center gap-2 neon-text-blue drop-shadow-lg">
           <span className="text-3xl">⭐</span>
-          {isEditMode ? (
-            <InlineEditableText
-              value={headlineText}
-              onChange={(val) => { setHeadlineText(val); notifyChange('headline', val); }}
-              className="font-bold text-cyan-300"
-              placeholder="Enter headline..."
-              initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
-            />
-          ) : headlineText}
+          <InlineEditableText
+            value={headlineText}
+            onChange={(val) => { setHeadlineText(val); notifyChange('headline', val); }}
+            className="font-bold text-cyan-300"
+            placeholder="Enter headline..."
+            initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+          />
           <span className="text-3xl">⭐</span>
         </div>
       </div>
@@ -310,19 +308,16 @@ export function Template7({ brand }: TemplateProps) {
             <h2 className="text-3xl font-black text-black mb-4">🎉 JACKPOT! 🎉</h2>
             <p className="text-xl text-black mb-2">Congratulations! You hit the JACKPOT!</p>
             <p className="text-2xl font-bold text-black mb-6">$1,000 BONUS!</p>
-            <button 
-              className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transform hover:scale-105 transition-all duration-200 mb-4"
-              onClick={() => !isEditMode && brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
+            <div 
+              className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transform hover:scale-105 transition-all duration-200 mb-4 cursor-pointer"
             >
-              {isEditMode ? (
-                <InlineEditableText
-                  value={ctaText}
-                  onChange={(val) => { setCtaText(val); notifyChange('cta', val); }}
-                  placeholder="Button text..."
-                  initialStyles={{ fontSize: 18, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
-                />
-              ) : `🎁 ${ctaText}`}
-            </button>
+              <InlineEditableText
+                value={ctaText}
+                onChange={(val) => { setCtaText(val); notifyChange('cta', val); }}
+                placeholder="Button text..."
+                initialStyles={{ fontSize: 18, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+              />
+            </div>
             <button 
               className="block mx-auto text-black/70 hover:text-black text-sm underline"
               onClick={() => setShowJackpot(false)}
