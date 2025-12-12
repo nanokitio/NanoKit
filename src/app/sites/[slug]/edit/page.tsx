@@ -3,12 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Loader2, Save, Eye, ArrowLeft, Palette, Type, Image as ImageIcon, Link as LinkIcon, ChevronDown, ChevronUp, Layers, FileText, Scale, Download, Mail, Globe, Monitor, Smartphone, Undo2, Redo2, Edit3, X, ChevronLeft, ChevronRight, Dices, Trophy, TrendingUp, Bitcoin, ShoppingBag, DollarSign, Heart, MoreHorizontal, Users, Settings, Wallet, Gift, Sparkles } from 'lucide-react'
+import { Loader2, Save, Eye, ArrowLeft, Palette, Type, Image as ImageIcon, Link as LinkIcon, ChevronDown, ChevronUp, Layers, FileText, Scale, Download, Mail, Globe, Monitor, Smartphone, Undo2, Redo2, Edit3, X, ChevronLeft, ChevronRight, Dices, Trophy, TrendingUp, Bitcoin, ShoppingBag, DollarSign, Heart, MoreHorizontal, Users, Settings, Wallet, Gift } from 'lucide-react'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import { EditorTour } from '@/components/EditorTour'
 import { getTemplateConfig, templateSupportsField } from '@/lib/template-config'
 import ScreenshotProtection from '@/components/ScreenshotProtection'
-import { CanvaEditorLayout } from '@/components/CanvaEditorLayout'
 
 interface SiteData {
   id: string
@@ -94,7 +93,6 @@ export default function SiteEditorPage() {
   const [historyIndex, setHistoryIndex] = useState(-1)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
-  const [canvaMode, setCanvaMode] = useState(false) // Toggle between classic and Canva UI
 
   // Save state to history whenever key fields change
   useEffect(() => {
@@ -1203,16 +1201,6 @@ export default function SiteEditorPage() {
               </button>
             </div>
 
-            {/* Canva Mode Toggle */}
-            <button
-              onClick={() => setCanvaMode(!canvaMode)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/70 hover:bg-purple-500/10 text-purple-400 hover:text-white rounded-lg transition-all duration-300 border border-purple-500/30 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20 backdrop-blur-sm font-medium"
-              title={canvaMode ? "Switch to Classic Editor" : "Switch to Canva Editor"}
-            >
-              <Sparkles size={18} />
-              <span className="hidden sm:inline">{canvaMode ? 'Classic' : 'Canva'}</span>
-            </button>
-            
             <button
               data-tour="preview-btn"
               onClick={() => window.open(getPreviewUrl(), '_blank')}
@@ -1242,40 +1230,8 @@ export default function SiteEditorPage() {
           </div>
         </div>
 
-      {/* Conditional Rendering: Canva Mode or Classic Mode */}
-      {canvaMode ? (
-        /* Canva-Style Editor */
-        <CanvaEditorLayout
-          siteName={brandName}
-          onSave={handleSave}
-          onPreview={() => window.open(getPreviewUrl(), '_blank')}
-          onDownload={() => setShowDownloadModal(true)}
-          onUndo={handleUndo}
-          onRedo={handleRedo}
-          canUndo={historyIndex > 0}
-          canRedo={historyIndex < history.length - 1}
-          currentTemplate={templateId}
-          onTemplateChange={(newTemplateId) => setTemplateId(newTemplateId)}
-        >
-          {/* Template Preview in Canva Mode - Fully Interactive */}
-          <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-            <iframe
-              key={`canva-${templateId}-${viewMode}`}
-              src={getPreviewUrl()}
-              className="w-full h-full border-0"
-              title="Template Preview"
-              style={{
-                pointerEvents: 'auto',
-                border: 'none',
-                background: 'white'
-              }}
-              allow="clipboard-read; clipboard-write"
-            />
-          </div>
-        </CanvaEditorLayout>
-      ) : (
-        /* Classic Editor */
-        <div className="flex-1 flex relative">
+      {/* Classic Editor */}
+      <div className="flex-1 flex relative">
         {/* Sidebar Toggle Button */}
         <button
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
@@ -1972,7 +1928,7 @@ export default function SiteEditorPage() {
                       <div className="border-t border-gray-700 pt-6">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
-                            <Sparkles size={20} className="text-purple-400" style={{ filter: 'drop-shadow(0 0 6px rgba(192, 132, 252, 0.6))' }} />
+                            <Palette size={20} className="text-purple-400" style={{ filter: 'drop-shadow(0 0 6px rgba(192, 132, 252, 0.6))' }} />
                             <h4 className="text-sm font-bold text-white">Background</h4>
                           </div>
                           {fields.backgroundColor?.isPremium && (
@@ -2481,7 +2437,6 @@ export default function SiteEditorPage() {
         </div>
       )}
       </div>
-      )}
 
     </div>
   )
