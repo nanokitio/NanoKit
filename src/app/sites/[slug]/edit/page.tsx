@@ -94,6 +94,28 @@ export default function SiteEditorPage() {
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
+  // Listen for content changes from iframe (inline editing)
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'CONTENT_CHANGE') {
+        const { field, value } = event.data;
+        switch (field) {
+          case 'headline':
+            setHeadline(value);
+            break;
+          case 'subheadline':
+            setSubheadline(value);
+            break;
+          case 'cta':
+            setCta(value);
+            break;
+        }
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   // Save state to history whenever key fields change
   useEffect(() => {
     const currentState = {
@@ -1614,71 +1636,26 @@ export default function SiteEditorPage() {
                       </p>
                     </div>
 
-                    {/* Basic Fields Section */}
+                    {/* Inline Editing Instructions */}
+                    <div className="bg-gradient-to-r from-blue-900/30 to-cyan-900/30 border border-blue-500/40 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Type size={18} className="text-blue-400" />
+                        <p className="text-sm text-blue-300 font-bold">
+                          Edit Text Directly
+                        </p>
+                      </div>
+                      <p className="text-xs text-gray-400 mb-3">
+                        Click on any text in the preview to edit it directly. A toolbar will appear with formatting options.
+                      </p>
+                      <div className="flex flex-wrap gap-2 text-xs">
+                        <span className="px-2 py-1 bg-slate-800 rounded text-slate-300">✏️ Click to edit</span>
+                        <span className="px-2 py-1 bg-slate-800 rounded text-slate-300">📏 Change size</span>
+                        <span className="px-2 py-1 bg-slate-800 rounded text-slate-300">B I U</span>
+                      </div>
+                    </div>
+
+                    {/* CTA URL - Keep this in sidebar */}
                     <div className="space-y-4">
-                      {/* Headline */}
-                      {fields.headline && (
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">
-                            {fields.headline.label}
-                            {fields.headline.required && <span className="text-red-400 ml-1">*</span>}
-                          </label>
-                          <input
-                            type="text"
-                            value={headline}
-                            onChange={(e) => setHeadline(e.target.value)}
-                            className="w-full px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                            placeholder={fields.headline.placeholder}
-                            required={fields.headline.required}
-                          />
-                          {fields.headline.description && (
-                            <p className="text-xs text-gray-500 mt-1.5">{fields.headline.description}</p>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Subheadline */}
-                      {fields.subheadline && (
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">
-                            {fields.subheadline.label}
-                            {fields.subheadline.required && <span className="text-red-400 ml-1">*</span>}
-                          </label>
-                          <input
-                            type="text"
-                            value={subheadline}
-                            onChange={(e) => setSubheadline(e.target.value)}
-                            className="w-full px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                            placeholder={fields.subheadline.placeholder}
-                          />
-                          {fields.subheadline.description && (
-                            <p className="text-xs text-gray-500 mt-1.5">{fields.subheadline.description}</p>
-                          )}
-                        </div>
-                      )}
-
-                      {/* CTA Button Text */}
-                      {fields.cta && (
-                        <div>
-                          <label className="block text-sm font-medium text-white mb-2">
-                            {fields.cta.label}
-                            {fields.cta.required && <span className="text-red-400 ml-1">*</span>}
-                          </label>
-                          <input
-                            type="text"
-                            value={cta}
-                            onChange={(e) => setCta(e.target.value)}
-                            className="w-full px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                            placeholder={fields.cta.placeholder}
-                            required={fields.cta.required}
-                          />
-                          {fields.cta.description && (
-                            <p className="text-xs text-gray-500 mt-1.5">{fields.cta.description}</p>
-                          )}
-                        </div>
-                      )}
-
-                      {/* CTA URL */}
                       {fields.ctaUrl && (
                         <div>
                           <label className="block text-sm font-medium text-white mb-2 flex items-center gap-2">
