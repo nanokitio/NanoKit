@@ -1,7 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { BrandConfig } from '@/lib/types'
-import { EditableText } from '@/components/EditableText'
+import { SimpleEditableText } from '@/components/SimpleEditableText'
 import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 interface Template14Props {
@@ -9,21 +10,22 @@ interface Template14Props {
 }
 
 export function Template14({ brand }: Template14Props) {
-  const { isEditMode, notifyChange } = useInlineEdit()
+  const { notifyChange } = useInlineEdit()
+  const [headline, setHeadline] = useState(brand.copy?.headline || 'SPIN THE WHEEL')
   
   return (
     <div className="w-full h-screen bg-gradient-to-b from-blue-900 to-blue-600 flex items-center justify-center">
       <div className="text-center text-white p-8">
-        {isEditMode ? (
-          <EditableText
-            value={brand.copy?.headline || 'SPIN THE WHEEL'}
-            onChange={(value) => notifyChange('headline', value)}
-            className="text-4xl font-bold mb-4"
-            as="h1"
-          />
-        ) : (
-          <h1 className="text-4xl font-bold mb-4">{brand.copy?.headline || 'SPIN THE WHEEL'}</h1>
-        )}
+        <SimpleEditableText
+          value={headline}
+          onChange={(val) => {
+            setHeadline(val)
+            notifyChange('headline', val)
+          }}
+          className="text-4xl font-bold mb-4"
+          as="h1"
+          placeholder="SPIN THE WHEEL"
+        />
         <p className="text-xl mb-6">Fortune Wheel - Underwater Theme 🌊</p>
         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-md mx-auto">
           <p className="text-sm opacity-90">
