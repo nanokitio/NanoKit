@@ -1,29 +1,34 @@
 'use client'
 
+import { useState } from 'react'
 import { BrandConfig } from '@/lib/types'
-import { EditableText } from '@/components/EditableText'
-import { useInlineEdit } from '@/hooks/useInlineEdit'
+import { InlineEditableText } from '@/components/InlineEditableText'
 
 interface Template15Props {
   brand: BrandConfig
 }
 
 export function Template15({ brand }: Template15Props) {
-  const { isEditMode, notifyChange } = useInlineEdit()
+  const [headline, setHeadline] = useState(brand.copy?.headline || 'SPIN THE WHEEL');
+
+  const notifyChange = (field: string, value: string) => {
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'CONTENT_CHANGE', field, value }, '*');
+    }
+  };
   
   return (
     <div className="w-full h-screen bg-gradient-to-b from-red-900 to-yellow-600 flex items-center justify-center">
       <div className="text-center text-white p-8">
-        {isEditMode ? (
-          <EditableText
-            value={brand.copy?.headline || 'SPIN THE WHEEL'}
-            onChange={(value) => notifyChange('headline', value)}
-            className="text-4xl font-bold mb-4"
-            as="h1"
+        <div className="mb-4">
+          <InlineEditableText
+            value={headline}
+            onChange={(val) => { setHeadline(val); notifyChange('headline', val); }}
+            className="text-4xl font-bold text-white"
+            placeholder="Enter headline..."
+            initialStyles={{ fontSize: 36, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
           />
-        ) : (
-          <h1 className="text-4xl font-bold mb-4">{brand.copy?.headline || 'SPIN THE WHEEL'}</h1>
-        )}
+        </div>
         <p className="text-xl mb-6">Fortune Wheel - China Theme 🏮</p>
         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-md mx-auto">
           <p className="text-sm opacity-90">
