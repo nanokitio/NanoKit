@@ -10,6 +10,9 @@ import { renderTemplate as renderT17 } from '@/templates/t17/server'
 import { renderTemplate as renderT18 } from '@/templates/t18/server'
 import { injectProtection, addProtectionStyles, applyFullEncryption, shouldEncrypt } from '@/lib/site-protection'
 
+// Client wrapper for edit mode with React components
+import SiteClientWrapper from './SiteClientWrapper'
+
 interface SitePageParams {
   slug: string
 }
@@ -35,6 +38,7 @@ interface SearchParams {
   featuredPlayer?: string
   sportDirector?: string
   preview?: string  // Flag to disable protections in editor preview
+  edit?: string     // Flag for edit mode with React components
 }
 
 export default async function SitePage({ 
@@ -63,37 +67,46 @@ export default async function SitePage({
   let html = site.generated_html
   let css = site.generated_css
 
+  // Build brand config for both React components and server rendering
+  const activeTemplateId = query.templateId || site.template_id
+  
+  const brandConfig = {
+    brandName: site.brand_name,
+    logoUrl: query.logoUrl || site.logo_url || '',
+    colors: {
+      primary: query.primaryColor || site.primary_color || '#4a90e2',
+      secondary: query.secondaryColor || site.secondary_color || '#7b68ee',
+      accent: query.accentColor || site.accent_color || '#ffd700'
+    },
+    copy: {
+      headline: query.headline || site.headline || 'YOUR TITLE HERE',
+      subheadline: query.subheadline || site.subheadline || '',
+      cta: query.cta || site.cta || 'PLAY NOW'
+    },
+    industry: site.industry || 'Casino & Gaming',
+    description: site.description || '',
+    ctaUrl: query.ctaUrl || site.cta_url || '#',
+    popupTitle: query.popupTitle || site.popup_title || 'WINNER!',
+    popupMessage: query.popupMessage || site.popup_message || 'Congratulations! You\'ve won!',
+    popupPrize: query.popupPrize || site.popup_prize || '$1,000 + 50 FREE SPINS',
+    gameBalance: query.gameBalance ? parseInt(query.gameBalance) : (site.game_balance || 1000),
+    customLogo: query.customLogo || site.custom_logo || null,
+    wheelValues: query.wheelValues || site.wheel_values || '$100, $200, $500, $1000, $2000, $5000, $800, $1500',
+    backgroundColor: query.backgroundColor || site.background_color || '#1a1a2e',
+    backgroundImage: query.backgroundImage || site.background_image || '',
+    featuredPlayer: query.featuredPlayer || site.featured_player || '',
+    sportDirector: query.sportDirector || site.sport_director || ''
+  } as any
+
+  // **EDIT MODE: Use React components with InlineEditableText**
+  const isEditMode = query.edit === '1' || query.preview === '1'
+  
+  if (isEditMode) {
+    // Return React component for inline editing
+    return <SiteClientWrapper templateId={activeTemplateId} brand={brandConfig} />
+  }
+
   if (Object.keys(query).length > 0) {
-    // Use templateId from query params or fall back to site's template_id
-    const activeTemplateId = query.templateId || site.template_id
-    
-    const brandConfig = {
-      brandName: site.brand_name,
-      logoUrl: query.logoUrl || site.logo_url || '',
-      colors: {
-        primary: query.primaryColor || site.primary_color || '#4a90e2',
-        secondary: query.secondaryColor || site.secondary_color || '#7b68ee',
-        accent: query.accentColor || site.accent_color || '#ffd700'
-      },
-      copy: {
-        headline: query.headline || site.headline || 'YOUR TITLE HERE',
-        subheadline: query.subheadline || site.subheadline || '',
-        cta: query.cta || site.cta || 'PLAY NOW'
-      },
-      industry: site.industry || 'Casino & Gaming',
-      description: site.description || '',
-      ctaUrl: query.ctaUrl || site.cta_url || '#',
-      popupTitle: query.popupTitle || site.popup_title || 'WINNER!',
-      popupMessage: query.popupMessage || site.popup_message || 'Congratulations! You\'ve won!',
-      popupPrize: query.popupPrize || site.popup_prize || '$1,000 + 50 FREE SPINS',
-      gameBalance: query.gameBalance ? parseInt(query.gameBalance) : (site.game_balance || 1000),
-      customLogo: query.customLogo || site.custom_logo || null,
-      wheelValues: query.wheelValues || site.wheel_values || '$100, $200, $500, $1000, $2000, $5000, $800, $1500',
-      backgroundColor: query.backgroundColor || site.background_color || '#1a1a2e',
-      backgroundImage: query.backgroundImage || site.background_image || '',
-      featuredPlayer: query.featuredPlayer || site.featured_player || '',
-      sportDirector: query.sportDirector || site.sport_director || ''
-    } as any
 
     // Render based on template ID
     let rendered;
