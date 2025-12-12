@@ -1,23 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { BrandConfig, TemplateRenderResult } from '@/lib/types'
 import { generateCSSVariables } from '@/lib/colors'
-import { EditableText } from '@/components/EditableText'
-import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 interface Template1Props {
   brand: BrandConfig
 }
 
 export function Template1({ brand }: Template1Props) {
-  const { isEditMode, notifyChange } = useInlineEdit()
-  const [headline, setHeadline] = useState(brand.copy.headline)
-  const [subheadline, setSubheadline] = useState(brand.copy.subheadline)
-  const [ctaText, setCtaText] = useState(brand.copy.cta)
+  const headline = brand.copy.headline
+  const subheadline = brand.copy.subheadline
+  const ctaText = brand.copy.cta
   
   const handleCTAClick = () => {
-    if (isEditMode) return
     if (brand.ctaUrl) window.open(brand.ctaUrl, '_blank')
   }
   
@@ -43,14 +39,7 @@ export function Template1({ brand }: Template1Props) {
               className="bg-[var(--brand-primary)] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
               onClick={handleCTAClick}
             >
-              <EditableText
-                value={ctaText}
-                onChange={(val) => {
-                  setCtaText(val)
-                  notifyChange('cta', val)
-                }}
-                as="span"
-              />
+              {ctaText}
             </button>
           </div>
         </div>
@@ -59,39 +48,18 @@ export function Template1({ brand }: Template1Props) {
       {/* Hero Content */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <EditableText
-            value={headline}
-            onChange={(val) => {
-              setHeadline(val)
-              notifyChange('headline', val)
-            }}
-            as="h1"
-            className="text-5xl font-bold text-gray-900 mb-6"
-            placeholder="Enter headline..."
-          />
-          <EditableText
-            value={subheadline}
-            onChange={(val) => {
-              setSubheadline(val)
-              notifyChange('subheadline', val)
-            }}
-            as="p"
-            className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto"
-            placeholder="Enter subheadline..."
-          />
+          <h1 className="text-5xl font-bold text-gray-900 mb-6">
+            {headline}
+          </h1>
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            {subheadline}
+          </p>
           <div className="cta-section text-center mt-12">
             <button 
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-all duration-200"
               onClick={handleCTAClick}
             >
-              <EditableText
-                value={ctaText}
-                onChange={(val) => {
-                  setCtaText(val)
-                  notifyChange('cta', val)
-                }}
-                as="span"
-              />
+              {ctaText}
             </button>
           </div>
         </div>
@@ -169,14 +137,7 @@ export function Template1({ brand }: Template1Props) {
             </div>
             <p className="text-gray-400 mb-6">{brand.description}</p>
             <button className="bg-[var(--brand-primary)] text-white px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity" onClick={handleCTAClick}>
-              <EditableText
-                value={ctaText}
-                onChange={(val) => {
-                  setCtaText(val)
-                  notifyChange('cta', val)
-                }}
-                as="span"
-              />
+              {ctaText}
             </button>
           </div>
         </div>

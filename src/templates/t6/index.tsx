@@ -2,21 +2,18 @@
 
 import React from 'react'
 import { BrandConfig } from '@/lib/types'
-import { EditableText } from '@/components/EditableText'
-import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 interface Template6Props {
   brand: BrandConfig
 }
 
 export function Template6({ brand }: Template6Props) {
-  const { isEditMode, notifyChange } = useInlineEdit()
   const [spinCount, setSpinCount] = React.useState(0);
   const [showWinModal, setShowWinModal] = React.useState(false);
   const [isSpinning, setIsSpinning] = React.useState(false);
-  const [headline, setHeadline] = React.useState(brand.copy.headline || `${brand.brandName.toUpperCase()} CYBER WINS`);
-  const [subheadline, setSubheadline] = React.useState(brand.copy.subheadline || 'Enter the neon grid where digital fortunes await');
-  const [ctaText, setCtaText] = React.useState(brand.copy.cta || 'ENTER THE GRID');
+  const headline = brand.copy.headline || `${brand.brandName.toUpperCase()} CYBER WINS`;
+  const subheadline = brand.copy.subheadline || 'Enter the neon grid where digital fortunes await';
+  const ctaText = brand.copy.cta || 'ENTER THE GRID';
 
   const symbols = ['◆', '▲', '●', '★', '◇', '▼'];
 
@@ -79,28 +76,14 @@ export function Template6({ brand }: Template6Props) {
           )}
           
           <div className="synth-title-container mb-6">
-            <EditableText
-              value={headline}
-              onChange={(val: string) => {
-                setHeadline(val)
-                notifyChange('headline', val)
-              }}
-              as="h1"
-              className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 mb-4 synth-glow animate-text-shimmer tracking-wider"
-              placeholder="YOUR TITLE HERE"
-            />
+            <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 mb-4 synth-glow animate-text-shimmer tracking-wider">
+              ◆ {headline} ◆
+            </h1>
             <div className="synth-underline"></div>
           </div>
-          <EditableText
-            value={subheadline}
-            onChange={(val: string) => {
-              setSubheadline(val)
-              notifyChange('subheadline', val)
-            }}
-            as="p"
-            className="text-lg md:text-xl text-cyan-100 mb-6 font-light tracking-wide retro-text"
-            placeholder="Enter your subtitle..."
-          />
+          <p className="text-lg md:text-xl text-cyan-100 mb-6 font-light tracking-wide retro-text">
+            {subheadline}
+          </p>
           
           {/* Retro Timer */}
           <div className="inline-flex items-center gap-3 bg-gradient-to-r from-pink-500/20 to-cyan-500/20 backdrop-blur-sm border border-pink-400/50 text-pink-300 px-6 py-3 rounded-lg font-mono text-sm synth-border animate-border-pulse">
@@ -188,19 +171,9 @@ export function Template6({ brand }: Template6Props) {
           <button 
             id="playNowBtn"
             className="cta-button bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-400 hover:via-purple-400 hover:to-cyan-400 text-white font-mono font-black text-xl md:text-2xl py-6 px-12 rounded-lg shadow-2xl backdrop-blur-sm border-2 border-pink-400/60 transform hover:scale-110 transition-all duration-300 synth-cta animate-cta-glow"
-            onClick={() => !isEditMode && brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
+            onClick={() => brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
           >
-            <EditableText
-              value={ctaText}
-              onChange={(val: string) => {
-                setCtaText(val)
-                notifyChange('cta', val)
-              }}
-              as="span"
-              className="tracking-widest"
-              placeholder="BUTTON TEXT"
-              style={{ color: 'inherit', fontWeight: 'inherit' }}
-            />
+            <span className="tracking-widest">★ {ctaText} ★</span>
           </button>
           <p className="text-cyan-200/60 text-sm mt-6 font-mono tracking-wide">18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY</p>
         </div>
