@@ -45,5 +45,15 @@ export function useInlineEdit() {
     }
   }
 
-  return { isEditMode, notifyChange, notifyFontSizeChange }
+  const notifyStyleChange = (field: string, styles: any) => {
+    if (isEditMode && window.parent) {
+      window.parent.postMessage({
+        type: 'STYLE_CHANGE',
+        field,
+        styles
+      }, '*')
+    }
+  }
+
+  return { isEditMode, notifyChange, notifyFontSizeChange, notifyStyleChange }
 }

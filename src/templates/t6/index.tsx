@@ -3,6 +3,7 @@
 import React from 'react'
 import { BrandConfig } from '@/lib/types'
 import { EditableText } from '@/components/EditableText'
+import { EditableTextCanva } from '@/components/EditableTextCanva'
 import { useInlineEdit } from '@/hooks/useInlineEdit'
 import { DebugPanel } from '@/components/DebugPanel'
 
@@ -11,7 +12,7 @@ interface Template6Props {
 }
 
 export function Template6({ brand }: Template6Props) {
-  const { isEditMode, notifyChange } = useInlineEdit()
+  const { isEditMode, notifyChange, notifyStyleChange } = useInlineEdit()
   const [spinCount, setSpinCount] = React.useState(0);
   const [showWinModal, setShowWinModal] = React.useState(false);
   const [isSpinning, setIsSpinning] = React.useState(false);
@@ -84,15 +85,25 @@ export function Template6({ brand }: Template6Props) {
           
           <div className="synth-title-container mb-6">
             {isEditMode ? (
-              <EditableText
+              <EditableTextCanva
                 value={headline}
                 onChange={(val) => {
                   setHeadline(val)
                   notifyChange('headline', val)
                 }}
+                onStyleChange={(styles) => notifyStyleChange('headline', styles)}
                 as="h1"
-                className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 mb-4 synth-glow animate-text-shimmer tracking-wider"
+                className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 synth-glow animate-text-shimmer tracking-wider"
                 placeholder="YOUR TITLE HERE"
+                initialStyles={{
+                  fontSize: 48,
+                  fontFamily: 'Inter',
+                  isBold: true,
+                  isItalic: false,
+                  isUnderline: false,
+                  textAlign: 'center',
+                  color: '#ffffff'
+                }}
               />
             ) : (
               <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 mb-4 synth-glow animate-text-shimmer tracking-wider">
@@ -102,15 +113,25 @@ export function Template6({ brand }: Template6Props) {
             <div className="synth-underline"></div>
           </div>
           {isEditMode ? (
-            <EditableText
+            <EditableTextCanva
               value={subheadline}
               onChange={(val) => {
                 setSubheadline(val)
                 notifyChange('subheadline', val)
               }}
+              onStyleChange={(styles) => notifyStyleChange('subheadline', styles)}
               as="p"
-              className="text-lg md:text-xl text-cyan-100 mb-6 font-light tracking-wide retro-text"
+              className="text-cyan-100 font-light tracking-wide retro-text"
               placeholder="Enter your subtitle..."
+              initialStyles={{
+                fontSize: 20,
+                fontFamily: 'Inter',
+                isBold: false,
+                isItalic: false,
+                isUnderline: false,
+                textAlign: 'center',
+                color: '#a5f3fc'
+              }}
             />
           ) : (
             <p className="text-lg md:text-xl text-cyan-100 mb-6 font-light tracking-wide retro-text">
