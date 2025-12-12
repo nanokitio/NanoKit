@@ -50,6 +50,44 @@ export interface TemplateConfig {
 
 // Template configurations
 export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
+  t1: {
+    id: 't1',
+    name: 'Classic Overlay',
+    fields: {
+      headline: {
+        id: 'headline',
+        label: 'Main Headline',
+        type: 'text',
+        placeholder: 'WIN BIG TODAY!',
+        description: 'Main headline text',
+        required: true
+      },
+      subheadline: {
+        id: 'subheadline',
+        label: 'Subheadline',
+        type: 'text',
+        placeholder: 'Join thousands of winners...',
+        description: 'Secondary text below headline'
+      },
+      cta: {
+        id: 'cta',
+        label: 'Button Text',
+        type: 'text',
+        placeholder: 'PLAY NOW',
+        description: 'Call-to-action button text',
+        required: true
+      },
+      ctaUrl: {
+        id: 'ctaUrl',
+        label: 'Destination URL',
+        type: 'url',
+        placeholder: 'https://your-casino.com',
+        description: 'Where button leads',
+        required: true
+      }
+    }
+  },
+
   t6: {
     id: 't6',
     name: 'Classic Overlay',
