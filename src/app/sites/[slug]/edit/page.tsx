@@ -8,6 +8,7 @@ import { NanoKitLogo } from '@/components/NanoKitLogo'
 import { EditorTour } from '@/components/EditorTour'
 import { getTemplateConfig, templateSupportsField } from '@/lib/template-config'
 import ScreenshotProtection from '@/components/ScreenshotProtection'
+import { CanvaEditorLayout } from '@/components/CanvaEditorLayout'
 
 interface SiteData {
   id: string
@@ -93,6 +94,7 @@ export default function SiteEditorPage() {
   const [historyIndex, setHistoryIndex] = useState(-1)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [canvaMode, setCanvaMode] = useState(false) // Toggle between classic and Canva UI
 
   // Save state to history whenever key fields change
   useEffect(() => {
@@ -1200,6 +1202,16 @@ export default function SiteEditorPage() {
                 <Redo2 size={18} />
               </button>
             </div>
+
+            {/* Canva Mode Toggle */}
+            <button
+              onClick={() => setCanvaMode(!canvaMode)}
+              className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/70 hover:bg-purple-500/10 text-purple-400 hover:text-white rounded-lg transition-all duration-300 border border-purple-500/30 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20 backdrop-blur-sm font-medium"
+              title={canvaMode ? "Switch to Classic Editor" : "Switch to Canva Editor"}
+            >
+              <Sparkles size={18} />
+              <span className="hidden sm:inline">{canvaMode ? 'Classic' : 'Canva'}</span>
+            </button>
             
             <button
               data-tour="preview-btn"
@@ -1230,7 +1242,32 @@ export default function SiteEditorPage() {
           </div>
         </div>
 
-      <div className="flex-1 flex relative">
+      {/* Conditional Rendering: Canva Mode or Classic Mode */}
+      {canvaMode ? (
+        /* Canva-Style Editor */
+        <CanvaEditorLayout
+          siteName={brandName}
+          onSave={handleSave}
+          onPreview={() => window.open(getPreviewUrl(), '_blank')}
+          onDownload={() => setShowDownloadModal(true)}
+          onUndo={handleUndo}
+          onRedo={handleRedo}
+          canUndo={historyIndex > 0}
+          canRedo={historyIndex < history.length - 1}
+          currentTemplate={templateId}
+          onTemplateChange={(newTemplateId) => setTemplateId(newTemplateId)}
+        >
+          {/* Template Preview in Canva Mode */}
+          <iframe
+            key={`canva-${templateId}-${viewMode}`}
+            src={getPreviewUrl()}
+            className="w-full h-full border-0"
+            title="Template Preview"
+          />
+        </CanvaEditorLayout>
+      ) : (
+        /* Classic Editor */
+        <div className="flex-1 flex relative">
         {/* Sidebar Toggle Button */}
         <button
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
@@ -2435,6 +2472,8 @@ export default function SiteEditorPage() {
             </div>
           </div>
         </div>
+      )}
+      </div>
       )}
 
     </div>
