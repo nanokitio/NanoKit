@@ -12,12 +12,17 @@ export function useInlineEdit() {
     // Check URL params for edit mode
     const params = new URLSearchParams(window.location.search)
     const editParam = params.get('edit')
+    const previewParam = params.get('preview')
     
-    const editMode = inIframe && editParam === '1'
+    // Enable edit mode if:
+    // 1. We're in an iframe AND
+    // 2. Either edit=1 OR preview=1 (both indicate we're in the editor)
+    const editMode = inIframe && (editParam === '1' || previewParam === '1')
     
     console.log('🔍 Inline Edit Debug:', {
       inIframe,
       editParam,
+      previewParam,
       editMode,
       url: window.location.href
     })
