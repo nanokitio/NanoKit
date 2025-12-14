@@ -158,22 +158,25 @@ export function EditorTour({ steps = DEFAULT_TOUR_STEPS, onComplete, onSkip }: E
         }}
       />
 
-      {/* Tooltip */}
+      {/* Tooltip - Fixed at bottom on mobile, positioned on desktop */}
       <div
         ref={tooltipRef}
+        className="fixed md:absolute left-4 right-4 md:left-auto md:right-auto bottom-4 md:bottom-auto"
         style={{
-          position: 'absolute',
-          top: tooltipPosition.top,
-          left: tooltipPosition.left,
-          width: '350px',
+          ...(typeof window !== 'undefined' && window.innerWidth >= 768 ? {
+            top: tooltipPosition.top,
+            left: tooltipPosition.left,
+            width: '350px',
+          } : {}),
           backgroundColor: '#1f2937',
           color: 'white',
-          padding: '24px',
-          borderRadius: '12px',
+          padding: '20px',
+          borderRadius: '16px',
           boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
           zIndex: 10000,
           transition: 'all 0.3s ease',
-          border: '2px solid #3b82f6'
+          border: '2px solid #3b82f6',
+          maxWidth: '100%'
         }}
       >
         <button

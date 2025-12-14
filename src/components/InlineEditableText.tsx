@@ -77,10 +77,21 @@ export function InlineEditableText({
   const [showFontSizeDropdown, setShowFontSizeDropdown] = useState(false)
   const [showFontFamilyDropdown, setShowFontFamilyDropdown] = useState(false)
   const [showColorPicker, setShowColorPicker] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const toolbarRef = useRef<HTMLDivElement>(null)
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   // Sync with external value
   useEffect(() => {
@@ -89,18 +100,22 @@ export function InlineEditableText({
     }
   }, [value, isEditing])
 
-  // Position toolbar BELOW the element always
+  // Position toolbar - fixed at bottom for mobile, below text for desktop
   useEffect(() => {
     if (isEditing && containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect()
-      // Always position toolbar below the text with 15px gap
-      const toolbarTop = rect.bottom + 15
-      setToolbarPosition({
-        top: toolbarTop,
-        left: Math.max(10, Math.min(rect.left + rect.width / 2 - 250, window.innerWidth - 520))
-      })
+      if (isMobile) {
+        // On mobile, toolbar is fixed at bottom - no position needed
+        setToolbarPosition({ top: 0, left: 0 })
+      } else {
+        const rect = containerRef.current.getBoundingClientRect()
+        const toolbarTop = rect.bottom + 15
+        setToolbarPosition({
+          top: toolbarTop,
+          left: Math.max(10, Math.min(rect.left + rect.width / 2 - 250, window.innerWidth - 520))
+        })
+      }
     }
-  }, [isEditing])
+  }, [isEditing, isMobile])
 
   // Focus input when editing starts
   useEffect(() => {
@@ -184,16 +199,29 @@ export function InlineEditableText({
       {isEditing && (
         <div
           ref={toolbarRef}
-          className="fixed z-[99999] rounded-xl shadow-2xl p-2 flex items-center gap-1 backdrop-blur-sm"
+          className={`fixed z-[99999] shadow-2xl backdrop-blur-sm ${
+            isMobile 
+              ? 'bottom-0 left-0 right-0 rounded-t-2xl p-3 pb-6' 
+              : 'rounded-xl p-2'
+          }`}
           style={{
-            top: Math.max(10, toolbarPosition.top),
-            left: Math.max(10, Math.min(toolbarPosition.left, window.innerWidth - 520)),
+            ...(isMobile ? {} : {
+              top: Math.max(10, toolbarPosition.top),
+              left: Math.max(10, Math.min(toolbarPosition.left, window.innerWidth - 520)),
+            }),
             backgroundColor: 'rgba(15, 23, 42, 0.98)',
-            border: '2px solid rgba(100, 116, 139, 0.5)',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.1)',
+            border: isMobile ? 'none' : '2px solid rgba(100, 116, 139, 0.5)',
+            borderTop: isMobile ? '2px solid rgba(100, 116, 139, 0.5)' : undefined,
+            boxShadow: isMobile 
+              ? '0 -10px 40px rgba(0, 0, 0, 0.5)' 
+              : '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.1)',
           }}
           onMouseDown={(e) => e.preventDefault()}
+          onTouchStart={(e) => e.stopPropagation()}
         >
+          {/* Mobile scroll container */}
+          <div className={`flex items-center gap-1 ${isMobile ? 'overflow-x-auto pb-2 scrollbar-hide' : ''}`}>
+        
           {/* Font Family */}
           <div className="relative">
             <button
@@ -250,31 +278,31 @@ export function InlineEditableText({
           <div className="w-px h-6 bg-slate-600 mx-1" />
 
           {/* Bold */}
-          <button onClick={toggleBold} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.fontWeight === 'bold' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Bold">
-            <Bold size={16} />
+          <button onClick={toggleBold} className={`${isMobile ? 'p-2.5' : 'p-1.5'} rounded hover:bg-slate-700 ${textStyles.fontWeight === 'bold' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Bold">
+            <Bold size={isMobile ? 20 : 16} />
           </button>
 
           {/* Italic */}
-          <button onClick={toggleItalic} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.fontStyle === 'italic' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Italic">
-            <Italic size={16} />
+          <button onClick={toggleItalic} className={`${isMobile ? 'p-2.5' : 'p-1.5'} rounded hover:bg-slate-700 ${textStyles.fontStyle === 'italic' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Italic">
+            <Italic size={isMobile ? 20 : 16} />
           </button>
 
           {/* Underline */}
-          <button onClick={toggleUnderline} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.textDecoration === 'underline' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Underline">
-            <Underline size={16} />
+          <button onClick={toggleUnderline} className={`${isMobile ? 'p-2.5' : 'p-1.5'} rounded hover:bg-slate-700 ${textStyles.textDecoration === 'underline' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Underline">
+            <Underline size={isMobile ? 20 : 16} />
           </button>
 
           <div className="w-px h-6 bg-slate-600 mx-1" />
 
           {/* Alignment */}
-          <button onClick={() => setAlignment('left')} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.textAlign === 'left' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Left">
-            <AlignLeft size={16} />
+          <button onClick={() => setAlignment('left')} className={`${isMobile ? 'p-2.5' : 'p-1.5'} rounded hover:bg-slate-700 ${textStyles.textAlign === 'left' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Left">
+            <AlignLeft size={isMobile ? 20 : 16} />
           </button>
-          <button onClick={() => setAlignment('center')} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.textAlign === 'center' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Center">
-            <AlignCenter size={16} />
+          <button onClick={() => setAlignment('center')} className={`${isMobile ? 'p-2.5' : 'p-1.5'} rounded hover:bg-slate-700 ${textStyles.textAlign === 'center' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Center">
+            <AlignCenter size={isMobile ? 20 : 16} />
           </button>
-          <button onClick={() => setAlignment('right')} className={`p-1.5 rounded hover:bg-slate-700 ${textStyles.textAlign === 'right' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Right">
-            <AlignRight size={16} />
+          <button onClick={() => setAlignment('right')} className={`${isMobile ? 'p-2.5' : 'p-1.5'} rounded hover:bg-slate-700 ${textStyles.textAlign === 'right' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Right">
+            <AlignRight size={isMobile ? 20 : 16} />
           </button>
 
           <div className="w-px h-6 bg-slate-600 mx-1" />
@@ -391,12 +419,13 @@ export function InlineEditableText({
           <div className="w-px h-6 bg-slate-600 mx-1" />
 
           {/* Save/Cancel */}
-          <button onClick={handleSave} className="p-1.5 rounded hover:bg-green-600 text-green-400 hover:text-white" title="Save (Enter)">
-            <Check size={16} />
+          <button onClick={handleSave} className={`p-1.5 rounded hover:bg-green-600 text-green-400 hover:text-white ${isMobile ? 'p-2.5' : ''}`} title="Save (Enter)">
+            <Check size={isMobile ? 20 : 16} />
           </button>
-          <button onClick={handleCancel} className="p-1.5 rounded hover:bg-red-600 text-red-400 hover:text-white" title="Cancel (Esc)">
-            <X size={16} />
+          <button onClick={handleCancel} className={`p-1.5 rounded hover:bg-red-600 text-red-400 hover:text-white ${isMobile ? 'p-2.5' : ''}`} title="Cancel (Esc)">
+            <X size={isMobile ? 20 : 16} />
           </button>
+          </div>
         </div>
       )}
 
