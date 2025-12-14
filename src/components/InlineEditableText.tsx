@@ -184,10 +184,13 @@ export function InlineEditableText({
       {isEditing && (
         <div
           ref={toolbarRef}
-          className="fixed z-[10000] bg-slate-900 border border-slate-600 rounded-lg shadow-2xl p-2 flex items-center gap-1"
+          className="fixed z-[99999] rounded-xl shadow-2xl p-2 flex items-center gap-1 backdrop-blur-sm"
           style={{
             top: Math.max(10, toolbarPosition.top),
-            left: Math.max(10, Math.min(toolbarPosition.left, window.innerWidth - 370)),
+            left: Math.max(10, Math.min(toolbarPosition.left, window.innerWidth - 520)),
+            backgroundColor: 'rgba(15, 23, 42, 0.98)',
+            border: '2px solid rgba(100, 116, 139, 0.5)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.1)',
           }}
           onMouseDown={(e) => e.preventDefault()}
         >
