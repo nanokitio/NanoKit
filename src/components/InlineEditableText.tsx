@@ -89,15 +89,15 @@ export function InlineEditableText({
     }
   }, [value, isEditing])
 
-  // Position toolbar above the element (with more space)
+  // Position toolbar BELOW the element always
   useEffect(() => {
     if (isEditing && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect()
-      // Position toolbar 70px above the element, or at top of screen if not enough space
-      const toolbarTop = Math.max(10, rect.top - 70)
+      // Always position toolbar below the text with 15px gap
+      const toolbarTop = rect.bottom + 15
       setToolbarPosition({
         top: toolbarTop,
-        left: Math.max(10, rect.left + rect.width / 2 - 200)
+        left: Math.max(10, Math.min(rect.left + rect.width / 2 - 250, window.innerWidth - 520))
       })
     }
   }, [isEditing])
@@ -276,7 +276,7 @@ export function InlineEditableText({
 
           <div className="w-px h-6 bg-slate-600 mx-1" />
 
-          {/* Color Picker */}
+          {/* Color Picker - Spectrum/Prisma style */}
           <div className="relative">
             <button
               onClick={() => { setShowColorPicker(!showColorPicker); setShowFontSizeDropdown(false); setShowFontFamilyDropdown(false) }}
@@ -285,32 +285,60 @@ export function InlineEditableText({
             >
               <Palette size={16} />
               <div 
-                className="w-3 h-3 rounded-full border border-slate-500" 
+                className="w-4 h-4 rounded border border-slate-500" 
                 style={{ backgroundColor: textStyles.color || '#ffffff' }}
               />
             </button>
             {showColorPicker && (
-              <div className="absolute top-full left-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl p-2 z-20">
-                <div className="grid grid-cols-5 gap-1 mb-2">
-                  {PRESET_COLORS.map(color => (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-800 border border-slate-600 rounded-lg shadow-2xl p-3 z-[10001]" style={{ minWidth: '220px' }}>
+                {/* Spectrum Color Picker */}
+                <div className="mb-3">
+                  <input
+                    type="color"
+                    value={textStyles.color || '#ffffff'}
+                    onChange={(e) => updateStyle('color', e.target.value)}
+                    className="w-full h-32 cursor-pointer rounded-lg border-0"
+                    style={{ 
+                      padding: 0,
+                      background: 'transparent'
+                    }}
+                    title="Pick any color"
+                  />
+                </div>
+                
+                {/* Quick Colors Row */}
+                <div className="flex gap-1 justify-center mb-2">
+                  {['#ffffff', '#000000', '#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899'].map(color => (
                     <button
                       key={color}
                       onClick={() => setColor(color)}
-                      className={`w-6 h-6 rounded-full border-2 hover:scale-110 transition-transform ${
-                        textStyles.color === color ? 'border-white' : 'border-transparent'
+                      className={`w-5 h-5 rounded-full border hover:scale-110 transition-transform ${
+                        textStyles.color === color ? 'border-white border-2' : 'border-slate-500'
                       }`}
                       style={{ backgroundColor: color }}
                       title={color}
                     />
                   ))}
                 </div>
-                <input
-                  type="color"
-                  value={textStyles.color || '#ffffff'}
-                  onChange={(e) => setColor(e.target.value)}
-                  className="w-full h-8 cursor-pointer rounded"
-                  title="Custom color"
-                />
+                
+                {/* Current Color Display */}
+                <div className="flex items-center gap-2 bg-slate-700 rounded px-2 py-1">
+                  <div 
+                    className="w-6 h-6 rounded border border-slate-500" 
+                    style={{ backgroundColor: textStyles.color || '#ffffff' }}
+                  />
+                  <input
+                    type="text"
+                    value={textStyles.color || '#ffffff'}
+                    onChange={(e) => {
+                      if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
+                        setColor(e.target.value)
+                      }
+                    }}
+                    className="bg-transparent text-white text-sm font-mono flex-1 outline-none"
+                    placeholder="#ffffff"
+                  />
+                </div>
               </div>
             )}
           </div>
