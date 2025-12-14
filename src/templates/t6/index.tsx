@@ -73,20 +73,43 @@ export function Template6({ brand }: Template6Props) {
     }
   };
 
-  const symbols = ['◆', '▲', '●', '★', '◇', '▼'];
+  const symbols = ['🍒', '💎', '7️⃣', '🎰', '⭐', '🏆'];
+  
+  // Slot machine display state
+  const [slotSymbols, setSlotSymbols] = useState<string[][]>([
+    ['🍒', '💎', '7️⃣'],
+    ['🎰', '⭐', '🏆'],
+    ['💎', '7️⃣', '🍒']
+  ]);
 
   const handleSpin = () => {
     if (isSpinning) return;
     
     setIsSpinning(true);
-    setSpinCount(prev => prev + 1);
+    const newSpinCount = spinCount + 1;
+    setSpinCount(newSpinCount);
     
-    // Animate the spin for 2 seconds
+    // Animate symbols during spin
+    const spinInterval = setInterval(() => {
+      setSlotSymbols([
+        [symbols[Math.floor(Math.random() * symbols.length)], symbols[Math.floor(Math.random() * symbols.length)], symbols[Math.floor(Math.random() * symbols.length)]],
+        [symbols[Math.floor(Math.random() * symbols.length)], symbols[Math.floor(Math.random() * symbols.length)], symbols[Math.floor(Math.random() * symbols.length)]],
+        [symbols[Math.floor(Math.random() * symbols.length)], symbols[Math.floor(Math.random() * symbols.length)], symbols[Math.floor(Math.random() * symbols.length)]]
+      ]);
+    }, 100);
+    
+    // Stop after 2 seconds
     setTimeout(() => {
+      clearInterval(spinInterval);
       setIsSpinning(false);
       
-      // Show win modal on second attempt
-      if (spinCount + 1 === 2) {
+      // Show winning combination on 2nd spin
+      if (newSpinCount >= 2) {
+        setSlotSymbols([
+          ['🏆', '🏆', '🏆'],
+          ['🏆', '🏆', '🏆'],
+          ['🏆', '🏆', '🏆']
+        ]);
         setTimeout(() => {
           setShowWinModal(true);
         }, 500);
@@ -206,23 +229,20 @@ export function Template6({ brand }: Template6Props) {
           <div className="slot-game bg-black/80 backdrop-blur-sm rounded-xl p-6 border border-cyan-400/30">
             {/* Synth Slot Machine Lines */}
             <div className="slot-lines space-y-3 mb-6">
-              {[0, 1, 2].map((lineIndex) => (
+              {slotSymbols.map((row, lineIndex) => (
                 <div key={lineIndex} className="rollover-line flex justify-center gap-3 p-3 bg-gradient-to-r from-purple-900/20 to-cyan-900/20 rounded-lg border border-pink-400/30">
-                  {[0, 1, 2].map((symbolIndex) => {
-                    const currentSymbol = spinCount >= 2 ? '★' : symbols[Math.floor(Math.random() * symbols.length)];
-                    return (
-                      <div
-                        key={symbolIndex}
-                        className={`rollover-symbol w-20 h-20 bg-gradient-to-br from-cyan-900/50 to-purple-900/50 border-2 border-cyan-400/60 rounded-lg flex items-center justify-center backdrop-blur-sm transition-all duration-300 synth-symbol ${
-                          isSpinning ? 'animate-synth-spin' : 'animate-symbol-glow'
-                        }`}
-                      >
-                        <div className="rollover-icon text-2xl text-cyan-300 font-bold">
-                          {isSpinning ? symbols[Math.floor(Math.random() * symbols.length)] : currentSymbol}
-                        </div>
+                  {row.map((symbol, symbolIndex) => (
+                    <div
+                      key={symbolIndex}
+                      className={`rollover-symbol w-20 h-20 bg-gradient-to-br from-cyan-900/50 to-purple-900/50 border-2 border-cyan-400/60 rounded-lg flex items-center justify-center backdrop-blur-sm transition-all duration-300 synth-symbol ${
+                        isSpinning ? 'animate-synth-spin' : 'animate-symbol-glow'
+                      }`}
+                    >
+                      <div className="rollover-icon text-3xl">
+                        {symbol}
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
@@ -236,7 +256,7 @@ export function Template6({ brand }: Template6Props) {
               }`}
             >
               <span className="tracking-widest">
-                {isSpinning ? '◆ PROCESSING ◆' : '▲ EXECUTE SPIN ▲'}
+                {isSpinning ? '🎰 SPINNING... 🎰' : '🎲 SPIN TO WIN! 🎲'}
               </span>
             </button>
           </div>
