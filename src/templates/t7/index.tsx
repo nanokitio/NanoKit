@@ -3,7 +3,14 @@
 import React, { useState, useEffect } from 'react'
 import { BrandConfig, TemplateProps } from '../../lib/types'
 import { generateCSSVariables } from '@/lib/colors'
-import { InlineEditableText } from '@/components/InlineEditableText'
+import { InlineEditableText, TextStyles } from '@/components/InlineEditableText'
+
+interface EditableTextItem {
+  id: string
+  text: string
+  position: 'top' | 'center' | 'bottom'
+  styles: TextStyles
+}
 
 export function Template7({ brand }: TemplateProps) {
   const { brandName, logoUrl, colors, copy } = brand
@@ -16,6 +23,11 @@ export function Template7({ brand }: TemplateProps) {
   const [showJackpot, setShowJackpot] = useState(false)
   const [reels, setReels] = useState(['💎', '🍑', '🍑', '🍑', '🍑', '🔔', '⭐', '⭐', '🍇'])
   const [loading, setLoading] = useState(true)
+  
+  // Additional editable text items
+  const [additionalTexts, setAdditionalTexts] = useState<EditableTextItem[]>([])
+  const [headlinePosition, setHeadlinePosition] = useState<'top' | 'center' | 'bottom'>('top')
+  const [brandPosition, setBrandPosition] = useState<'top' | 'center' | 'bottom'>('top')
 
   const symbols = ['🍑', '🍋', '🔔', '💎', '⭐', '🍀', '💰', '🍇']
 
@@ -41,6 +53,55 @@ export function Template7({ brand }: TemplateProps) {
       window.parent.postMessage({ type: 'CONTENT_CHANGE', field, value }, '*');
     }
   };
+
+  // Duplicate headline
+  const duplicateHeadline = () => {
+    const newText: EditableTextItem = {
+      id: `text-${Date.now()}`,
+      text: headlineText,
+      position: 'center',
+      styles: { fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#22d3ee' }
+    }
+    setAdditionalTexts([...additionalTexts, newText])
+  }
+
+  // Update additional text
+  const updateAdditionalText = (id: string, text: string) => {
+    setAdditionalTexts(additionalTexts.map(t => t.id === id ? { ...t, text } : t))
+  }
+
+  // Update additional text position
+  const updateAdditionalTextPosition = (id: string, position: 'top' | 'center' | 'bottom') => {
+    setAdditionalTexts(additionalTexts.map(t => t.id === id ? { ...t, position } : t))
+  }
+
+  // Duplicate additional text
+  const duplicateAdditionalText = (id: string) => {
+    const original = additionalTexts.find(t => t.id === id)
+    if (original) {
+      const newText: EditableTextItem = {
+        id: `text-${Date.now()}`,
+        text: original.text,
+        position: original.position === 'top' ? 'center' : 'bottom',
+        styles: { ...original.styles }
+      }
+      setAdditionalTexts([...additionalTexts, newText])
+    }
+  }
+
+  // Delete additional text
+  const deleteAdditionalText = (id: string) => {
+    setAdditionalTexts(additionalTexts.filter(t => t.id !== id))
+  }
+
+  // Get position style
+  const getPositionStyle = (position: 'top' | 'center' | 'bottom'): React.CSSProperties => {
+    switch (position) {
+      case 'top': return { top: '20px' }
+      case 'center': return { top: '50%', transform: 'translateX(-50%) translateY(-50%)' }
+      case 'bottom': return { bottom: '100px' }
+    }
+  }
 
   const spinReels = () => {
     if (spinning) return
@@ -219,9 +280,11 @@ export function Template7({ brand }: TemplateProps) {
           <InlineEditableText
             value={brandName || 'BONANZA BILLION'}
             onChange={(val) => { notifyChange('brandName', val); }}
+            onPositionChange={setBrandPosition}
             className="font-black text-yellow-400"
             placeholder="Brand name..."
-            initialStyles={{ fontSize: 48, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+            initialStyles={{ fontSize: 48, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
+            showDuplicateButton={false}
           />
           <span className="text-6xl">💎</span>
         </h1>
@@ -230,13 +293,34 @@ export function Template7({ brand }: TemplateProps) {
           <InlineEditableText
             value={headlineText}
             onChange={(val) => { setHeadlineText(val); notifyChange('headline', val); }}
+            onDuplicate={duplicateHeadline}
+            onPositionChange={setHeadlinePosition}
             className="font-bold text-cyan-300"
             placeholder="Enter headline..."
-            initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+            initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#22d3ee' }}
           />
           <span className="text-3xl">⭐</span>
         </div>
       </div>
+
+      {/* Additional Texts - Duplicated items */}
+      {additionalTexts.map((item) => (
+        <div 
+          key={item.id}
+          className="absolute left-1/2 transform -translate-x-1/2 z-20"
+          style={getPositionStyle(item.position)}
+        >
+          <InlineEditableText
+            value={item.text}
+            onChange={(val) => updateAdditionalText(item.id, val)}
+            onDuplicate={() => duplicateAdditionalText(item.id)}
+            onPositionChange={(pos) => updateAdditionalTextPosition(item.id, pos)}
+            className="font-bold"
+            placeholder="Enter text..."
+            initialStyles={item.styles}
+          />
+        </div>
+      ))}
 
       {/* Main Game Area */}
       <main className="relative z-10 px-4 py-8 flex justify-center gap-8 max-w-6xl mx-auto">

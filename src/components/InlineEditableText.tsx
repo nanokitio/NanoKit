@@ -1,16 +1,20 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Type, Check, X, ChevronDown } from 'lucide-react'
+import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Type, Check, X, ChevronDown, Copy, ArrowUp, ArrowDown, Minus, Palette } from 'lucide-react'
 
 interface InlineEditableTextProps {
   value: string
   onChange: (value: string) => void
   onStyleChange?: (styles: TextStyles) => void
+  onDuplicate?: () => void
+  onPositionChange?: (position: 'top' | 'center' | 'bottom') => void
   className?: string
   placeholder?: string
   style?: React.CSSProperties
   initialStyles?: TextStyles
+  showPositionControls?: boolean
+  showDuplicateButton?: boolean
 }
 
 export interface TextStyles {
@@ -20,7 +24,14 @@ export interface TextStyles {
   fontStyle: 'normal' | 'italic'
   textDecoration: 'none' | 'underline'
   textAlign: 'left' | 'center' | 'right'
+  color?: string
 }
+
+const PRESET_COLORS = [
+  '#ffffff', '#000000', '#ef4444', '#f97316', '#eab308', 
+  '#22c55e', '#06b6d4', '#3b82f6', '#8b5cf6', '#ec4899',
+  '#fbbf24', '#a3e635', '#2dd4bf', '#60a5fa', '#c084fc'
+]
 
 const FONT_SIZES = [12, 14, 16, 18, 20, 24, 28, 32, 36, 42, 48, 56, 64, 72, 96]
 
@@ -42,10 +53,14 @@ export function InlineEditableText({
   value,
   onChange,
   onStyleChange,
+  onDuplicate,
+  onPositionChange,
   className = '',
   placeholder = 'Click to edit...',
   style,
-  initialStyles
+  initialStyles,
+  showPositionControls = true,
+  showDuplicateButton = true
 }: InlineEditableTextProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [localValue, setLocalValue] = useState(value)
@@ -55,11 +70,13 @@ export function InlineEditableText({
     fontWeight: 'normal',
     fontStyle: 'normal',
     textDecoration: 'none',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: '#ffffff'
   })
   const [toolbarPosition, setToolbarPosition] = useState({ top: 0, left: 0 })
   const [showFontSizeDropdown, setShowFontSizeDropdown] = useState(false)
   const [showFontFamilyDropdown, setShowFontFamilyDropdown] = useState(false)
+  const [showColorPicker, setShowColorPicker] = useState(false)
   
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -105,12 +122,16 @@ export function InlineEditableText({
   const handleSave = () => {
     setIsEditing(false)
     setShowFontSizeDropdown(false)
+    setShowFontFamilyDropdown(false)
+    setShowColorPicker(false)
     onChange(localValue)
   }
 
   const handleCancel = () => {
     setIsEditing(false)
     setShowFontSizeDropdown(false)
+    setShowFontFamilyDropdown(false)
+    setShowColorPicker(false)
     setLocalValue(value)
   }
 
@@ -136,6 +157,13 @@ export function InlineEditableText({
   const setAlignment = (align: 'left' | 'center' | 'right') => updateStyle('textAlign', align)
   const setFontSize = (size: number) => { updateStyle('fontSize', size); setShowFontSizeDropdown(false) }
   const setFontFamily = (font: string) => { updateStyle('fontFamily', font); setShowFontFamilyDropdown(false) }
+  const setColor = (color: string) => { updateStyle('color', color); setShowColorPicker(false) }
+  
+  const closeAllDropdowns = () => {
+    setShowFontSizeDropdown(false)
+    setShowFontFamilyDropdown(false)
+    setShowColorPicker(false)
+  }
   
   const currentFontName = FONTS.find(f => f.value === textStyles.fontFamily)?.name || 'Default'
 
@@ -145,6 +173,7 @@ export function InlineEditableText({
     fontFamily: textStyles.fontFamily || 'inherit',
     fontWeight: textStyles.fontWeight,
     fontStyle: textStyles.fontStyle,
+    color: textStyles.color || '#ffffff',
     textDecoration: textStyles.textDecoration,
     textAlign: textStyles.textAlign,
   }
@@ -247,6 +276,89 @@ export function InlineEditableText({
 
           <div className="w-px h-6 bg-slate-600 mx-1" />
 
+          {/* Color Picker */}
+          <div className="relative">
+            <button
+              onClick={() => { setShowColorPicker(!showColorPicker); setShowFontSizeDropdown(false); setShowFontFamilyDropdown(false) }}
+              className="p-1.5 rounded hover:bg-slate-700 text-slate-300 flex items-center gap-1"
+              title="Text Color"
+            >
+              <Palette size={16} />
+              <div 
+                className="w-3 h-3 rounded-full border border-slate-500" 
+                style={{ backgroundColor: textStyles.color || '#ffffff' }}
+              />
+            </button>
+            {showColorPicker && (
+              <div className="absolute top-full left-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl p-2 z-20">
+                <div className="grid grid-cols-5 gap-1 mb-2">
+                  {PRESET_COLORS.map(color => (
+                    <button
+                      key={color}
+                      onClick={() => setColor(color)}
+                      className={`w-6 h-6 rounded-full border-2 hover:scale-110 transition-transform ${
+                        textStyles.color === color ? 'border-white' : 'border-transparent'
+                      }`}
+                      style={{ backgroundColor: color }}
+                      title={color}
+                    />
+                  ))}
+                </div>
+                <input
+                  type="color"
+                  value={textStyles.color || '#ffffff'}
+                  onChange={(e) => setColor(e.target.value)}
+                  className="w-full h-8 cursor-pointer rounded"
+                  title="Custom color"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Position Controls */}
+          {showPositionControls && onPositionChange && (
+            <>
+              <div className="w-px h-6 bg-slate-600 mx-1" />
+              <button 
+                onClick={() => onPositionChange('top')} 
+                className="p-1.5 rounded hover:bg-slate-700 text-slate-300" 
+                title="Move to top"
+              >
+                <ArrowUp size={16} />
+              </button>
+              <button 
+                onClick={() => onPositionChange('center')} 
+                className="p-1.5 rounded hover:bg-slate-700 text-slate-300" 
+                title="Move to center"
+              >
+                <Minus size={16} />
+              </button>
+              <button 
+                onClick={() => onPositionChange('bottom')} 
+                className="p-1.5 rounded hover:bg-slate-700 text-slate-300" 
+                title="Move to bottom"
+              >
+                <ArrowDown size={16} />
+              </button>
+            </>
+          )}
+
+          {/* Duplicate Button */}
+          {showDuplicateButton && onDuplicate && (
+            <>
+              <div className="w-px h-6 bg-slate-600 mx-1" />
+              <button 
+                onClick={onDuplicate} 
+                className="p-1.5 rounded hover:bg-purple-600 text-purple-400 hover:text-white" 
+                title="Duplicate text"
+              >
+                <Copy size={16} />
+              </button>
+            </>
+          )}
+
+          <div className="w-px h-6 bg-slate-600 mx-1" />
+
           {/* Save/Cancel */}
           <button onClick={handleSave} className="p-1.5 rounded hover:bg-green-600 text-green-400 hover:text-white" title="Save (Enter)">
             <Check size={16} />
@@ -273,7 +385,7 @@ export function InlineEditableText({
             }
             // Small delay to allow toolbar clicks
             setTimeout(() => {
-              if (!showFontSizeDropdown && !showFontFamilyDropdown) {
+              if (!showFontSizeDropdown && !showFontFamilyDropdown && !showColorPicker) {
                 handleSave()
               }
             }, 300)
