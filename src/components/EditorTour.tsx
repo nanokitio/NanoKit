@@ -15,22 +15,22 @@ interface TourStep {
 export const DEFAULT_TOUR_STEPS: TourStep[] = [
   {
     target: '[data-editable="true"]',
-    title: '✏️ Textos Editables',
-    content: 'Los textos con borde punteado son editables. Haz clic en cualquiera para cambiar el texto, color, fuente y más.',
+    title: '✏️ Editable Text',
+    content: 'Text with a dashed border is editable. Click on any of them to change the text, color, font, and more.',
     position: 'bottom',
     icon: '✏️'
   },
   {
     target: '.editable-text',
-    title: '🎨 Personaliza Todo',
-    content: 'Al hacer clic en un texto, aparecerá una barra con opciones: fuente, tamaño, negrita, color y alineación.',
+    title: '🎨 Customize Everything',
+    content: 'When you click on text, a toolbar will appear with options: font, size, bold, color, and alignment.',
     position: 'bottom',
     icon: '🎨'
   },
   {
     target: 'iframe',
-    title: '👀 Vista Previa en Vivo',
-    content: 'Aquí ves tu template en tiempo real. Todos los cambios se reflejan instantáneamente.',
+    title: '👀 Live Preview',
+    content: 'Here you see your template in real-time. All changes are reflected instantly.',
     position: 'left',
     icon: '👀'
   }
@@ -243,7 +243,7 @@ export function EditorTour({ steps = DEFAULT_TOUR_STEPS, onComplete, onSkip }: E
                 }}
               >
                 <ArrowLeft className="w-4 h-4" />
-                Anterior
+                Previous
               </button>
             )}
             
@@ -263,7 +263,7 @@ export function EditorTour({ steps = DEFAULT_TOUR_STEPS, onComplete, onSkip }: E
                 fontWeight: 600
               }}
             >
-              {currentStep === tourSteps.length - 1 ? '¡Entendido!' : 'Siguiente'}
+              {currentStep === tourSteps.length - 1 ? 'Got it!' : 'Next'}
               {currentStep < tourSteps.length - 1 && <ArrowRight className="w-4 h-4" />}
             </button>
           </div>

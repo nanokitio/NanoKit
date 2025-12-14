@@ -12,85 +12,85 @@ interface FAQ {
 const FAQS: FAQ[] = [
   // Editing
   {
-    question: '¿Cómo edito un texto?',
-    answer: 'Haz clic directamente sobre cualquier texto con borde punteado. Se abrirá un editor con opciones de fuente, tamaño, color y más.',
+    question: 'How do I edit text?',
+    answer: 'Click directly on any text with a dashed border. An editor will open with font, size, color, and more options.',
     category: 'editing'
   },
   {
-    question: '¿Cómo cambio el color del texto?',
-    answer: 'Al editar un texto, haz clic en el ícono de paleta 🎨 en la barra de herramientas. Puedes elegir colores predefinidos o seleccionar cualquier color del espectro.',
+    question: 'How do I change text color?',
+    answer: 'When editing text, click on the palette icon 🎨 in the toolbar. You can choose preset colors or select any color from the spectrum.',
     category: 'editing'
   },
   {
-    question: '¿Cómo cambio la fuente?',
-    answer: 'En la barra de edición, haz clic en el nombre de la fuente (ej: "Default") para ver todas las fuentes disponibles. Selecciona la que más te guste.',
+    question: 'How do I change the font?',
+    answer: 'In the editing bar, click on the font name (e.g., "Default") to see all available fonts. Select the one you like best.',
     category: 'editing'
   },
   {
-    question: '¿Cómo cambio el tamaño del texto?',
-    answer: 'En la barra de edición, haz clic en el número del tamaño (ej: "48") para ver todos los tamaños disponibles.',
+    question: 'How do I change text size?',
+    answer: 'In the editing bar, click on the size number (e.g., "48") to see all available sizes.',
     category: 'editing'
   },
   {
-    question: '¿Cómo guardo mis cambios?',
-    answer: 'Los cambios se guardan automáticamente. También puedes hacer clic en ✓ (check verde) o presionar Enter para confirmar.',
+    question: 'How do I save my changes?',
+    answer: 'Changes are saved automatically. You can also click ✓ (green check) or press Enter to confirm.',
     category: 'editing'
   },
   {
-    question: '¿Cómo cancelo una edición?',
-    answer: 'Haz clic en ✗ (X roja) o presiona Escape para cancelar y volver al texto original.',
+    question: 'How do I cancel an edit?',
+    answer: 'Click ✗ (red X) or press Escape to cancel and return to the original text.',
     category: 'editing'
   },
   // Templates
   {
-    question: '¿Cómo cambio de template?',
-    answer: 'En el panel izquierdo, busca la sección "Template" y selecciona el diseño que prefieras de la lista.',
+    question: 'How do I change templates?',
+    answer: 'In the left panel, find the "Template" section and select the design you prefer from the list.',
     category: 'templates'
   },
   {
-    question: '¿Qué es el Wheel Fortune?',
-    answer: 'Es un juego interactivo de ruleta de la fortuna. El usuario puede girar la rueda y ganar premios. Ideal para captar leads.',
+    question: 'What is the Fortune Wheel?',
+    answer: 'It\'s an interactive wheel of fortune game. Users can spin the wheel and win prizes. Ideal for lead capture.',
     category: 'templates'
   },
   {
-    question: '¿Qué es el Scratch Card?',
-    answer: 'Es un juego de raspa y gana. El usuario rasca las casillas para descubrir si ganó un premio. Muy efectivo para conversiones.',
+    question: 'What is the Scratch Card?',
+    answer: 'It\'s a scratch and win game. Users scratch the boxes to discover if they won a prize. Very effective for conversions.',
     category: 'templates'
   },
   // Colors
   {
-    question: '¿Cómo cambio los colores del template?',
-    answer: 'En el panel izquierdo, busca la sección "Colores". Puedes cambiar el color primario, secundario y de acento de todo el template.',
+    question: 'How do I change template colors?',
+    answer: 'In the left panel, find the "Colors" section. You can change the primary, secondary, and accent colors of the entire template.',
     category: 'colors'
   },
   {
-    question: '¿Puedo usar mis colores de marca?',
-    answer: 'Sí, usa el selector de color para ingresar el código hexadecimal exacto de tu marca (ej: #FF5500).',
+    question: 'Can I use my brand colors?',
+    answer: 'Yes, use the color picker to enter your brand\'s exact hexadecimal code (e.g., #FF5500).',
     category: 'colors'
   },
   // General
   {
-    question: '¿Cómo subo mi logo?',
-    answer: 'En el panel izquierdo, busca la sección de logo y haz clic para subir una imagen. Recomendamos formato PNG con fondo transparente.',
+    question: 'How do I upload my logo?',
+    answer: 'In the left panel, find the logo section and click to upload an image. We recommend PNG format with transparent background.',
     category: 'general'
   },
   {
-    question: '¿Cómo publico mi sitio?',
-    answer: 'Una vez satisfecho con tu diseño, haz clic en el botón "Publicar" en la parte superior. Tu sitio estará disponible inmediatamente.',
+    question: 'How do I publish my site?',
+    answer: 'Once satisfied with your design, click the "Publish" button at the top. Your site will be available immediately.',
     category: 'general'
   },
   {
-    question: '¿Puedo previsualizar en móvil?',
-    answer: 'Sí, usa los botones de vista (desktop/móvil) en la parte superior del editor para ver cómo se verá en diferentes dispositivos.',
+    question: 'Can I preview on mobile?',
+    answer: 'Yes, use the view buttons (desktop/mobile) at the top of the editor to see how it will look on different devices.',
     category: 'general'
   },
 ]
 
 const CATEGORIES = [
-  { id: 'all', label: 'Todas', icon: '📚' },
-  { id: 'editing', label: 'Edición de texto', icon: '✏️' },
+  { id: 'all', label: 'All', icon: '📚' },
+  { id: 'editing', label: 'Text Editing', icon: '✏️' },
   { id: 'templates', label: 'Templates', icon: '🎨' },
-  { id: 'colors', label: 'Colores', icon: '🌈' },
+  { id: 'colors', label: 'Colors', icon: '🌈' },
   { id: 'general', label: 'General', icon: '⚙️' },
 ]
 
@@ -114,7 +114,7 @@ export function EditorHelpBot() {
       <button
         onClick={() => setIsOpen(true)}
         className="fixed bottom-6 right-6 z-[9999] w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
-        title="¿Necesitas ayuda?"
+        title="Need help?"
       >
         <HelpCircle className="w-7 h-7 text-white" />
         <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse" />
@@ -139,8 +139,8 @@ export function EditorHelpBot() {
                     <MessageCircle className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-white font-bold text-lg">Centro de Ayuda</h2>
-                    <p className="text-white/70 text-sm">¿En qué puedo ayudarte?</p>
+                    <h2 className="text-white font-bold text-lg">Help Center</h2>
+                    <p className="text-white/70 text-sm">How can I help you?</p>
                   </div>
                 </div>
                 <button
@@ -157,7 +157,7 @@ export function EditorHelpBot() {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Buscar pregunta..."
+                  placeholder="Search questions..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-slate-800 text-white rounded-lg px-4 py-3 pl-10 outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-400"
@@ -190,8 +190,8 @@ export function EditorHelpBot() {
             <div className="overflow-y-auto max-h-[40vh] p-4 space-y-2">
               {filteredFaqs.length === 0 ? (
                 <div className="text-center py-8 text-slate-400">
-                  <p>No encontré respuestas para tu búsqueda.</p>
-                  <p className="text-sm mt-2">Intenta con otras palabras.</p>
+                  <p>No results found for your search.</p>
+                  <p className="text-sm mt-2">Try different keywords.</p>
                 </div>
               ) : (
                 filteredFaqs.map((faq, index) => (
@@ -225,7 +225,7 @@ export function EditorHelpBot() {
             {/* Footer */}
             <div className="p-4 border-t border-slate-700 bg-slate-800/50">
               <p className="text-slate-400 text-xs text-center">
-                💡 Tip: Los textos con <span className="text-cyan-400">borde punteado</span> son editables. ¡Solo haz clic!
+                💡 Tip: Text with a <span className="text-cyan-400">dashed border</span> is editable. Just click!
               </p>
             </div>
           </div>

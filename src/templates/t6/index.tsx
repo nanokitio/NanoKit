@@ -20,6 +20,13 @@ export function Template6({ brand }: Template6Props) {
   const [ctaText, setCtaText] = useState(brand.copy.cta || 'ENTER THE GRID');
   const [maxWinText, setMaxWinText] = useState('MAX WIN\n$5,000');
   const [minWinText, setMinWinText] = useState('MIN WIN\n$1,000');
+  
+  // Feature texts
+  const [feature1, setFeature1] = useState('INSTANT\nPAYOUTS');
+  const [feature2, setFeature2] = useState('WELCOME\nBONUS');
+  const [feature3, setFeature3] = useState('24/7\nSUPPORT');
+  const [playNowText, setPlayNowText] = useState('Play Now & Win!');
+  const [disclaimerText, setDisclaimerText] = useState('18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY');
 
   // Check if in edit mode (inside iframe with edit param)
   useEffect(() => {
@@ -211,15 +218,39 @@ export function Template6({ brand }: Template6Props) {
         <div className="features flex flex-wrap justify-center gap-6 mb-8">
           <div className="feature-item bg-gradient-to-br from-cyan-900/30 to-purple-900/30 backdrop-blur-sm border border-cyan-400/50 rounded-lg p-4 text-center min-w-[140px] synth-feature animate-feature-glow-1">
             <div className="text-2xl mb-2 text-cyan-400">◆</div>
-            <div className="text-cyan-300 font-mono text-sm tracking-wide">INSTANT<br />PAYOUTS</div>
+            <InlineEditableText
+              value={feature1}
+              onChange={(val) => { setFeature1(val); notifyChange('feature1', val); }}
+              className="text-cyan-300 font-mono text-sm tracking-wide whitespace-pre-line"
+              placeholder="Feature 1..."
+              initialStyles={{ fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#67e8f9' }}
+              showPositionControls={false}
+              showDuplicateButton={false}
+            />
           </div>
           <div className="feature-item bg-gradient-to-br from-pink-900/30 to-purple-900/30 backdrop-blur-sm border border-pink-400/50 rounded-lg p-4 text-center min-w-[140px] synth-feature animate-feature-glow-2">
             <div className="text-2xl mb-2 text-pink-400">▲</div>
-            <div className="text-pink-300 font-mono text-sm tracking-wide">WELCOME<br />BONUS</div>
+            <InlineEditableText
+              value={feature2}
+              onChange={(val) => { setFeature2(val); notifyChange('feature2', val); }}
+              className="text-pink-300 font-mono text-sm tracking-wide whitespace-pre-line"
+              placeholder="Feature 2..."
+              initialStyles={{ fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#f9a8d4' }}
+              showPositionControls={false}
+              showDuplicateButton={false}
+            />
           </div>
           <div className="feature-item bg-gradient-to-br from-yellow-900/30 to-orange-900/30 backdrop-blur-sm border border-yellow-400/50 rounded-lg p-4 text-center min-w-[140px] synth-feature animate-feature-glow-3">
             <div className="text-2xl mb-2 text-yellow-400">●</div>
-            <div className="text-yellow-300 font-mono text-sm tracking-wide">24/7<br />SUPPORT</div>
+            <InlineEditableText
+              value={feature3}
+              onChange={(val) => { setFeature3(val); notifyChange('feature3', val); }}
+              className="text-yellow-300 font-mono text-sm tracking-wide whitespace-pre-line"
+              placeholder="Feature 3..."
+              initialStyles={{ fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#fde047' }}
+              showPositionControls={false}
+              showDuplicateButton={false}
+            />
           </div>
         </div>
 
@@ -240,7 +271,17 @@ export function Template6({ brand }: Template6Props) {
               initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
             />
           </div>
-          <p className="text-cyan-200/60 text-sm mt-6 font-mono tracking-wide">18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY</p>
+          <div className="mt-6">
+            <InlineEditableText
+              value={disclaimerText}
+              onChange={(val) => { setDisclaimerText(val); notifyChange('disclaimer', val); }}
+              className="text-cyan-200/60 text-sm font-mono tracking-wide"
+              placeholder="Disclaimer..."
+              initialStyles={{ fontSize: 14, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#a5f3fc' }}
+              showPositionControls={false}
+              showDuplicateButton={false}
+            />
+          </div>
         </div>
       </div>
 
