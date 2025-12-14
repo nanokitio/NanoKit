@@ -19,13 +19,13 @@ export function Template18({ brand }: Template18Props) {
   };
   
   return (
-    <div className="w-full h-screen bg-gradient-to-br from-red-700 via-red-600 to-red-700 flex items-center justify-center relative overflow-hidden">
+    <div className="w-full min-h-screen bg-gradient-to-br from-red-700 via-red-600 to-red-700 flex items-center justify-center relative overflow-auto py-8">
       {/* Radial burst background effect */}
-      <div className="absolute inset-0 opacity-30" style={{
+      <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
         background: 'repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 3deg, rgba(139, 0, 0, 0.5) 3deg, rgba(139, 0, 0, 0.5) 6deg)'
       }} />
       
-      <div className="text-center text-white p-8 relative z-10">
+      <div className="text-center text-white p-4 sm:p-8 relative z-10 w-full max-w-lg mx-auto">
         <div className="bg-gradient-to-b from-yellow-500 via-yellow-400 to-yellow-500 rounded-2xl p-8 border-4 border-orange-500 shadow-2xl max-w-md mx-auto">
           <div className="bg-gradient-to-b from-red-700 via-red-600 to-red-700 rounded-xl p-6 border-2 border-yellow-400">
             <div className="mb-2">

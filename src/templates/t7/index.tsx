@@ -28,6 +28,14 @@ export function Template7({ brand }: TemplateProps) {
   const [additionalTexts, setAdditionalTexts] = useState<EditableTextItem[]>([])
   const [headlinePosition, setHeadlinePosition] = useState<'top' | 'center' | 'bottom'>('top')
   const [brandPosition, setBrandPosition] = useState<'top' | 'center' | 'bottom'>('top')
+  
+  // Game section editable texts
+  const [slotTitle, setSlotTitle] = useState('BONANZA BILLION')
+  const [slotSubtitle, setSlotSubtitle] = useState('SLOTS')
+  const [gameControlsTitle, setGameControlsTitle] = useState('GAME CONTROLS')
+  const [betText, setBetText] = useState('BET: $10')
+  const [balanceText, setBalanceText] = useState('BALANCE: $1,000')
+  const [spinButtonText, setSpinButtonText] = useState('SPIN TO WIN')
 
   const symbols = ['🍑', '🍋', '🔔', '💎', '⭐', '🍀', '💰', '🍇']
 
@@ -328,8 +336,24 @@ export function Template7({ brand }: TemplateProps) {
         {/* Slot Machine Container */}
         <div className="bg-gradient-to-b from-slate-800 to-slate-900 rounded-3xl p-6 shadow-2xl" style={{ borderWidth: '4px', borderStyle: 'solid', borderColor: colors.primary || '#fbbf24' }}>
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-black text-yellow-400 mb-1">BONANZA BILLION</h2>
-            <h3 className="text-xl font-bold text-yellow-400">SLOTS</h3>
+            <InlineEditableText
+              value={slotTitle}
+              onChange={(val) => { setSlotTitle(val); notifyChange('slotTitle', val); }}
+              className="text-2xl font-black text-yellow-400 mb-1"
+              placeholder="Slot title..."
+              initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
+              showPositionControls={false}
+              showDuplicateButton={false}
+            />
+            <InlineEditableText
+              value={slotSubtitle}
+              onChange={(val) => { setSlotSubtitle(val); notifyChange('slotSubtitle', val); }}
+              className="text-xl font-bold text-yellow-400"
+              placeholder="Subtitle..."
+              initialStyles={{ fontSize: 20, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
+              showPositionControls={false}
+              showDuplicateButton={false}
+            />
           </div>
 
           {/* 3x3 Slot Grid */}
@@ -349,17 +373,41 @@ export function Template7({ brand }: TemplateProps) {
         {/* Game Controls Panel */}
         <div className="bg-gradient-to-b from-slate-800 to-slate-900 rounded-3xl p-6 shadow-2xl min-w-[280px]" style={{ borderWidth: '4px', borderStyle: 'solid', borderColor: colors.primary || '#fbbf24' }}>
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-black text-yellow-400">GAME CONTROLS</h2>
+            <InlineEditableText
+              value={gameControlsTitle}
+              onChange={(val) => { setGameControlsTitle(val); notifyChange('gameControlsTitle', val); }}
+              className="text-2xl font-black text-yellow-400"
+              placeholder="Controls title..."
+              initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
+              showPositionControls={false}
+              showDuplicateButton={false}
+            />
           </div>
 
           {/* Bet Display */}
           <div className="bg-slate-700/80 rounded-xl p-4 mb-4 shadow-lg" style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: colors.secondary || '#06b6d4' }}>
-            <div className="text-yellow-400 font-bold text-center text-lg">BET: $10</div>
+            <InlineEditableText
+              value={betText}
+              onChange={(val) => { setBetText(val); notifyChange('betText', val); }}
+              className="text-yellow-400 font-bold text-center text-lg"
+              placeholder="Bet amount..."
+              initialStyles={{ fontSize: 18, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
+              showPositionControls={false}
+              showDuplicateButton={false}
+            />
           </div>
 
           {/* Balance Display */}
           <div className="bg-slate-700/80 rounded-xl p-4 mb-6 shadow-lg" style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: colors.secondary || '#06b6d4' }}>
-            <div className="text-yellow-400 font-bold text-center text-lg">BALANCE: $1,000</div>
+            <InlineEditableText
+              value={balanceText}
+              onChange={(val) => { setBalanceText(val); notifyChange('balanceText', val); }}
+              className="text-yellow-400 font-bold text-center text-lg"
+              placeholder="Balance..."
+              initialStyles={{ fontSize: 18, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
+              showPositionControls={false}
+              showDuplicateButton={false}
+            />
           </div>
 
           {/* Spin Button */}
@@ -374,7 +422,17 @@ export function Template7({ brand }: TemplateProps) {
             onClick={spinReels}
             disabled={spinning}
           >
-            {spinning ? '🎰 SPINNING...' : '🎰 SPIN TO WIN'}
+            {spinning ? '🎰 SPINNING...' : (
+              <InlineEditableText
+                value={spinButtonText}
+                onChange={(val) => { setSpinButtonText(val); notifyChange('spinButtonText', val); }}
+                className="text-white font-black"
+                placeholder="Button text..."
+                initialStyles={{ fontSize: 20, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#ffffff' }}
+                showPositionControls={false}
+                showDuplicateButton={false}
+              />
+            )}
           </button>
         </div>
       </main>

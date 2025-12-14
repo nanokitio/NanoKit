@@ -18,6 +18,8 @@ export function Template6({ brand }: Template6Props) {
   const [headline, setHeadline] = useState(brand.copy.headline || `${brand.brandName.toUpperCase()} CYBER WINS`);
   const [subheadline, setSubheadline] = useState(brand.copy.subheadline || 'Enter the neon grid where digital fortunes await');
   const [ctaText, setCtaText] = useState(brand.copy.cta || 'ENTER THE GRID');
+  const [maxWinText, setMaxWinText] = useState('MAX WIN\n$5,000');
+  const [minWinText, setMinWinText] = useState('MIN WIN\n$1,000');
 
   // Check if in edit mode (inside iframe with edit param)
   useEffect(() => {
@@ -141,11 +143,27 @@ export function Template6({ brand }: Template6Props) {
           <div className="prize-display flex justify-center gap-6 mb-8">
             <div className="prize-item bg-gradient-to-br from-green-400/20 to-cyan-400/20 border border-green-400/60 rounded-lg p-4 text-center backdrop-blur-sm synth-prize animate-prize-glow-1">
               <div className="text-2xl mb-2 text-green-400">◆</div>
-              <div className="text-green-300 font-mono text-sm tracking-wider">MAX WIN<br />$5,000</div>
+              <InlineEditableText
+                value={maxWinText}
+                onChange={(val) => { setMaxWinText(val); notifyChange('maxWin', val); }}
+                className="text-green-300 font-mono text-sm tracking-wider whitespace-pre-line"
+                placeholder="MAX WIN..."
+                initialStyles={{ fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#86efac' }}
+                showPositionControls={false}
+                showDuplicateButton={false}
+              />
             </div>
             <div className="prize-item bg-gradient-to-br from-purple-400/20 to-pink-400/20 border border-purple-400/60 rounded-lg p-4 text-center backdrop-blur-sm synth-prize animate-prize-glow-2">
               <div className="text-2xl mb-2 text-purple-400">★</div>
-              <div className="text-purple-300 font-mono text-sm tracking-wider">MIN WIN<br />$1,000</div>
+              <InlineEditableText
+                value={minWinText}
+                onChange={(val) => { setMinWinText(val); notifyChange('minWin', val); }}
+                className="text-purple-300 font-mono text-sm tracking-wider whitespace-pre-line"
+                placeholder="MIN WIN..."
+                initialStyles={{ fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#d8b4fe' }}
+                showPositionControls={false}
+                showDuplicateButton={false}
+              />
             </div>
           </div>
 
