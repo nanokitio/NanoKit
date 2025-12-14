@@ -1,28 +1,54 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { X, ArrowRight, ArrowLeft } from 'lucide-react'
+import { X, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react'
 
 interface TourStep {
   target: string
   title: string
   content: string
   position?: 'top' | 'bottom' | 'left' | 'right'
+  icon?: string
 }
 
+// Default tour steps for the editor
+export const DEFAULT_TOUR_STEPS: TourStep[] = [
+  {
+    target: '[data-editable="true"]',
+    title: '✏️ Textos Editables',
+    content: 'Los textos con borde punteado son editables. Haz clic en cualquiera para cambiar el texto, color, fuente y más.',
+    position: 'bottom',
+    icon: '✏️'
+  },
+  {
+    target: '.editable-text',
+    title: '🎨 Personaliza Todo',
+    content: 'Al hacer clic en un texto, aparecerá una barra con opciones: fuente, tamaño, negrita, color y alineación.',
+    position: 'bottom',
+    icon: '🎨'
+  },
+  {
+    target: 'iframe',
+    title: '👀 Vista Previa en Vivo',
+    content: 'Aquí ves tu template en tiempo real. Todos los cambios se reflejan instantáneamente.',
+    position: 'left',
+    icon: '👀'
+  }
+]
+
 interface EditorTourProps {
-  steps: TourStep[]
+  steps?: TourStep[]
   onComplete: () => void
   onSkip: () => void
 }
 
-export function EditorTour({ steps, onComplete, onSkip }: EditorTourProps) {
+export function EditorTour({ steps = DEFAULT_TOUR_STEPS, onComplete, onSkip }: EditorTourProps) {
   const [currentStep, setCurrentStep] = useState(0)
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
   const [highlightPosition, setHighlightPosition] = useState({ top: 0, left: 0, width: 0, height: 0 })
   const tooltipRef = useRef<HTMLDivElement>(null)
-
-  const step = steps[currentStep]
+  const tourSteps = steps || DEFAULT_TOUR_STEPS
+  const step = tourSteps[currentStep]
 
   useEffect(() => {
     updatePositions()
@@ -86,7 +112,7 @@ export function EditorTour({ steps, onComplete, onSkip }: EditorTourProps) {
   }
 
   const handleNext = () => {
-    if (currentStep < steps.length - 1) {
+    if (currentStep < tourSteps.length - 1) {
       setCurrentStep(currentStep + 1)
     } else {
       onComplete()
@@ -195,7 +221,7 @@ export function EditorTour({ steps, onComplete, onSkip }: EditorTourProps) {
             color: '#9ca3af',
             fontWeight: 600
           }}>
-            {currentStep + 1} / {steps.length}
+            {currentStep + 1} / {tourSteps.length}
           </div>
 
           <div style={{ display: 'flex', gap: '8px' }}>
@@ -237,8 +263,8 @@ export function EditorTour({ steps, onComplete, onSkip }: EditorTourProps) {
                 fontWeight: 600
               }}
             >
-              {currentStep === steps.length - 1 ? '¡Entendido!' : 'Siguiente'}
-              {currentStep < steps.length - 1 && <ArrowRight className="w-4 h-4" />}
+              {currentStep === tourSteps.length - 1 ? '¡Entendido!' : 'Siguiente'}
+              {currentStep < tourSteps.length - 1 && <ArrowRight className="w-4 h-4" />}
             </button>
           </div>
         </div>
