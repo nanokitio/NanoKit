@@ -93,10 +93,12 @@ export default function SiteEditorPage() {
   const [historyIndex, setHistoryIndex] = useState(-1)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [customStyles, setCustomStyles] = useState<Record<string, any>>({})
 
-  // Listen for content changes from iframe (inline editing)
+  // Listen for content AND style changes from iframe (inline editing)
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
+      // Handle text content changes
       if (event.data?.type === 'CONTENT_CHANGE') {
         const { field, value } = event.data;
         switch (field) {
@@ -110,6 +112,31 @@ export default function SiteEditorPage() {
             setCta(value);
             break;
         }
+      }
+      
+      // Handle style changes for persistence
+      if (event.data?.type === 'STYLE_CHANGE') {
+        const { field, value, styles } = event.data;
+        console.log('Style change received:', field, styles);
+        
+        // Update the text value
+        switch (field) {
+          case 'headline':
+            setHeadline(value);
+            break;
+          case 'subheadline':
+            setSubheadline(value);
+            break;
+          case 'cta':
+            setCta(value);
+            break;
+        }
+        
+        // Save styles for persistence
+        setCustomStyles(prev => ({
+          ...prev,
+          [field]: { value, styles }
+        }));
       }
     };
     window.addEventListener('message', handleMessage);
@@ -309,6 +336,23 @@ export default function SiteEditorPage() {
     }
   }, [headline, cta, ctaUrl, primaryColor, secondaryColor, accentColor, logoUrl, popupTitle, popupMessage, popupPrize, isPopupOpen])
 
+  // Send custom styles to iframe when loaded
+  useEffect(() => {
+    if (Object.keys(customStyles).length > 0) {
+      const timer = setTimeout(() => {
+        const iframe = document.querySelector('iframe') as HTMLIFrameElement
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.postMessage({
+            type: 'APPLY_STYLES',
+            customStyles
+          }, '*')
+        }
+      }, 1000) // Wait for iframe to load
+      
+      return () => clearTimeout(timer)
+    }
+  }, [customStyles, templateId])
+
   const loadSite = async () => {
     try {
       const supabase = createClient()
@@ -345,6 +389,11 @@ export default function SiteEditorPage() {
       setFeaturedPlayer(data.featured_player || '')
       setSportDirector(data.sport_director || '')
       setBrandName(data.brand_name || 'My New Asset')
+      
+      // Load custom styles from sections JSONB
+      if (data.sections?.customStyles) {
+        setCustomStyles(data.sections.customStyles)
+      }
     } catch (error) {
       console.error('Error loading site:', error)
       alert('Failed to load site')
@@ -530,6 +579,11 @@ export default function SiteEditorPage() {
         // Save team member names
         updateData.featured_player = featuredPlayer || null
         updateData.sport_director = sportDirector || null
+        
+        // Save custom styles from inline editing (using sections JSONB field)
+        if (Object.keys(customStyles).length > 0) {
+          updateData.sections = { customStyles }
+        }
       } catch (e) {
         console.warn('Some optional fields not available in schema:', e)
       }

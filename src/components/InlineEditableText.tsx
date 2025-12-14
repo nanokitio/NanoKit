@@ -15,6 +15,7 @@ interface InlineEditableTextProps {
   initialStyles?: TextStyles
   showPositionControls?: boolean
   showDuplicateButton?: boolean
+  fieldName?: string // Used to identify this field for style persistence
 }
 
 export interface TextStyles {
@@ -60,7 +61,8 @@ export function InlineEditableText({
   style,
   initialStyles,
   showPositionControls = true,
-  showDuplicateButton = true
+  showDuplicateButton = true,
+  fieldName
 }: InlineEditableTextProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [localValue, setLocalValue] = useState(value)
@@ -140,6 +142,16 @@ export function InlineEditableText({
     setShowFontFamilyDropdown(false)
     setShowColorPicker(false)
     onChange(localValue)
+    
+    // Notify parent about style changes for persistence
+    if (fieldName && window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'STYLE_CHANGE',
+        field: fieldName,
+        value: localValue,
+        styles: textStyles
+      }, '*')
+    }
   }
 
   const handleCancel = () => {

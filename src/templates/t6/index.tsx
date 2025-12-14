@@ -28,12 +28,38 @@ export function Template6({ brand }: Template6Props) {
   const [playNowText, setPlayNowText] = useState('Play Now & Win!');
   const [disclaimerText, setDisclaimerText] = useState('18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY');
 
+  // Custom styles from editor (persisted)
+  const [fieldStyles, setFieldStyles] = useState<Record<string, any>>({});
+
   // Check if in edit mode (inside iframe with edit param)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const inIframe = window.self !== window.top;
     const editParam = params.get('edit') === '1' || params.get('preview') === '1';
     setIsEditMode(inIframe && editParam);
+  }, []);
+
+  // Listen for APPLY_STYLES from parent editor
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'APPLY_STYLES' && event.data.customStyles) {
+        console.log('Applying saved styles:', event.data.customStyles);
+        setFieldStyles(event.data.customStyles);
+        
+        // Apply saved text values
+        Object.entries(event.data.customStyles).forEach(([field, data]: [string, any]) => {
+          if (data?.value) {
+            switch (field) {
+              case 'headline': setHeadline(data.value); break;
+              case 'subheadline': setSubheadline(data.value); break;
+              case 'cta': setCtaText(data.value); break;
+            }
+          }
+        });
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
   }, []);
 
   // Send changes to parent editor
@@ -116,7 +142,8 @@ export function Template6({ brand }: Template6Props) {
               }}
               className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 mb-4 synth-glow tracking-wider"
               placeholder="Enter your headline..."
-              initialStyles={{ fontSize: 48, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+              initialStyles={fieldStyles.headline?.styles || { fontSize: 48, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+              fieldName="headline"
             />
             <div className="synth-underline"></div>
           </div>
@@ -129,7 +156,8 @@ export function Template6({ brand }: Template6Props) {
               }}
               className="text-lg md:text-xl text-cyan-100 font-light tracking-wide"
               placeholder="Enter your subheadline..."
-              initialStyles={{ fontSize: 20, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+              initialStyles={fieldStyles.subheadline?.styles || { fontSize: 20, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+              fieldName="subheadline"
             />
           </div>
           
@@ -268,7 +296,8 @@ export function Template6({ brand }: Template6Props) {
               }}
               className="tracking-widest"
               placeholder="Button text..."
-              initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+              initialStyles={fieldStyles.cta?.styles || { fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+              fieldName="cta"
             />
           </div>
           <div className="mt-6">
