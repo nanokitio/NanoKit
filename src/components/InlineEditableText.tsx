@@ -240,7 +240,7 @@ export function InlineEditableText({
               <ChevronDown size={12} />
             </button>
             {showFontFamilyDropdown && (
-              <div className="absolute top-full left-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl py-1 max-h-60 overflow-y-auto z-20 min-w-[140px]">
+              <div className="absolute top-0 left-full ml-2 bg-slate-800 border border-slate-600 rounded-lg shadow-xl py-1 max-h-60 overflow-y-auto z-20 min-w-[140px]">
                 {FONTS.map(font => (
                   <button
                     key={font.value}
@@ -267,7 +267,7 @@ export function InlineEditableText({
               <span>{textStyles.fontSize}</span>
             </button>
             {showFontSizeDropdown && (
-              <div className="absolute top-full left-0 mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl py-1 max-h-48 overflow-y-auto z-20 min-w-[80px]">
+              <div className="absolute top-0 left-full ml-2 bg-slate-800 border border-slate-600 rounded-lg shadow-xl py-1 max-h-48 overflow-y-auto z-20 min-w-[80px]">
                 {FONT_SIZES.map(size => (
                   <button
                     key={size}
@@ -329,7 +329,7 @@ export function InlineEditableText({
               />
             </button>
             {showColorPicker && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-800 border border-slate-600 rounded-lg shadow-2xl p-3 z-[10001]" style={{ minWidth: '220px' }}>
+              <div className="absolute top-0 left-full ml-2 bg-slate-800 border border-slate-600 rounded-lg shadow-2xl p-3 z-[10001]" style={{ minWidth: '220px' }}>
                 {/* Spectrum Color Picker */}
                 <div className="mb-3">
                   <input
