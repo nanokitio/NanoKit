@@ -207,35 +207,31 @@ export function InlineEditableText({
 
   return (
     <div ref={containerRef} className="relative" style={{ zIndex: 10 }}>
-      {/* Floating Toolbar - Only when editing */}
+      {/* Vertical Toolbar - Fixed on left side when editing */}
       {isEditing && (
         <div
           ref={toolbarRef}
-          className={`fixed z-[99999] shadow-2xl backdrop-blur-sm ${
-            isMobile 
-              ? 'bottom-0 left-0 right-0 rounded-t-2xl p-3 pb-6' 
-              : 'rounded-xl p-2'
-          }`}
+          className="fixed z-[99999] shadow-2xl backdrop-blur-sm rounded-r-xl"
           style={{
-            ...(isMobile ? {} : {
-              top: Math.max(10, toolbarPosition.top),
-              left: Math.max(10, Math.min(toolbarPosition.left, window.innerWidth - 520)),
-            }),
+            top: '50%',
+            left: 0,
+            transform: 'translateY(-50%)',
             backgroundColor: 'rgba(15, 23, 42, 0.98)',
-            border: isMobile ? 'none' : '2px solid rgba(100, 116, 139, 0.5)',
-            borderTop: isMobile ? '2px solid rgba(100, 116, 139, 0.5)' : undefined,
-            boxShadow: isMobile 
-              ? '0 -10px 40px rgba(0, 0, 0, 0.5)' 
-              : '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.1)',
+            border: '2px solid rgba(100, 116, 139, 0.5)',
+            borderLeft: 'none',
+            boxShadow: '4px 0 20px rgba(0, 0, 0, 0.5)',
+            padding: '12px 8px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
           }}
           onMouseDown={(e) => e.preventDefault()}
           onTouchStart={(e) => e.stopPropagation()}
         >
-          {/* Mobile scroll container */}
-          <div className={`flex items-center gap-1 ${isMobile ? 'overflow-x-auto pb-2 scrollbar-hide' : ''}`}>
-        
-          {/* Font Family */}
-          <div className="relative">
+          {/* Vertical layout container */}
+          <div className="flex flex-col items-center gap-2">
+          
+            {/* Font Family */}
+            <div className="relative">
             <button
               onClick={() => { setShowFontFamilyDropdown(!showFontFamilyDropdown); setShowFontSizeDropdown(false) }}
               className="flex items-center gap-1 px-2 py-1.5 text-white hover:bg-slate-700 rounded text-sm font-medium min-w-[90px] justify-between"
@@ -287,7 +283,7 @@ export function InlineEditableText({
             )}
           </div>
 
-          <div className="w-px h-6 bg-slate-600 mx-1" />
+          <div className="h-px w-full bg-slate-600 my-1" />
 
           {/* Bold */}
           <button onClick={toggleBold} className={`${isMobile ? 'p-2.5' : 'p-1.5'} rounded hover:bg-slate-700 ${textStyles.fontWeight === 'bold' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Bold">
@@ -304,7 +300,7 @@ export function InlineEditableText({
             <Underline size={isMobile ? 20 : 16} />
           </button>
 
-          <div className="w-px h-6 bg-slate-600 mx-1" />
+          <div className="h-px w-full bg-slate-600 my-1" />
 
           {/* Alignment */}
           <button onClick={() => setAlignment('left')} className={`${isMobile ? 'p-2.5' : 'p-1.5'} rounded hover:bg-slate-700 ${textStyles.textAlign === 'left' ? 'bg-blue-600 text-white' : 'text-slate-300'}`} title="Left">
@@ -317,7 +313,7 @@ export function InlineEditableText({
             <AlignRight size={isMobile ? 20 : 16} />
           </button>
 
-          <div className="w-px h-6 bg-slate-600 mx-1" />
+          <div className="h-px w-full bg-slate-600 my-1" />
 
           {/* Color Picker - Spectrum/Prisma style */}
           <div className="relative">
@@ -389,7 +385,7 @@ export function InlineEditableText({
           {/* Position Controls */}
           {showPositionControls && onPositionChange && (
             <>
-              <div className="w-px h-6 bg-slate-600 mx-1" />
+              <div className="h-px w-full bg-slate-600 my-1" />
               <button 
                 onClick={() => onPositionChange('top')} 
                 className="p-1.5 rounded hover:bg-slate-700 text-slate-300" 
@@ -417,7 +413,7 @@ export function InlineEditableText({
           {/* Duplicate Button */}
           {showDuplicateButton && onDuplicate && (
             <>
-              <div className="w-px h-6 bg-slate-600 mx-1" />
+              <div className="h-px w-full bg-slate-600 my-1" />
               <button 
                 onClick={onDuplicate} 
                 className="p-1.5 rounded hover:bg-purple-600 text-purple-400 hover:text-white" 
@@ -428,7 +424,7 @@ export function InlineEditableText({
             </>
           )}
 
-          <div className="w-px h-6 bg-slate-600 mx-1" />
+          <div className="h-px w-full bg-slate-600 my-1" />
 
           {/* Save/Cancel */}
           <button onClick={handleSave} className={`p-1.5 rounded hover:bg-green-600 text-green-400 hover:text-white ${isMobile ? 'p-2.5' : ''}`} title="Save (Enter)">
