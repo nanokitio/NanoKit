@@ -73,13 +73,14 @@ export function Template6({ brand }: Template6Props) {
     }
   };
 
-  const symbols = ['🍒', '💎', '7️⃣', '🎰', '⭐', '🏆'];
+  // Using simple text symbols that render correctly in all encodings
+  const symbols = ['7', 'BAR', '$', 'X', 'W', '*'];
   
   // Slot machine display state
   const [slotSymbols, setSlotSymbols] = useState<string[][]>([
-    ['🍒', '💎', '7️⃣'],
-    ['🎰', '⭐', '🏆'],
-    ['💎', '7️⃣', '🍒']
+    ['7', 'BAR', '$'],
+    ['X', 'W', '*'],
+    ['BAR', '7', '$']
   ]);
 
   const handleSpin = () => {
@@ -106,9 +107,9 @@ export function Template6({ brand }: Template6Props) {
       // Show winning combination on 2nd spin
       if (newSpinCount >= 2) {
         setSlotSymbols([
-          ['🏆', '🏆', '🏆'],
-          ['🏆', '🏆', '🏆'],
-          ['🏆', '🏆', '🏆']
+          ['7', '7', '7'],
+          ['7', '7', '7'],
+          ['7', '7', '7']
         ]);
         setTimeout(() => {
           setShowWinModal(true);
@@ -186,9 +187,9 @@ export function Template6({ brand }: Template6Props) {
           
           {/* Retro Timer */}
           <div className="inline-flex items-center gap-3 bg-gradient-to-r from-pink-500/20 to-cyan-500/20 backdrop-blur-sm border border-pink-400/50 text-pink-300 px-6 py-3 rounded-lg font-mono text-sm synth-border animate-border-pulse">
-            <span className="text-yellow-400 animate-pulse">▲</span>
+            <span className="text-yellow-400 animate-pulse">*</span>
             <span className="tracking-widest">BONUS EXPIRES: 05:55</span>
-            <span className="text-yellow-400 animate-pulse">▲</span>
+            <span className="text-yellow-400 animate-pulse">*</span>
           </div>
         </header>
 
@@ -200,7 +201,7 @@ export function Template6({ brand }: Template6Props) {
           {/* Retro Prize Display */}
           <div className="prize-display flex justify-center gap-6 mb-8">
             <div className="prize-item bg-gradient-to-br from-green-400/20 to-cyan-400/20 border border-green-400/60 rounded-lg p-4 text-center backdrop-blur-sm synth-prize animate-prize-glow-1">
-              <div className="text-2xl mb-2 text-green-400">◆</div>
+              <div className="text-2xl mb-2 text-green-400">$</div>
               <InlineEditableText
                 value={maxWinText}
                 onChange={(val) => { setMaxWinText(val); notifyChange('maxWin', val); }}
@@ -212,7 +213,7 @@ export function Template6({ brand }: Template6Props) {
               />
             </div>
             <div className="prize-item bg-gradient-to-br from-purple-400/20 to-pink-400/20 border border-purple-400/60 rounded-lg p-4 text-center backdrop-blur-sm synth-prize animate-prize-glow-2">
-              <div className="text-2xl mb-2 text-purple-400">★</div>
+              <div className="text-2xl mb-2 text-purple-400">*</div>
               <InlineEditableText
                 value={minWinText}
                 onChange={(val) => { setMinWinText(val); notifyChange('minWin', val); }}
@@ -256,7 +257,7 @@ export function Template6({ brand }: Template6Props) {
               }`}
             >
               <span className="tracking-widest">
-                {isSpinning ? '🎰 SPINNING... 🎰' : '🎲 SPIN TO WIN! 🎲'}
+                {isSpinning ? '*** SPINNING ***' : '== SPIN TO WIN =='}
               </span>
             </button>
           </div>
@@ -265,7 +266,7 @@ export function Template6({ brand }: Template6Props) {
         {/* Synth Features Section */}
         <div className="features flex flex-wrap justify-center gap-6 mb-8">
           <div className="feature-item bg-gradient-to-br from-cyan-900/30 to-purple-900/30 backdrop-blur-sm border border-cyan-400/50 rounded-lg p-4 text-center min-w-[140px] synth-feature animate-feature-glow-1">
-            <div className="text-2xl mb-2 text-cyan-400">◆</div>
+            <div className="text-2xl mb-2 text-cyan-400">$</div>
             <InlineEditableText
               value={feature1}
               onChange={(val) => { setFeature1(val); notifyChange('feature1', val); }}
@@ -277,7 +278,7 @@ export function Template6({ brand }: Template6Props) {
             />
           </div>
           <div className="feature-item bg-gradient-to-br from-pink-900/30 to-purple-900/30 backdrop-blur-sm border border-pink-400/50 rounded-lg p-4 text-center min-w-[140px] synth-feature animate-feature-glow-2">
-            <div className="text-2xl mb-2 text-pink-400">▲</div>
+            <div className="text-2xl mb-2 text-pink-400">+</div>
             <InlineEditableText
               value={feature2}
               onChange={(val) => { setFeature2(val); notifyChange('feature2', val); }}
@@ -289,7 +290,7 @@ export function Template6({ brand }: Template6Props) {
             />
           </div>
           <div className="feature-item bg-gradient-to-br from-yellow-900/30 to-orange-900/30 backdrop-blur-sm border border-yellow-400/50 rounded-lg p-4 text-center min-w-[140px] synth-feature animate-feature-glow-3">
-            <div className="text-2xl mb-2 text-yellow-400">●</div>
+            <div className="text-2xl mb-2 text-yellow-400">*</div>
             <InlineEditableText
               value={feature3}
               onChange={(val) => { setFeature3(val); notifyChange('feature3', val); }}
@@ -338,14 +339,14 @@ export function Template6({ brand }: Template6Props) {
       {showWinModal && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
           <div className="win-content bg-gradient-to-br from-cyan-900/80 to-purple-900/80 backdrop-blur-xl border-2 border-pink-400/60 p-8 rounded-2xl text-center shadow-2xl max-w-md mx-4 synth-modal animate-modal-glow">
-            <h2 className="text-3xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4 tracking-wider">◆ JACKPOT ACHIEVED ◆</h2>
+            <h2 className="text-3xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400 mb-4 tracking-wider">=== JACKPOT ACHIEVED ===</h2>
             <p className="text-xl text-cyan-300 mb-2 font-mono">CREDIT TRANSFER: <span className="font-bold text-2xl text-green-400 animate-pulse">$1,000</span></p>
-            <p className="text-pink-300 mb-6 font-mono tracking-wide">★ BONUS: 50 FREE EXECUTIONS ★</p>
+            <p className="text-pink-300 mb-6 font-mono tracking-wide">*** BONUS: 50 FREE SPINS ***</p>
             <button 
               className="bg-gradient-to-r from-green-500 to-cyan-500 hover:from-green-400 hover:to-cyan-400 text-white font-mono font-bold py-4 px-8 rounded-lg text-lg shadow-lg backdrop-blur-sm border border-green-400/50 transform hover:scale-105 transition-all duration-300 mb-3 w-full animate-claim-glow tracking-widest"
               onClick={() => brand.ctaUrl && window.open(brand.ctaUrl, '_blank')}
             >
-              ▲ CLAIM REWARDS ▲
+              {'>>'} CLAIM REWARDS {'<<'}
             </button>
             <button 
               className="block mx-auto text-cyan-300/70 hover:text-cyan-300 text-sm font-mono tracking-wide"
