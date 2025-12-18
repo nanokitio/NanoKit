@@ -126,23 +126,17 @@ export async function POST(request: NextRequest) {
 
       if (orgError) {
         console.error('Failed to create organization:', orgError)
-      } else {
+        console.error('Org error details:', JSON.stringify(orgError, null, 2))
+        // Continue without org_id - some databases might not require it
+      } else if (newOrg) {
         orgId = newOrg.id
+        console.log('Created new organization:', orgId)
       }
     }
 
-    // Map templates to database-compatible versions
-    // Schema allows: t6, t7, t9, t10, t11
-    // Database allows: t1, t2, t3, t4, t5, t6, t7
-    // Intersection: t6, t7 (these can be used directly)
-    const templateMapping: Record<string, string> = {
-      't6': 't6',   // Direct mapping
-      't7': 't7',   // Direct mapping
-      't9': 't4',   // Map to available slot
-      't10': 't5',  // Map to available slot
-      't11': 't3'   // Map to available slot
-    }
-    const dbTemplateId = templateMapping[validatedData.templateId] || 't6'
+    // Map templates to database - store actual template ID
+    // The database should accept any template ID as text
+    const dbTemplateId = validatedData.templateId
     
     // Build insert data conditionally
     const insertData: any = {
@@ -178,9 +172,13 @@ export async function POST(request: NextRequest) {
 
     if (siteError) {
       console.error('Site creation error:', siteError)
+      console.error('Site creation error details:', JSON.stringify(siteError, null, 2))
+      console.error('Insert data was:', JSON.stringify(insertData, null, 2))
       return NextResponse.json({ 
         error: 'Failed to create site', 
-        details: siteError.message 
+        details: siteError.message,
+        code: siteError.code,
+        hint: siteError.hint
       }, { status: 500 })
     }
 
