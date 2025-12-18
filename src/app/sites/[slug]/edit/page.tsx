@@ -1391,7 +1391,10 @@ export default function SiteEditorPage() {
                     <input
                       type="text"
                       value={siteName}
-                      onChange={(e) => setSiteName(e.target.value)}
+                      onChange={(e) => {
+                        console.log('Site name input changed from:', siteName, 'to:', e.target.value)
+                        setSiteName(e.target.value)
+                      }}
                       placeholder="Enter a name for your site"
                       className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400 transition-all"
                     />
