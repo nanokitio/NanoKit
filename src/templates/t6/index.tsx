@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react'
 import { BrandConfig } from '@/lib/types'
 import { InlineEditableText } from '@/components/InlineEditableText'
-import { Diamond, Star, DollarSign, Cherry, Gem, Trophy, Zap, Crown } from 'lucide-react'
 
 interface Template6Props {
   brand: BrandConfig
@@ -74,41 +73,81 @@ export function Template6({ brand }: Template6Props) {
     }
   };
 
-  // Symbol types for slot machine
-  type SymbolType = 'diamond' | 'star' | 'dollar' | 'cherry' | 'gem' | 'trophy' | 'zap' | 'crown';
-  const symbolTypes: SymbolType[] = ['diamond', 'star', 'dollar', 'cherry', 'gem', 'trophy', 'zap', 'crown'];
+  // Symbol types for slot machine - using inline SVG for proper serialization
+  type SymbolType = 'seven' | 'bar' | 'cherry' | 'bell' | 'lemon' | 'grape' | 'star' | 'diamond';
+  const symbolTypes: SymbolType[] = ['seven', 'bar', 'cherry', 'bell', 'lemon', 'grape', 'star', 'diamond'];
   
-  // Render icon based on symbol type
+  // Render SVG symbol - inline SVG works in static HTML
   const renderSymbol = (symbol: SymbolType) => {
-    const iconProps = { size: 32, strokeWidth: 2.5 };
-    const colors: Record<SymbolType, string> = {
-      diamond: '#67e8f9',
-      star: '#fde047',
-      dollar: '#4ade80',
-      cherry: '#f472b6',
-      gem: '#a78bfa',
-      trophy: '#fbbf24',
-      zap: '#f97316',
-      crown: '#facc15'
-    };
+    const size = 36;
+    const svgStyle = { width: size, height: size };
     
     switch (symbol) {
-      case 'diamond': return <Diamond {...iconProps} color={colors.diamond} />;
-      case 'star': return <Star {...iconProps} color={colors.star} fill={colors.star} />;
-      case 'dollar': return <DollarSign {...iconProps} color={colors.dollar} />;
-      case 'cherry': return <Cherry {...iconProps} color={colors.cherry} />;
-      case 'gem': return <Gem {...iconProps} color={colors.gem} />;
-      case 'trophy': return <Trophy {...iconProps} color={colors.trophy} fill={colors.trophy} />;
-      case 'zap': return <Zap {...iconProps} color={colors.zap} fill={colors.zap} />;
-      case 'crown': return <Crown {...iconProps} color={colors.crown} fill={colors.crown} />;
+      case 'seven':
+        return (
+          <svg style={svgStyle} viewBox="0 0 24 24" fill="none">
+            <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="20" fontWeight="bold" fill="#fde047">7</text>
+          </svg>
+        );
+      case 'bar':
+        return (
+          <svg style={svgStyle} viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="8" width="20" height="8" rx="2" fill="#f97316"/>
+            <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="8" fontWeight="bold" fill="#fff">BAR</text>
+          </svg>
+        );
+      case 'cherry':
+        return (
+          <svg style={svgStyle} viewBox="0 0 24 24" fill="none">
+            <circle cx="8" cy="16" r="5" fill="#ef4444"/>
+            <circle cx="16" cy="16" r="5" fill="#ef4444"/>
+            <path d="M8 11 C8 6 12 4 12 4 C12 4 16 6 16 11" stroke="#22c55e" strokeWidth="2" fill="none"/>
+          </svg>
+        );
+      case 'bell':
+        return (
+          <svg style={svgStyle} viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C8 2 5 5 5 9V14L3 17H21L19 14V9C19 5 16 2 12 2Z" fill="#fbbf24"/>
+            <circle cx="12" cy="20" r="2" fill="#fbbf24"/>
+          </svg>
+        );
+      case 'lemon':
+        return (
+          <svg style={svgStyle} viewBox="0 0 24 24" fill="none">
+            <ellipse cx="12" cy="12" rx="8" ry="6" fill="#fde047" transform="rotate(-30 12 12)"/>
+          </svg>
+        );
+      case 'grape':
+        return (
+          <svg style={svgStyle} viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="6" r="3" fill="#a855f7"/>
+            <circle cx="8" cy="11" r="3" fill="#a855f7"/>
+            <circle cx="16" cy="11" r="3" fill="#a855f7"/>
+            <circle cx="10" cy="16" r="3" fill="#a855f7"/>
+            <circle cx="14" cy="16" r="3" fill="#a855f7"/>
+            <circle cx="12" cy="20" r="3" fill="#a855f7"/>
+          </svg>
+        );
+      case 'star':
+        return (
+          <svg style={svgStyle} viewBox="0 0 24 24" fill="#fde047">
+            <path d="M12 2L15 9H22L16.5 13.5L18.5 21L12 16.5L5.5 21L7.5 13.5L2 9H9L12 2Z"/>
+          </svg>
+        );
+      case 'diamond':
+        return (
+          <svg style={svgStyle} viewBox="0 0 24 24" fill="#67e8f9">
+            <path d="M12 2L22 12L12 22L2 12L12 2Z"/>
+          </svg>
+        );
     }
   };
   
   // Slot machine display state
   const [slotSymbols, setSlotSymbols] = useState<SymbolType[][]>([
-    ['diamond', 'star', 'dollar'],
-    ['cherry', 'gem', 'trophy'],
-    ['star', 'diamond', 'zap']
+    ['seven', 'bar', 'cherry'],
+    ['bell', 'lemon', 'grape'],
+    ['star', 'diamond', 'seven']
   ]);
 
   const handleSpin = () => {
@@ -133,12 +172,12 @@ export function Template6({ brand }: Template6Props) {
       clearInterval(spinInterval);
       setIsSpinning(false);
       
-      // Show winning combination on 2nd spin (all trophies!)
+      // Show winning combination on 2nd spin (classic 777!)
       if (newSpinCount >= 2) {
         setSlotSymbols([
-          ['trophy', 'trophy', 'trophy'],
-          ['trophy', 'trophy', 'trophy'],
-          ['trophy', 'trophy', 'trophy']
+          ['seven', 'seven', 'seven'],
+          ['seven', 'seven', 'seven'],
+          ['seven', 'seven', 'seven']
         ]);
         setTimeout(() => {
           setShowWinModal(true);
