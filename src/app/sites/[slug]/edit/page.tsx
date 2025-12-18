@@ -11,6 +11,7 @@ import ScreenshotProtection from '@/components/ScreenshotProtection'
 
 interface SiteData {
   id: string
+  name?: string
   slug: string
   template_id: string
   brand_name: string
@@ -48,7 +49,8 @@ export default function SiteEditorPage() {
     logo: false,
     content: false,
     colors: false,
-    legal: false
+    legal: false,
+    siteSettings: true
   })
   
   // Editable fields
@@ -88,6 +90,7 @@ export default function SiteEditorPage() {
   const [featuredPlayer, setFeaturedPlayer] = useState('')
   const [sportDirector, setSportDirector] = useState('')
   const [brandName, setBrandName] = useState('')
+  const [siteName, setSiteName] = useState('')
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [history, setHistory] = useState<any[]>([])
   const [historyIndex, setHistoryIndex] = useState(-1)
@@ -174,7 +177,7 @@ export default function SiteEditorPage() {
     setHistoryIndex(prev => prev + 1)
   }, [headline, subheadline, cta, ctaUrl, primaryColor, secondaryColor, accentColor, logoUrl, backgroundColor, backgroundImage])
 
-  const toggleSection = (section: 'vertical' | 'template' | 'logo' | 'content' | 'colors' | 'legal') => {
+  const toggleSection = (section: 'vertical' | 'template' | 'logo' | 'content' | 'colors' | 'legal' | 'siteSettings') => {
     const isExpanding = !expandedSections[section]
     
     setExpandedSections(prev => ({
@@ -200,7 +203,8 @@ export default function SiteEditorPage() {
       logo: false,
       content: false,
       colors: false,
-      legal: false
+      legal: false,
+      siteSettings: false
     })
   }
 
@@ -211,7 +215,8 @@ export default function SiteEditorPage() {
       logo: true,
       content: true,
       colors: true,
-      legal: true
+      legal: true,
+      siteSettings: true
     })
   }
 
@@ -389,6 +394,7 @@ export default function SiteEditorPage() {
       setFeaturedPlayer(data.featured_player || '')
       setSportDirector(data.sport_director || '')
       setBrandName(data.brand_name || 'My New Asset')
+      setSiteName(data.name || `${data.brand_name} - ${data.industry} Site`)
       
       // Load custom styles from sections JSONB
       if (data.sections?.customStyles) {
@@ -548,6 +554,7 @@ export default function SiteEditorPage() {
       
       // Prepare update data
       const updateData: any = {
+        name: siteName,
         brand_name: brandName,
         headline,
         subheadline,
@@ -1341,6 +1348,47 @@ export default function SiteEditorPage() {
                 </button>
               </div>
             )}
+
+            {/* Site Settings */}
+            <div className="bg-gray-800 rounded-lg overflow-hidden">
+              <button
+                onClick={() => toggleSection('siteSettings')}
+                className="w-full flex items-center justify-between px-4 py-3 bg-gray-800 hover:bg-gray-750 transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  <Settings size={18} className="text-green-400" />
+                  <h3 className="text-sm font-semibold text-white">Site Settings</h3>
+                </div>
+                {expandedSections.siteSettings ? <ChevronUp size={18} className="text-gray-400" /> : <ChevronDown size={18} className="text-gray-400" />}
+              </button>
+              
+              {expandedSections.siteSettings && (
+                <div className="p-4 space-y-4 border-t border-gray-700">
+                  <div className="bg-slate-900/60 rounded-lg p-3 border border-cyan-500/20">
+                    <p className="text-sm text-slate-300 font-medium">
+                      Configure your site name and basic settings
+                    </p>
+                  </div>
+
+                  {/* Site Name */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                      Site Name
+                    </label>
+                    <input
+                      type="text"
+                      value={siteName}
+                      onChange={(e) => setSiteName(e.target.value)}
+                      placeholder="Enter a name for your site"
+                      className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400 transition-all"
+                    />
+                    <p className="text-xs text-slate-500 mt-1">
+                      This name will appear in your dashboard for easy identification
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
             
             {/* Win Popup Editor for Fortune Wheel templates */}
             {(templateId === 't14' || templateId === 't15' || templateId === 't16' || templateId === 't17') && (
