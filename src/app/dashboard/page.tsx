@@ -16,6 +16,7 @@ interface SiteWithVisits extends Site {
   downloaded_at?: string
   download_count?: number
   deployment_count?: number // Count of AWS hosted deployments
+  hosted_url?: string // URL of the most recent AWS deployment
 }
 
 export default function DashboardPage() {
@@ -106,7 +107,7 @@ export default function DashboardPage() {
         .select(`
           *,
           visits(count),
-          prelander_deployments(count)
+          prelander_deployments(count, hosted_url, created_at)
         `)
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
@@ -124,7 +125,7 @@ export default function DashboardPage() {
             .select(`
               *,
               visits(count),
-              prelander_deployments(count)
+              prelander_deployments(count, hosted_url, created_at)
             `)
             .eq('org_id', org.id)
             .order('created_at', { ascending: false })
@@ -142,13 +143,21 @@ export default function DashboardPage() {
         console.error('Error fetching sites:', sitesError)
         setSites([])
       } else {
-        // Process sites data to extract deployment counts
-        const processedSites = (sitesData || []).map((site: any) => ({
-          ...site,
-          deployment_count: Array.isArray(site.prelander_deployments) 
-            ? site.prelander_deployments[0]?.count || 0 
-            : 0
-        }))
+        // Process sites data to extract deployment counts and latest hosted URL
+        const processedSites = (sitesData || []).map((site: any) => {
+          const deployments = Array.isArray(site.prelander_deployments) ? site.prelander_deployments : []
+          // Sort by created_at to get the most recent
+          const sortedDeployments = deployments.sort((a: any, b: any) => 
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          )
+          const latestDeployment = sortedDeployments[0]
+          
+          return {
+            ...site,
+            deployment_count: deployments.length > 0 ? (deployments[0]?.count || deployments.length) : 0,
+            hosted_url: latestDeployment?.hosted_url || null
+          }
+        })
         
         console.log('Setting sites:', processedSites)
         setSites(processedSites)
@@ -1026,7 +1035,20 @@ export default function DashboardPage() {
                           )}
                           {visibleColumns.hosted && (
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-                              {(site.deployment_count || 0) > 0 ? (
+                              {site.hosted_url ? (
+                                <a 
+                                  href={site.hosted_url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors"
+                                  title={site.hosted_url}
+                                >
+                                  <Globe className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
+                                  <span className="max-w-[120px] truncate text-xs">
+                                    {site.hosted_url.replace(/^https?:\/\/[^\/]+\//, '').split('/').pop()?.substring(0, 15) || 'View'}...
+                                  </span>
+                                </a>
+                              ) : (site.deployment_count || 0) > 0 ? (
                                 <span className="flex items-center gap-2">
                                   <Globe className="w-4 h-4 text-purple-400" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
                                   <span className="text-purple-300">{site.deployment_count}</span>
