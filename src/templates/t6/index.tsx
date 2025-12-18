@@ -201,8 +201,8 @@ export function Template6({ brand }: Template6Props) {
         <div className="scan-lines"></div>
       </div>
 
-      {/* Main Container */}
-      <div className="container relative z-10 min-h-screen flex flex-col justify-center items-center px-4 py-8">
+      {/* Main Container - Add top padding when in edit mode for toolbar space */}
+      <div className={`container relative z-10 min-h-screen flex flex-col justify-center items-center px-4 py-8 ${isEditMode ? 'pt-20' : ''}`}>
         {/* Header */}
         <header className="text-center mb-8 retro-header">
           {/* Casino Brand Logo - Perfect for iGaming Affiliates */}

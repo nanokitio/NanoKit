@@ -48,8 +48,8 @@ export function Template15({ brand }: Template15Props) {
             : backgroundColor 
         }}
       >
-        {/* Editable Title Overlay */}
-        <div className="absolute top-5 left-1/2 transform -translate-x-1/2 z-50 text-center px-5 max-w-[90%]">
+        {/* Editable Title Overlay - Extra top space in edit mode for toolbar */}
+        <div className={`absolute left-1/2 transform -translate-x-1/2 z-50 text-center px-5 max-w-[90%] ${isEditMode ? 'top-16' : 'top-5'}`}>
           <InlineEditableText
             value={headline}
             onChange={(val) => { setHeadline(val); notifyChange('headline', val); }}

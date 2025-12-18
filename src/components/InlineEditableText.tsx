@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Type, Check, X, ChevronDown, Copy, ArrowUp, ArrowDown, Minus, Palette } from 'lucide-react'
 
 interface InlineEditableTextProps {
