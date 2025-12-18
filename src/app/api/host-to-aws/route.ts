@@ -368,7 +368,7 @@ function generateFingerprintedJS(
   function track(content) {
     // Add hidden fingerprint
     var meta = document.createElement('meta');
-    meta.name = 'forge-id';
+    meta.name = 'nanokit-id';
     meta.content = fingerprint;
     document.head.appendChild(meta);
     
@@ -382,7 +382,7 @@ function generateFingerprintedJS(
     
     // Track page visibility
     window.__AFF_ID__ = content.__aff;
-    window.__FORGE_TS__ = content.__ts;
+    window.__NANOKIT_TS__ = content.__ts;
     
     // Anti-tampering validation
     if (!content.__aff || content.__aff.length < 8) {

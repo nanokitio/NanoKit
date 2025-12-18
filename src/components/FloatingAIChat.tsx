@@ -208,7 +208,7 @@ export function FloatingAIChat({
             </div>
             <div>
               <h3 className="text-white font-semibold text-sm">AI Coding Assistant</h3>
-              <p className="text-white/70 text-xs">Powered by Nexus Forge AI</p>
+              <p className="text-white/70 text-xs">Powered by NanoKit AI</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">

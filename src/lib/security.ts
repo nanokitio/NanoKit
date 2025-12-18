@@ -1,5 +1,5 @@
 /**
- * Comprehensive Security System for Nexus Forge
+ * Comprehensive Security System for NanoKit
  * Protects: Bank accounts, emails, passwords, PII, authentication
  * Implements: Encryption, hashing, secure storage, audit logging
  */
@@ -22,7 +22,7 @@ function getEncryptionKey(): Buffer {
   if (!masterKey) {
     throw new Error('MASTER_ENCRYPTION_KEY not set in environment variables');
   }
-  return crypto.scryptSync(masterKey, 'nexus-forge-salt', KEY_LENGTH);
+  return crypto.scryptSync(masterKey, 'nanokit-salt', KEY_LENGTH);
 }
 
 /**

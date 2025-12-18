@@ -134,7 +134,7 @@ export function generateProtectionScript(): string {
   // Watermark overlay (invisible but detectable)
   var watermark = document.createElement('div');
   watermark.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999999;opacity:0.01;';
-  watermark.setAttribute('data-protection', 'nexus-forge');
+  watermark.setAttribute('data-protection', 'nanokit');
   document.body.appendChild(watermark);
   
   // Detect if running in iframe (anti-embedding)

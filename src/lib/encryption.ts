@@ -1,5 +1,5 @@
 /**
- * Advanced Encryption System for Nexus Forge
+ * Advanced Encryption System for NanoKit
  * Encrypts HTML, CSS, and JavaScript content for maximum protection
  */
 
@@ -119,7 +119,7 @@ export function generateEncryptedHTML(
   // Generate unique encryption key based on user ID and timestamp
   const encryptionKey = crypto
     .createHash('sha256')
-    .update(`${userId}-${Date.now()}-nexus-forge`)
+    .update(`${userId}-${Date.now()}-nanokit`)
     .digest('hex')
     .substring(0, 32);
   
@@ -228,7 +228,7 @@ export function generateEncryptedHTML(
         const fingerprint = document.createElement('div');
         fingerprint.style.display = 'none';
         fingerprint.setAttribute('data-user', userId);
-        fingerprint.setAttribute('data-forge', 'nexus');
+        fingerprint.setAttribute('data-nanokit', 'true');
         document.body.appendChild(fingerprint);
         
         // Clear encryption data from memory

@@ -157,7 +157,7 @@ export default function SignupPage() {
                 </div>
                 <h2 className="text-4xl font-black mb-6">
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400">
-                    Forge Activated!
+                    Account Created!
                   </span>
                 </h2>
                 <p className="text-lg text-slate-300 mb-2">
@@ -170,7 +170,7 @@ export default function SignupPage() {
                 >
                   <span className="flex items-center justify-center">
                     <span className="mr-2">⚡</span>
-                    Access Your Forge
+                    Go to Dashboard
                   </span>
                 </Link>
               </div>

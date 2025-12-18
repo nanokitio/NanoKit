@@ -705,9 +705,9 @@ export default function DashboardPage() {
               <div className="mx-auto w-20 h-20 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-400 rounded-2xl flex items-center justify-center mb-6">
                 <div className="text-white font-black text-3xl">⚡</div>
               </div>
-              <h3 className="text-3xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Your Forge Awaits</h3>
+              <h3 className="text-3xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Welcome to NanoKit</h3>
               <p className="text-lg text-slate-300 mb-8 max-w-md mx-auto">
-                Ready to forge your first digital experience? Let's create something extraordinary together.
+                Ready to create your first digital experience? Let's build something extraordinary together.
               </p>
               <Button 
                 onClick={handleQuickCreate}
@@ -715,7 +715,7 @@ export default function DashboardPage() {
               >
                 <span className="flex items-center gap-2">
                   <Zap className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))' }} />
-                  Forge Your First Site
+                  Create Your First Site
                 </span>
               </Button>
             </div>
