@@ -189,15 +189,17 @@ export function InlineEditableText({
 
   return (
     <div ref={containerRef} className="relative" style={{ zIndex: 10 }}>
-      {/* Horizontal Toolbar - Fixed on top like Word */}
+      {/* Horizontal Toolbar - Fixed at absolute top of viewport */}
       {isEditing && (
         <div
           ref={toolbarRef}
-          className="fixed z-[99999] shadow-2xl backdrop-blur-sm rounded-b-xl"
+          className="shadow-2xl backdrop-blur-sm rounded-b-xl"
           style={{
-            top: 0,
+            position: 'fixed',
+            top: '0px',
             left: '50%',
             transform: 'translateX(-50%)',
+            zIndex: 999999,
             backgroundColor: 'rgba(15, 23, 42, 0.98)',
             border: '2px solid rgba(100, 116, 139, 0.5)',
             borderTop: 'none',
