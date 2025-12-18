@@ -706,7 +706,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
                             <div class="rollover-symbol" id="slot8"><div class="rollover-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20" font-weight="bold" fill="#fde047">7</text></svg></div></div>
                         </div>
                     </div>
-                    <button class="spin-button" id="spinButton"><span>== SPIN TO WIN ==</span></button>
+                    <button class="spin-button" id="spinButton"><span>SPIN TO WIN</span></button>
                 </div>
             </div>
             <div class="features">
@@ -803,7 +803,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
             
             const button = this;
             const buttonText = button.querySelector('span');
-            buttonText.textContent = '... SPINNING ...';
+            buttonText.textContent = 'SPINNING...';
             button.disabled = true;
             
             const slotSymbols = document.querySelectorAll('.rollover-symbol');
@@ -832,7 +832,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
                 
                 updateSlotSymbols();
                 
-                buttonText.textContent = '== SPIN TO WIN ==';
+                buttonText.textContent = 'SPIN TO WIN';
                 button.disabled = false;
                 isSpinning = false;
                 

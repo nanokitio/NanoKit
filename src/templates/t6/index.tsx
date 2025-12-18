@@ -325,7 +325,7 @@ export function Template6({ brand }: Template6Props) {
               }`}
             >
               <span className="tracking-widest">
-                {isSpinning ? '*** SPINNING ***' : '== SPIN TO WIN =='}
+                {isSpinning ? 'SPINNING...' : 'SPIN TO WIN'}
               </span>
             </button>
           </div>
