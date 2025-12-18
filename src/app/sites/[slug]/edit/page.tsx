@@ -569,6 +569,9 @@ export default function SiteEditorPage() {
       
       console.log('Saving site with data:', { siteName, brandName, updateData })
       
+      // Add logging for the update operation
+      console.log('About to update site with ID:', site?.id)
+      
       // Try to add optional fields that might not exist in all database schemas
       try {
         updateData.popup_title = popupTitle
@@ -601,6 +604,8 @@ export default function SiteEditorPage() {
         .from('sites')
         .update(updateData)
         .eq('slug', slug)
+
+      console.log('Update result:', { error, updateData })
 
       if (error) {
         // If error is about missing column, try without optional fields
