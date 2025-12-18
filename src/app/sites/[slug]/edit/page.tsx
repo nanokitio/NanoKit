@@ -394,7 +394,9 @@ export default function SiteEditorPage() {
       setFeaturedPlayer(data.featured_player || '')
       setSportDirector(data.sport_director || '')
       setBrandName(data.brand_name || 'My New Asset')
+      console.log('Loading site - data.name:', data.name, 'data.brand_name:', data.brand_name, 'data.industry:', data.industry)
       setSiteName(data.name || `${data.brand_name} - ${data.industry} Site`)
+      console.log('Set siteName to:', data.name || `${data.brand_name} - ${data.industry} Site`)
       
       // Load custom styles from sections JSONB
       if (data.sections?.customStyles) {
