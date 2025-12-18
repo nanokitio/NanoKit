@@ -98,10 +98,11 @@ export default function DashboardPage() {
       }
 
       // Get user's sites - try multiple strategies
-      let sitesData = null
-      const sitesError = null
+      let sitesData: any[] = []
+      let sitesError: any = null
 
       // Strategy 1: Try with user_id column
+      console.log('Fetching sites for user_id:', user.id)
       const result1 = await supabase
         .from('sites')
         .select(`
@@ -112,7 +113,12 @@ export default function DashboardPage() {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
 
-      if (!result1.error && result1.data && result1.data.length > 0) {
+      console.log('Result1:', { data: result1.data, error: result1.error })
+
+      if (result1.error) {
+        console.error('Error fetching by user_id:', result1.error)
+        sitesError = result1.error
+      } else if (result1.data && result1.data.length > 0) {
         sitesData = result1.data
         console.log('Sites found by user_id:', sitesData.length)
       } else {
@@ -130,14 +136,18 @@ export default function DashboardPage() {
             .eq('org_id', org.id)
             .order('created_at', { ascending: false })
 
-          if (!result2.error && result2.data) {
+          console.log('Result2:', { data: result2.data, error: result2.error })
+
+          if (result2.error) {
+            console.error('Error fetching by org_id:', result2.error)
+          } else if (result2.data) {
             sitesData = result2.data
             console.log('Sites found by org_id:', sitesData.length)
           }
         }
       }
 
-      console.log('Final sites data:', sitesData)
+      console.log('Final sites data:', sitesData?.length || 0, 'sites')
 
       if (sitesError) {
         console.error('Error fetching sites:', sitesError)
