@@ -56,6 +56,52 @@ export default function DashboardPage() {
     setCurrentPage(1)
   }, [viewMode, showArchived])
   
+  const migrateSiteNames = async () => {
+    try {
+      // Check if we already ran migration by checking localStorage
+      const migrationRan = localStorage.getItem('site-names-migrated')
+      if (migrationRan) {
+        console.log('Site names migration already ran')
+        return
+      }
+
+      console.log('Running site names migration...')
+      const response = await fetch('/api/migrate-site-names', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      
+      if (response.ok) {
+        const result = await response.json()
+        console.log('Migration result:', result)
+        
+        // Mark migration as run
+        localStorage.setItem('site-names-migrated', 'true')
+        
+        // Reload sites to show updated names
+        if (result.success && result.updates?.length > 0) {
+          console.log('Reloading sites to show updated names...')
+          setTimeout(() => {
+            loadData()
+          }, 1000)
+        }
+      } else {
+        console.error('Migration failed:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Error running migration:', error)
+    }
+  }
+
+  useEffect(() => {
+    loadData()
+    
+    // Run migration for existing sites without names
+    migrateSiteNames()
+  }, [showArchived])
+  
   // Close column menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
