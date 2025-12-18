@@ -168,6 +168,8 @@ export default function DashboardPage() {
         sitesData = result1.data
         console.log('Sites found by user_id:', sitesData.length)
         console.log('Sample site data:', result1.data[0])
+        console.log('Sample site name field:', result1.data[0]?.name)
+        console.log('Sample site brand_name:', result1.data[0]?.brand_name)
       } else {
         console.log('No sites found by user_id, trying org_id...')
         
@@ -1055,6 +1057,9 @@ export default function DashboardPage() {
                               <div>
                                 <div className="text-sm font-semibold text-white">
                                   {site.name || site.brand_name || 'Untitled Site'}
+                                </div>
+                                <div className="text-xs text-slate-500">
+                                  Debug: name="{site.name || 'null'}" brand="{site.brand_name || 'null'}"
                                 </div>
                                 <div className="text-sm text-slate-400">
                                   /{site.slug}
