@@ -1058,9 +1058,6 @@ export default function DashboardPage() {
                                 <div className="text-sm font-semibold text-white">
                                   {site.name || site.brand_name || 'Untitled Site'}
                                 </div>
-                                <div className="text-xs text-slate-500">
-                                  Debug: name="{site.name || 'null'}" brand="{site.brand_name || 'null'}"
-                                </div>
                                 <div className="text-sm text-slate-400">
                                   /{site.slug}
                                 </div>

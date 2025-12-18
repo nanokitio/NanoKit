@@ -607,7 +607,11 @@ export default function SiteEditorPage() {
 
       console.log('Update result:', { error, updateData })
 
-      if (error) {
+      if (!error) {
+        console.log('✅ Site saved successfully!')
+        // Show success message
+        alert('Site saved successfully!')
+      } else {
         // If error is about missing column, try without optional fields
         if (error.message?.includes('wheel_values') || error.message?.includes('schema cache')) {
           console.warn('wheel_values column not in schema, saving without it')
