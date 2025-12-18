@@ -638,13 +638,17 @@ export default function DashboardPage() {
                       <button
                         onClick={() => {
                           setShowUserMenu(false)
-                          router.push('/referral')
+                          // router.push('/referral') // Coming soon
                         }}
-                        className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700/50 hover:text-green-400 transition-all flex items-center justify-between group"
+                        className="w-full px-4 py-2.5 text-left text-sm text-slate-400 hover:bg-slate-700/50 hover:text-green-400 transition-all flex items-center justify-between group opacity-60 cursor-not-allowed"
+                        title="Coming Soon"
                       >
                         <div className="flex items-center gap-3">
-                          <Gift className="w-5 h-5 text-green-400 group-hover:text-green-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 197, 94, 0.5))' }} />
-                          <span className="font-medium">My Referral</span>
+                          <Gift className="w-5 h-5 text-green-400/60 group-hover:text-green-300 transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 197, 94, 0.3))' }} />
+                          <div>
+                            <span className="font-medium">My Referral</span>
+                            <span className="ml-2 text-xs text-slate-500">Coming Soon</span>
+                          </div>
                         </div>
                       </button>
                       
