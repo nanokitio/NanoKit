@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { ConfigurationNotice } from '@/components/ConfigurationNotice'
 import { Button } from '@/components/ui/button'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
+import { Footer } from '@/components/Footer'
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
@@ -458,13 +459,7 @@ export default function SignupPage() {
       </div>
       
       {/* Footer */}
-      <footer className="relative z-10 py-8 px-6 border-t border-slate-700/50 backdrop-blur-2xl bg-slate-900/80">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center text-slate-400 text-sm">
-            <p>2025 <a href="https://nanokit.io" className="hover:text-white transition-colors">Nanokit.io</a></p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
       
       {/* CSS Animations */}
       <style jsx>{`

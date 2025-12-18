@@ -75,7 +75,6 @@ export function InlineEditableText({
     textAlign: 'center',
     color: '#ffffff'
   })
-  const [toolbarPosition, setToolbarPosition] = useState({ top: 0, left: 0 })
   const [showFontSizeDropdown, setShowFontSizeDropdown] = useState(false)
   const [showFontFamilyDropdown, setShowFontFamilyDropdown] = useState(false)
   const [showColorPicker, setShowColorPicker] = useState(false)
@@ -101,23 +100,6 @@ export function InlineEditableText({
       setLocalValue(value)
     }
   }, [value, isEditing])
-
-  // Position toolbar - fixed at bottom for mobile, below text for desktop
-  useEffect(() => {
-    if (isEditing && containerRef.current) {
-      if (isMobile) {
-        // On mobile, toolbar is fixed at bottom - no position needed
-        setToolbarPosition({ top: 0, left: 0 })
-      } else {
-        const rect = containerRef.current.getBoundingClientRect()
-        const toolbarTop = rect.bottom + 15
-        setToolbarPosition({
-          top: toolbarTop,
-          left: Math.max(10, Math.min(rect.left + rect.width / 2 - 250, window.innerWidth - 520))
-        })
-      }
-    }
-  }, [isEditing, isMobile])
 
   // Focus input when editing starts
   useEffect(() => {
