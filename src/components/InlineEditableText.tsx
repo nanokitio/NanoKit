@@ -80,10 +80,16 @@ export function InlineEditableText({
   const [showFontFamilyDropdown, setShowFontFamilyDropdown] = useState(false)
   const [showColorPicker, setShowColorPicker] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
   
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const toolbarRef = useRef<HTMLDivElement>(null)
+
+  // Create portal container for toolbar to escape any transform containers
+  useEffect(() => {
+    setPortalContainer(document.body)
+  }, [])
 
   // Detect mobile device
   useEffect(() => {
@@ -188,30 +194,28 @@ export function InlineEditableText({
     textAlign: textStyles.textAlign,
   }
 
-  return (
-    <div ref={containerRef} className="relative" style={{ zIndex: 10 }}>
-      {/* Horizontal Toolbar - Fixed at absolute top of viewport */}
-      {isEditing && (
-        <div
-          ref={toolbarRef}
-          className="shadow-2xl backdrop-blur-sm rounded-b-xl"
-          style={{
-            position: 'fixed',
-            top: '0px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 999999,
-            backgroundColor: 'rgba(15, 23, 42, 0.98)',
-            border: '2px solid rgba(100, 116, 139, 0.5)',
-            borderTop: 'none',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
-            padding: '8px 16px',
-            maxWidth: '95vw',
-            overflowX: 'auto',
-          }}
-          onMouseDown={(e) => e.preventDefault()}
-          onTouchStart={(e) => e.stopPropagation()}
-        >
+  // Toolbar component to be rendered via portal
+  const toolbar = (
+    <div
+      ref={toolbarRef}
+      className="shadow-2xl backdrop-blur-sm rounded-b-xl"
+      style={{
+        position: 'fixed',
+        top: '0px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 999999,
+        backgroundColor: 'rgba(15, 23, 42, 0.98)',
+        border: '2px solid rgba(100, 116, 139, 0.5)',
+        borderTop: 'none',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+        padding: '8px 16px',
+        maxWidth: '95vw',
+        overflowX: 'auto',
+      }}
+      onMouseDown={(e) => e.preventDefault()}
+      onTouchStart={(e) => e.stopPropagation()}
+    >
           {/* Horizontal layout container - like Word toolbar */}
           <div className="flex items-center gap-1 flex-wrap">
           
@@ -420,7 +424,12 @@ export function InlineEditableText({
           </button>
           </div>
         </div>
-      )}
+  );
+
+  return (
+    <div ref={containerRef} className="relative" style={{ zIndex: 10 }}>
+      {/* Toolbar rendered via portal to document.body - escapes any transform containers */}
+      {isEditing && portalContainer && createPortal(toolbar, portalContainer)}
 
       {/* Display or Edit Mode */}
       {isEditing ? (
