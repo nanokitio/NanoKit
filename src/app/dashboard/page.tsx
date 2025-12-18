@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/utils'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import { Site } from '@/lib/types'
-import { CreditCard, FileText, LogOut, Search, BarChart3, Rocket, Download, Archive, Eye, Edit, Trash2, Zap, User, Settings, Gift, HelpCircle, MessageSquare, ChevronRight, ArrowUpDown, Globe, ChevronUp, ChevronDown } from 'lucide-react'
+import { CreditCard, FileText, LogOut, Search, BarChart3, Rocket, Download, Archive, Eye, Edit, Trash2, Zap, User, Settings, Gift, HelpCircle, MessageSquare, ChevronRight, ArrowUpDown, Globe, ChevronUp, ChevronDown, RefreshCw } from 'lucide-react'
 
 interface SiteWithVisits extends Site {
   visits?: { count: number }[]
@@ -100,6 +100,14 @@ export default function DashboardPage() {
     
     // Run migration for existing sites without names
     migrateSiteNames()
+    
+    // Refresh data every 30 seconds to catch updates
+    const interval = setInterval(() => {
+      console.log('Refreshing dashboard data...')
+      loadData()
+    }, 30000)
+    
+    return () => clearInterval(interval)
   }, [showArchived])
   
   // Close column menu when clicking outside
@@ -796,15 +804,27 @@ export default function DashboardPage() {
                     manage your digital assets here
                   </p>
                 </div>
-                <Button 
-                  onClick={handleQuickCreate}
-                  className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 font-semibold px-6 py-4 text-base"
-                >
-                  <span className="flex items-center gap-2">
-                    <Zap className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))' }} />
-                    Create New Site
-                  </span>
-                </Button>
+                <div className="flex items-center gap-3">
+                  <Button 
+                    onClick={() => {
+                      console.log('Manual refresh triggered')
+                      loadData()
+                    }}
+                    className="bg-slate-700 hover:bg-slate-600 text-white border-0 shadow-lg transition-all duration-300 font-semibold px-4 py-3 text-base"
+                    title="Refresh dashboard data"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                  </Button>
+                  <Button 
+                    onClick={handleQuickCreate}
+                    className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 font-semibold px-6 py-4 text-base"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Zap className="w-5 h-5" style={{ filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))' }} />
+                      Create New Site
+                    </span>
+                  </Button>
+                </div>
               </div>
               
               {/* Search Bar */}
