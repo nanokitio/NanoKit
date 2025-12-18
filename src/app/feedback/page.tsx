@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, MessageSquare, Send, Star, ThumbsUp, ThumbsDown, Lightbulb, Bug } from 'lucide-react'
+import { NanoKitLogo } from '@/components/NanoKitLogo'
+import { MessageSquare, Send, Star, ThumbsUp, ThumbsDown, Lightbulb, Bug } from 'lucide-react'
 
 export default function FeedbackPage() {
   const [feedbackType, setFeedbackType] = useState<'general' | 'bug' | 'feature' | 'rating'>('general')
@@ -105,15 +106,8 @@ export default function FeedbackPage() {
       <header className="relative z-50 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-6">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                onClick={() => router.push('/dashboard')}
-                className="text-slate-300 hover:text-cyan-400"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Dashboard
-              </Button>
+            <div className="flex items-center gap-6">
+              <NanoKitLogo size="header" href="/" />
               <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
                 Quick Feedback
               </h1>
