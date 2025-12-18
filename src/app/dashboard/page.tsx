@@ -121,6 +121,7 @@ export default function DashboardPage() {
       } else if (result1.data && result1.data.length > 0) {
         sitesData = result1.data
         console.log('Sites found by user_id:', sitesData.length)
+        console.log('Sample site data:', result1.data[0])
       } else {
         console.log('No sites found by user_id, trying org_id...')
         

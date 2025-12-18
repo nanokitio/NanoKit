@@ -567,6 +567,8 @@ export default function SiteEditorPage() {
         template_id: templateId  // Always save template_id
       }
       
+      console.log('Saving site with data:', { siteName, brandName, updateData })
+      
       // Try to add optional fields that might not exist in all database schemas
       try {
         updateData.popup_title = popupTitle
