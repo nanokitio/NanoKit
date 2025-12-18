@@ -731,7 +731,17 @@ export default function SiteDetailPage() {
 </body>
 </html>`;
                       } else {
-                        // For other templates, use the existing logic
+                        // For other templates - check if generated_html is a complete document
+                        const html = site.generated_html || '';
+                        const isCompleteDocument = html.trim().toLowerCase().startsWith('<!doctype') || html.trim().toLowerCase().startsWith('<html');
+                        
+                        if (isCompleteDocument) {
+                          // T6, T7, etc. return complete HTML documents with scripts
+                          // Use them directly without wrapping
+                          return html;
+                        }
+                        
+                        // Legacy templates - wrap in document
                         return `<!DOCTYPE html>
 <html>
 <head>
@@ -740,7 +750,7 @@ export default function SiteDetailPage() {
   <style>${site.generated_css}</style>
 </head>
 <body>
-  ${site.generated_html
+  ${html
     .replace(/\$\{brand\.copy\.headline[^}]*\}/g, headline || site.headline || 'Your Headline')
     .replace(/\$\{brand\.brandName\.toUpperCase\(\)\}/g, (brandName || site.brand_name || 'Brand').toUpperCase())
     .replace(/\$\{brand\.brandName\}/g, brandName || site.brand_name || 'Brand')
