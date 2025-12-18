@@ -140,6 +140,7 @@ export async function POST(request: NextRequest) {
     
     // Build insert data conditionally
     const insertData: any = {
+      name: validatedData.name,
       slug,
       template_id: dbTemplateId,
       logo_url: validatedData.logoUrl,
