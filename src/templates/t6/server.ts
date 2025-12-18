@@ -666,74 +666,74 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
                 </div>
                 ` : ''}
                 <div class="synth-title-container">
-                    <h1 class="main-title">◆ ${headline} ◆</h1>
+                    <h1 class="main-title">${headline}</h1>
                     <div class="synth-underline"></div>
                 </div>
                 <p class="subtitle">${subheadline}</p>
                 <div class="bonus-timer">
-                    <span class="timer-icon">▲</span>
+                    <span class="timer-icon">*</span>
                     <span class="timer-text">BONUS EXPIRES: <span id="countdown">05:55</span></span>
-                    <span class="timer-icon">▲</span>
+                    <span class="timer-icon">*</span>
                 </div>
             </header>
             <div class="slot-machine">
                 <div class="synth-border-glow"></div>
                 <div class="prize-display">
                     <div class="prize-item">
-                        <div class="prize-icon">◆</div>
+                        <div class="prize-icon">$</div>
                         <div class="prize-text">MAX WIN<br>$5,000</div>
                     </div>
                     <div class="prize-item">
-                        <div class="prize-icon">★</div>
+                        <div class="prize-icon">*</div>
                         <div class="prize-text">MIN WIN<br>$1,000</div>
                     </div>
                 </div>
                 <div class="slot-game">
                     <div class="slot-lines">
                         <div class="rollover-line">
-                            <div class="rollover-symbol" id="slot0"><div class="rollover-icon">💎</div></div>
-                            <div class="rollover-symbol" id="slot1"><div class="rollover-icon">▲</div></div>
-                            <div class="rollover-symbol" id="slot2"><div class="rollover-icon">●</div></div>
+                            <div class="rollover-symbol" id="slot0"><div class="rollover-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20" font-weight="bold" fill="#fde047">7</text></svg></div></div>
+                            <div class="rollover-symbol" id="slot1"><div class="rollover-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="2" y="8" width="20" height="8" rx="2" fill="#f97316"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="8" font-weight="bold" fill="#fff">BAR</text></svg></div></div>
+                            <div class="rollover-symbol" id="slot2"><div class="rollover-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="16" r="5" fill="#ef4444"/><circle cx="16" cy="16" r="5" fill="#ef4444"/><path d="M8 11 C8 6 12 4 12 4 C12 4 16 6 16 11" stroke="#22c55e" stroke-width="2" fill="none"/></svg></div></div>
                         </div>
                         <div class="rollover-line">
-                            <div class="rollover-symbol" id="slot3"><div class="rollover-icon">★</div></div>
-                            <div class="rollover-symbol" id="slot4"><div class="rollover-icon">◆</div></div>
-                            <div class="rollover-symbol" id="slot5"><div class="rollover-icon">◇</div></div>
+                            <div class="rollover-symbol" id="slot3"><div class="rollover-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9V14L3 17H21L19 14V9C19 5 16 2 12 2Z" fill="#fbbf24"/><circle cx="12" cy="20" r="2" fill="#fbbf24"/></svg></div></div>
+                            <div class="rollover-symbol" id="slot4"><div class="rollover-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="12" rx="8" ry="6" fill="#fde047" transform="rotate(-30 12 12)"/></svg></div></div>
+                            <div class="rollover-symbol" id="slot5"><div class="rollover-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="6" r="3" fill="#a855f7"/><circle cx="8" cy="11" r="3" fill="#a855f7"/><circle cx="16" cy="11" r="3" fill="#a855f7"/><circle cx="10" cy="16" r="3" fill="#a855f7"/><circle cx="14" cy="16" r="3" fill="#a855f7"/><circle cx="12" cy="20" r="3" fill="#a855f7"/></svg></div></div>
                         </div>
                         <div class="rollover-line">
-                            <div class="rollover-symbol" id="slot6"><div class="rollover-icon">▼</div></div>
-                            <div class="rollover-symbol" id="slot7"><div class="rollover-icon">💎</div></div>
-                            <div class="rollover-symbol" id="slot8"><div class="rollover-icon">★</div></div>
+                            <div class="rollover-symbol" id="slot6"><div class="rollover-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="#fde047"><path d="M12 2L15 9H22L16.5 13.5L18.5 21L12 16.5L5.5 21L7.5 13.5L2 9H9L12 2Z"/></svg></div></div>
+                            <div class="rollover-symbol" id="slot7"><div class="rollover-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="#67e8f9"><path d="M12 2L22 12L12 22L2 12L12 2Z"/></svg></div></div>
+                            <div class="rollover-symbol" id="slot8"><div class="rollover-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20" font-weight="bold" fill="#fde047">7</text></svg></div></div>
                         </div>
                     </div>
-                    <button class="spin-button" id="spinButton"><span>▲ EXECUTE SPIN ▲</span></button>
+                    <button class="spin-button" id="spinButton"><span>== SPIN TO WIN ==</span></button>
                 </div>
             </div>
             <div class="features">
                 <div class="feature-item">
-                    <div class="feature-icon">◆</div>
+                    <div class="feature-icon">$</div>
                     <div class="feature-text">INSTANT<br>PAYOUTS</div>
                 </div>
                 <div class="feature-item">
-                    <div class="feature-icon">▲</div>
+                    <div class="feature-icon">+</div>
                     <div class="feature-text">WELCOME<br>BONUS</div>
                 </div>
                 <div class="feature-item">
-                    <div class="feature-icon">●</div>
+                    <div class="feature-icon">*</div>
                     <div class="feature-text">24/7<br>SUPPORT</div>
                 </div>
             </div>
             <div class="cta-section">
-                <a href="${ctaUrl}" target="_blank" class="cta-button" id="playNowBtn"><span>★ ${cta} ★</span></a>
+                <a href="${ctaUrl}" target="_blank" class="cta-button" id="playNowBtn"><span>${cta}</span></a>
                 <p class="disclaimer">18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY</p>
             </div>
         </div>
         <div id="winModal" class="modal">
             <div class="win-content">
-                <h2 class="win-title">◆ JACKPOT ACHIEVED ◆</h2>
+                <h2 class="win-title">JACKPOT ACHIEVED!</h2>
                 <p class="win-amount">CREDIT TRANSFER: <span class="win-amount-value">$1,000</span></p>
-                <p class="win-bonus">★ BONUS: 50 FREE EXECUTIONS ★</p>
-                <a href="${ctaUrl}" target="_blank" class="claim-btn" id="claimBtn">▲ CLAIM REWARDS ▲</a>
+                <p class="win-bonus">BONUS: 50 FREE SPINS!</p>
+                <a href="${ctaUrl}" target="_blank" class="claim-btn" id="claimBtn">CLAIM REWARDS</a>
                 <button class="close-btn" id="closeModal">[ CLOSE TERMINAL ]</button>
             </div>
         </div>
@@ -762,7 +762,17 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
         
         let spinCount = 0;
         let isSpinning = false;
-        const symbols = ['◆', '▲', '●', '★', '◇', '▼'];
+        const symbolSVGs = [
+            '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20" font-weight="bold" fill="#fde047">7</text></svg>',
+            '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="2" y="8" width="20" height="8" rx="2" fill="#f97316"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="8" font-weight="bold" fill="#fff">BAR</text></svg>',
+            '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="16" r="5" fill="#ef4444"/><circle cx="16" cy="16" r="5" fill="#ef4444"/><path d="M8 11 C8 6 12 4 12 4 C12 4 16 6 16 11" stroke="#22c55e" stroke-width="2" fill="none"/></svg>',
+            '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9V14L3 17H21L19 14V9C19 5 16 2 12 2Z" fill="#fbbf24"/><circle cx="12" cy="20" r="2" fill="#fbbf24"/></svg>',
+            '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="12" rx="8" ry="6" fill="#fde047" transform="rotate(-30 12 12)"/></svg>',
+            '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="6" r="3" fill="#a855f7"/><circle cx="8" cy="11" r="3" fill="#a855f7"/><circle cx="16" cy="11" r="3" fill="#a855f7"/><circle cx="10" cy="16" r="3" fill="#a855f7"/><circle cx="14" cy="16" r="3" fill="#a855f7"/><circle cx="12" cy="20" r="3" fill="#a855f7"/></svg>',
+            '<svg width="36" height="36" viewBox="0 0 24 24" fill="#fde047"><path d="M12 2L15 9H22L16.5 13.5L18.5 21L12 16.5L5.5 21L7.5 13.5L2 9H9L12 2Z"/></svg>',
+            '<svg width="36" height="36" viewBox="0 0 24 24" fill="#67e8f9"><path d="M12 2L22 12L12 22L2 12L12 2Z"/></svg>'
+        ];
+        const winSVG = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20" font-weight="bold" fill="#fde047">7</text></svg>';
         
         function updateSlotSymbols() {
             for (let i = 0; i < 9; i++) {
@@ -771,9 +781,9 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
                     const icon = slot.querySelector('.rollover-icon');
                     if (icon) {
                         if (spinCount >= 2) {
-                            icon.textContent = '★';
+                            icon.innerHTML = winSVG;
                         } else {
-                            icon.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                            icon.innerHTML = symbolSVGs[Math.floor(Math.random() * symbolSVGs.length)];
                         }
                     }
                 }
@@ -793,7 +803,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
             
             const button = this;
             const buttonText = button.querySelector('span');
-            buttonText.textContent = '◆ PROCESSING ◆';
+            buttonText.textContent = '... SPINNING ...';
             button.disabled = true;
             
             const slotSymbols = document.querySelectorAll('.rollover-symbol');
@@ -807,7 +817,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
                     if (slot) {
                         const icon = slot.querySelector('.rollover-icon');
                         if (icon) {
-                            icon.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                            icon.innerHTML = symbolSVGs[Math.floor(Math.random() * symbolSVGs.length)];
                         }
                     }
                 }
@@ -822,7 +832,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
                 
                 updateSlotSymbols();
                 
-                buttonText.textContent = '▲ EXECUTE SPIN ▲';
+                buttonText.textContent = '== SPIN TO WIN ==';
                 button.disabled = false;
                 isSpinning = false;
                 
