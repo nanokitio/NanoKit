@@ -138,9 +138,12 @@ export async function POST(request: NextRequest) {
     // The database should accept any template ID as text
     const dbTemplateId = validatedData.templateId
     
+    // Generate automatic name if not provided
+    const siteName = validatedData.name || `${validatedData.brandName} - ${validatedData.industry} Site`
+    
     // Build insert data conditionally
     const insertData: any = {
-      name: validatedData.name,
+      name: siteName,
       slug,
       template_id: dbTemplateId,
       logo_url: validatedData.logoUrl,

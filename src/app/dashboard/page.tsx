@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/utils'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import { Site } from '@/lib/types'
-import { CreditCard, FileText, LogOut, Search, BarChart3, Rocket, Download, Archive, Eye, Edit, Trash2, Zap, User, Settings, Gift, HelpCircle, MessageSquare, ChevronRight, ArrowUpDown, Globe, ChevronUp, ChevronDown, X } from 'lucide-react'
+import { CreditCard, FileText, LogOut, Search, BarChart3, Rocket, Download, Archive, Eye, Edit, Trash2, Zap, User, Settings, Gift, HelpCircle, MessageSquare, ChevronRight, ArrowUpDown, Globe, ChevronUp, ChevronDown } from 'lucide-react'
 
 interface SiteWithVisits extends Site {
   visits?: { count: number }[]
@@ -285,26 +285,19 @@ export default function DashboardPage() {
     }
   }
 
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const [newSiteName, setNewSiteName] = useState('')
-
-  const handleQuickCreate = async (siteName?: string) => {
+  const handleQuickCreate = async () => {
     try {
       setLoading(true)
       
-      // Use provided name or default
-      const name = siteName || newSiteName || 'My New Site'
-      
       // Call the generate API to create the site with rendered HTML/CSS
       // The API will handle organization creation if needed
-      console.log('About to call API with templateId: t6, name:', name)
+      console.log('About to call API with templateId: t6')
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: name,
           templateId: 't6',
           brandName: 'My New Site',
           industry: 'Casino & Gaming',
@@ -339,17 +332,6 @@ export default function DashboardPage() {
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleCreateFromModal = async () => {
-    if (!newSiteName.trim()) {
-      alert('Please enter a site name')
-      return
-    }
-    
-    setShowCreateModal(false)
-    await handleQuickCreate(newSiteName.trim())
-    setNewSiteName('')
   }
 
   const getFilteredSites = () => {
@@ -743,7 +725,7 @@ export default function DashboardPage() {
                 Ready to create your first digital experience? Let's build something extraordinary together.
               </p>
               <Button 
-                onClick={() => setShowCreateModal(true)}
+                onClick={handleQuickCreate}
                 className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 text-lg px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105"
               >
                 <span className="flex items-center gap-2">
@@ -766,7 +748,7 @@ export default function DashboardPage() {
                   </p>
                 </div>
                 <Button 
-                  onClick={() => setShowCreateModal(true)}
+                  onClick={handleQuickCreate}
                   className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 font-semibold px-6 py-4 text-base"
                 >
                   <span className="flex items-center gap-2">
@@ -1241,71 +1223,6 @@ export default function DashboardPage() {
                   )}
                 </Button>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {/* Create Site Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
-          <div className="bg-slate-900 rounded-2xl p-8 max-w-md w-full border border-slate-700 shadow-2xl shadow-purple-500/20">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-white">Create New Site</h3>
-              <button
-                onClick={() => {
-                  setShowCreateModal(false)
-                  setNewSiteName('')
-                }}
-                className="text-slate-400 hover:text-white transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                Site Name
-              </label>
-              <input
-                type="text"
-                value={newSiteName}
-                onChange={(e) => setNewSiteName(e.target.value)}
-                placeholder="Enter a name for your site"
-                className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                autoFocus
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleCreateFromModal()
-                  } else if (e.key === 'Escape') {
-                    setShowCreateModal(false)
-                    setNewSiteName('')
-                  }
-                }}
-              />
-              <p className="text-xs text-slate-500 mt-2">
-                This name will help you identify your site in the dashboard
-              </p>
-            </div>
-            
-            <div className="flex gap-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowCreateModal(false)
-                  setNewSiteName('')
-                }}
-                className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-800"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleCreateFromModal}
-                disabled={!newSiteName.trim()}
-                className="flex-1 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Create Site
-              </Button>
             </div>
           </div>
         </div>
