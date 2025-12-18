@@ -108,7 +108,7 @@ export default function DashboardPage() {
         .select(`
           *,
           visits(count),
-          prelander_deployments(count, hosted_url, created_at)
+          prelander_deployments(hosted_url, created_at)
         `)
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
@@ -131,7 +131,7 @@ export default function DashboardPage() {
             .select(`
               *,
               visits(count),
-              prelander_deployments(count, hosted_url, created_at)
+              prelander_deployments(hosted_url, created_at)
             `)
             .eq('org_id', org.id)
             .order('created_at', { ascending: false })
@@ -164,7 +164,7 @@ export default function DashboardPage() {
           
           return {
             ...site,
-            deployment_count: deployments.length > 0 ? (deployments[0]?.count || deployments.length) : 0,
+            deployment_count: deployments.length, // Count is now just the array length
             hosted_url: latestDeployment?.hosted_url || null
           }
         })
