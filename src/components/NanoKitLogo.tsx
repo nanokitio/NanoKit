@@ -10,10 +10,10 @@ interface NanoKitLogoProps {
 
 export function NanoKitLogo({ size = 'md', href, className = '' }: NanoKitLogoProps) {
   const dimensions = {
-    sm: { width: 120, height: 90 },
-    md: { width: 150, height: 113 },
-    lg: { width: 200, height: 150 },
-    header: { width: 180, height: 135 }
+    sm: { width: 180, height: 135 },
+    md: { width: 240, height: 180 },
+    lg: { width: 320, height: 240 },
+    header: { width: 280, height: 210 }
   }
 
   const logoElement = (
