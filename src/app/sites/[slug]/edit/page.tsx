@@ -395,8 +395,13 @@ export default function SiteEditorPage() {
       setSportDirector(data.sport_director || '')
       setBrandName(data.brand_name || 'My New Asset')
       console.log('Loading site - data.name:', data.name, 'data.brand_name:', data.brand_name, 'data.industry:', data.industry)
-      setSiteName(data.name || `${data.brand_name} - ${data.industry} Site`)
-      console.log('Set siteName to:', data.name || `${data.brand_name} - ${data.industry} Site`)
+      
+      // Force site name to be empty if it's the auto-generated one
+      const initialSiteName = data.name && !data.name.includes(`${data.brand_name} - ${data.industry} Site`) 
+        ? data.name 
+        : ''
+      setSiteName(initialSiteName)
+      console.log('Set siteName to:', initialSiteName)
       
       // Load custom styles from sections JSONB
       if (data.sections?.customStyles) {

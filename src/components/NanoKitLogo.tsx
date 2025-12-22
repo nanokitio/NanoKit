@@ -19,7 +19,7 @@ export function NanoKitLogo({ size = 'md', href, className = '' }: NanoKitLogoPr
   const logoElement = (
     <div className={`flex items-center ${className}`}>
       <img
-        src="https://raw.githubusercontent.com/manupor/Prelander_Gen/main/public/images/nano-kit-logo.png"
+        src="/images/NANO-KIT-LOGO.png"
         alt="Nano Kit Logo"
         width={dimensions[size].width}
         height={dimensions[size].height}
@@ -31,12 +31,12 @@ export function NanoKitLogo({ size = 'md', href, className = '' }: NanoKitLogoPr
           height: 'auto'
         }}
         onLoad={() => {
-          console.log('✅ Logo PNG loaded from GitHub raw');
+          console.log('✅ New NANO-KIT-LOGO.png loaded successfully');
         }}
         onError={(e) => {
-          console.log('❌ GitHub raw failed, trying local paths');
+          console.log('❌ New logo failed, trying fallback');
           const img = e.target as HTMLImageElement;
-          img.src = '/logo.png';
+          img.src = '/images/nano-kit-logo.png';
         }}
       />
     </div>
