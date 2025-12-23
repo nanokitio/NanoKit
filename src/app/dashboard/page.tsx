@@ -623,6 +623,9 @@ export default function DashboardPage() {
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center space-x-6">
               <NanoKitLogo size="header" href="/dashboard" />
+              <div>
+                <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Your Launch Center</h2>
+              </div>
             </div>
             <div className="flex items-center gap-4">
               {/* Welcome text primero */}
@@ -799,7 +802,6 @@ export default function DashboardPage() {
             <div className="mb-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Your Launch Center</h2>
                   <p className="mt-2 text-lg text-slate-300">
                     manage your digital assets here
                   </p>
@@ -964,11 +966,12 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 
-                <div className="overflow-x-auto">
-                  <table className="min-w-full">
+                <div className="overflow-visible">
+                  <div className="hidden lg:block overflow-visible">
+                    <table className="w-full table-fixed">
                     <thead className="bg-gradient-to-r from-slate-800/50 to-slate-700/50">
                       <tr>
-                        <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                        <th className="px-4 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide w-[25%]">
                           <button 
                             onClick={() => toggleSort('name')}
                             className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
@@ -982,7 +985,7 @@ export default function DashboardPage() {
                           </button>
                         </th>
                         {visibleColumns.template && (
-                          <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                          <th className="px-3 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide w-[12%]">
                             <button 
                               onClick={() => toggleSort('template')}
                               className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
@@ -997,7 +1000,7 @@ export default function DashboardPage() {
                           </th>
                         )}
                         {visibleColumns.status && (
-                          <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                          <th className="px-3 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide w-[10%]">
                             <button 
                               onClick={() => toggleSort('status')}
                               className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
@@ -1012,7 +1015,7 @@ export default function DashboardPage() {
                           </th>
                         )}
                         {visibleColumns.downloads && (
-                          <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                          <th className="px-3 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide w-[8%]">
                             <button 
                               onClick={() => toggleSort('downloads')}
                               className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
@@ -1027,7 +1030,7 @@ export default function DashboardPage() {
                           </th>
                         )}
                         {visibleColumns.hosted && (
-                          <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                          <th className="px-3 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide w-[12%]">
                             <button 
                               onClick={() => toggleSort('hosted')}
                               className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
@@ -1042,7 +1045,7 @@ export default function DashboardPage() {
                           </th>
                         )}
                         {visibleColumns.creationDate && (
-                          <th className="px-6 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                          <th className="px-3 py-4 text-left text-xs font-medium text-cyan-300 uppercase tracking-wide w-[13%]">
                             <button 
                               onClick={() => toggleSort('creationDate')}
                               className="flex items-center gap-2 hover:text-cyan-200 transition-colors"
@@ -1056,7 +1059,7 @@ export default function DashboardPage() {
                             </button>
                           </th>
                         )}
-                        <th className="px-6 py-4 text-center text-xs font-medium text-cyan-300 uppercase tracking-wide">
+                        <th className="px-3 py-4 text-center text-xs font-medium text-cyan-300 uppercase tracking-wide w-[20%]">
                           Quick Actions
                         </th>
                       </tr>
@@ -1064,37 +1067,37 @@ export default function DashboardPage() {
                     <tbody>
                       {getPaginatedSites().map((site) => (
                         <tr key={site.id} className="hover:bg-slate-800/30 transition-colors duration-200">
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-4 py-4 whitespace-nowrap">
                             <div className="flex items-center">
                               {site.logo_url && (
                                 <img
-                                  className="h-10 w-10 rounded-full mr-4"
+                                  className="h-8 w-8 rounded-full mr-3"
                                   style={{ border: 'none' }}
                                   src={site.logo_url}
                                   alt=""
                                 />
                               )}
                               <div>
-                                <div className="text-sm font-semibold text-white">
+                                <div className="text-sm font-semibold text-white truncate max-w-[200px]">
                                   {site.name || site.brand_name || 'Untitled Site'}
                                 </div>
-                                <div className="text-sm text-slate-400">
+                                <div className="text-xs text-slate-400">
                                   /{site.slug}
                                 </div>
                               </div>
                             </div>
                           </td>
                           {visibleColumns.template && (
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-cyan-300" style={{ border: 'none' }}>
-                                Template {site.template_id.toUpperCase()}
+                            <td className="px-3 py-4 whitespace-nowrap">
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-cyan-300" style={{ border: 'none' }}>
+                                {site.template_id.toUpperCase()}
                               </span>
                             </td>
                           )}
                           {visibleColumns.status && (
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            <td className="px-3 py-4 whitespace-nowrap">
                               <span
-                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                                className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                                   site.status === 'published'
                                     ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300'
                                     : 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300'
@@ -1106,10 +1109,10 @@ export default function DashboardPage() {
                             </td>
                           )}
                           {visibleColumns.downloads && (
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                            <td className="px-3 py-4 whitespace-nowrap text-sm font-medium text-white text-center">
                               {site.is_downloaded ? (
-                                <span className="flex items-center gap-2">
-                                  <Download className="w-4 h-4 text-cyan-400" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.5))' }} />
+                                <span className="flex items-center justify-center gap-1">
+                                  <Download className="w-3 h-3 text-cyan-400" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.5))' }} />
                                   {site.download_count || 1}
                                 </span>
                               ) : (
@@ -1118,23 +1121,23 @@ export default function DashboardPage() {
                             </td>
                           )}
                           {visibleColumns.hosted && (
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                            <td className="px-3 py-4 whitespace-nowrap text-sm font-medium text-white">
                               {site.hosted_url ? (
                                 <a 
                                   href={site.hosted_url} 
                                   target="_blank" 
                                   rel="noopener noreferrer"
-                                  className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors"
+                                  className="flex items-center gap-1 text-purple-400 hover:text-purple-300 transition-colors"
                                   title={site.hosted_url}
                                 >
-                                  <Globe className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
-                                  <span className="max-w-[120px] truncate text-xs">
-                                    {site.hosted_url.replace(/^https?:\/\/[^\/]+\//, '').split('/').pop()?.substring(0, 15) || 'View'}...
+                                  <Globe className="w-3 h-3" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
+                                  <span className="max-w-[80px] truncate text-xs">
+                                    {site.hosted_url.replace(/^https?:\/\/[^\/]+\//, '').split('/').pop()?.substring(0, 10) || 'View'}...
                                   </span>
                                 </a>
                               ) : (site.deployment_count || 0) > 0 ? (
-                                <span className="flex items-center gap-2">
-                                  <Globe className="w-4 h-4 text-purple-400" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
+                                <span className="flex items-center justify-center gap-1">
+                                  <Globe className="w-3 h-3 text-purple-400" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
                                   <span className="text-purple-300">{site.deployment_count}</span>
                                 </span>
                               ) : (
@@ -1143,54 +1146,46 @@ export default function DashboardPage() {
                             </td>
                           )}
                           {visibleColumns.creationDate && (
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
+                            <td className="px-3 py-4 whitespace-nowrap text-xs text-slate-400">
                               {formatDate(site.created_at)}
                             </td>
                           )}
-                          <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                            <div className="flex items-center justify-center space-x-3">
+                          <td className="px-3 py-4 whitespace-nowrap text-center text-xs font-medium">
+                            <div className="flex items-center justify-center space-x-1 flex-wrap">
                               <Link
                                 href={`/sites/${site.slug}`}
-                                className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors duration-200"
+                                className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors duration-200 flex items-center gap-1"
                                 target="_blank"
+                                title="Preview site"
+                                aria-label="Preview site"
                               >
-                                <span className="flex items-center gap-1.5">
-                                  <Eye className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.5))' }} />
-                                  Preview
-                                </span>
+                                <Eye className="w-3 h-3" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.5))' }} />
                               </Link>
                               <Link
                                 href={`/sites/${site.slug}/edit`}
-                                className="text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200"
+                                className="text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200 flex items-center gap-1"
+                                title="Edit site"
+                                aria-label="Edit site"
                               >
-                                <span className="flex items-center gap-1.5">
-                                  <Edit className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
-                                  Edit
-                                </span>
+                                <Edit className="w-3 h-3" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
                               </Link>
                               <button
                                 onClick={() => handleArchiveToggle(site)}
                                 disabled={archivingId === site.id}
-                                className="text-yellow-400 hover:text-yellow-300 font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="text-yellow-400 hover:text-yellow-300 font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                                title={site.status === 'draft' ? 'Activate site' : 'Archive site'}
+                                aria-label={site.status === 'draft' ? 'Activate site' : 'Archive site'}
                               >
-                                {archivingId === site.id ? 'Processing...' : (
-                                  <span className="flex items-center gap-1.5">
-                                    <Archive className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(234, 179, 8, 0.5))' }} />
-                                    {site.status === 'draft' ? 'Activate' : 'Archive'}
-                                  </span>
-                                )}
+                                <Archive className="w-3 h-3" style={{ filter: 'drop-shadow(0 0 4px rgba(234, 179, 8, 0.5))' }} />
                               </button>
                               <button
                                 onClick={() => handleDeleteClick(site)}
                                 disabled={deletingId === site.id}
-                                className="text-red-400 hover:text-red-300 font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="text-red-400 hover:text-red-300 font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                                title="Delete site"
+                                aria-label="Delete site"
                               >
-                                {deletingId === site.id ? 'Deleting...' : (
-                                  <span className="flex items-center gap-1.5">
-                                    <Trash2 className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(239, 68, 68, 0.5))' }} />
-                                    Delete
-                                  </span>
-                                )}
+                                <Trash2 className="w-3 h-3" style={{ filter: 'drop-shadow(0 0 4px rgba(239, 68, 68, 0.5))' }} />
                               </button>
                             </div>
                           </td>
@@ -1198,6 +1193,146 @@ export default function DashboardPage() {
                       ))}
                     </tbody>
                   </table>
+                  </div>
+                  
+                  {/* Mobile Card Layout */}
+                  <div className="lg:hidden space-y-4">
+                    {getPaginatedSites().map((site) => (
+                      <div key={site.id} className="bg-slate-900/60 backdrop-blur-xl rounded-xl p-4 border border-slate-800/50">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center flex-1 min-w-0">
+                            {site.logo_url && (
+                              <img
+                                className="h-10 w-10 rounded-full mr-3 flex-shrink-0"
+                                style={{ border: 'none' }}
+                                src={site.logo_url}
+                                alt=""
+                              />
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <div className="text-sm font-semibold text-white truncate">
+                                {site.name || site.brand_name || 'Untitled Site'}
+                              </div>
+                              <div className="text-xs text-slate-400">
+                                /{site.slug}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 ml-2">
+                            <Link
+                              href={`/sites/${site.slug}`}
+                              className="text-cyan-400 hover:text-cyan-300 p-2 rounded-lg hover:bg-slate-800/50 transition-colors"
+                              target="_blank"
+                              aria-label="Preview site"
+                            >
+                              <Eye className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.5))' }} />
+                            </Link>
+                            <Link
+                              href={`/sites/${site.slug}/edit`}
+                              className="text-purple-400 hover:text-purple-300 p-2 rounded-lg hover:bg-slate-800/50 transition-colors"
+                              aria-label="Edit site"
+                            >
+                              <Edit className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
+                            </Link>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-3 text-xs">
+                          {visibleColumns.template && (
+                            <div className="flex items-center">
+                              <span className="text-slate-400 mr-2">Template:</span>
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-cyan-300">
+                                {site.template_id.toUpperCase()}
+                              </span>
+                            </div>
+                          )}
+                          {visibleColumns.status && (
+                            <div className="flex items-center">
+                              <span className="text-slate-400 mr-2">Status:</span>
+                              <span
+                                className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                  site.status === 'published'
+                                    ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300'
+                                    : 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300'
+                                }`}
+                                style={{ border: 'none' }}
+                              >
+                                {site.status}
+                              </span>
+                            </div>
+                          )}
+                          {visibleColumns.downloads && (
+                            <div className="flex items-center">
+                              <span className="text-slate-400 mr-2">Downloads:</span>
+                              {site.is_downloaded ? (
+                                <span className="flex items-center gap-1 text-cyan-400">
+                                  <Download className="w-3 h-3" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 211, 238, 0.5))' }} />
+                                  {site.download_count || 1}
+                                </span>
+                              ) : (
+                                <span className="text-gray-500">-</span>
+                              )}
+                            </div>
+                          )}
+                          {visibleColumns.hosted && (
+                            <div className="flex items-center">
+                              <span className="text-slate-400 mr-2">Hosted:</span>
+                              {site.hosted_url ? (
+                                <a 
+                                  href={site.hosted_url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-1 text-purple-400 hover:text-purple-300 transition-colors"
+                                  aria-label={`Visit hosted site: ${site.hosted_url}`}
+                                >
+                                  <Globe className="w-3 h-3" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
+                                  <span className="truncate max-w-[60px]">
+                                    {site.hosted_url.replace(/^https?:\/\/[^\/]+\//, '').split('/').pop()?.substring(0, 8) || 'View'}...
+                                  </span>
+                                </a>
+                              ) : (site.deployment_count || 0) > 0 ? (
+                                <span className="flex items-center gap-1 text-purple-300">
+                                  <Globe className="w-3 h-3" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.5))' }} />
+                                  {site.deployment_count}
+                                </span>
+                              ) : (
+                                <span className="text-gray-500">-</span>
+                              )}
+                            </div>
+                          )}
+                          {visibleColumns.creationDate && (
+                            <div className="flex items-center col-span-2">
+                              <span className="text-slate-400 mr-2">Created:</span>
+                              <span className="text-slate-300">{formatDate(site.created_at)}</span>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-800/50">
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleArchiveToggle(site)}
+                              disabled={archivingId === site.id}
+                              className="text-yellow-400 hover:text-yellow-300 px-3 py-2 rounded-lg hover:bg-slate-800/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs font-medium flex items-center gap-2"
+                              aria-label={site.status === 'draft' ? 'Activate site' : 'Archive site'}
+                            >
+                              <Archive className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(234, 179, 8, 0.5))' }} />
+                              {archivingId === site.id ? 'Processing...' : (site.status === 'draft' ? 'Activate' : 'Archive')}
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(site)}
+                              disabled={deletingId === site.id}
+                              className="text-red-400 hover:text-red-300 px-3 py-2 rounded-lg hover:bg-slate-800/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs font-medium flex items-center gap-2"
+                              aria-label="Delete site"
+                            >
+                              <Trash2 className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(239, 68, 68, 0.5))' }} />
+                              {deletingId === site.id ? 'Deleting...' : 'Delete'}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
               
