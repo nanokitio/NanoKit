@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
-import { ProcessAnimation } from '@/components/ProcessAnimation'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { Menu, X, ArrowUp, Sparkles, Palette, Rocket } from 'lucide-react'
@@ -376,9 +375,19 @@ export default function Home() {
             </span>
           </h2>
           
-          {/* Floating Animation - No Container */}
-          <div className="relative w-full min-h-[600px] flex items-center justify-center">
-            <ProcessAnimation />
+          {/* Video - Nanokit-Home.mp4 */}
+          <div className="relative w-full flex items-center justify-center">
+            <video
+              src="/Nanokit-Home.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full max-w-4xl rounded-2xl shadow-2xl shadow-[#4FC3FF]/30"
+              style={{
+                boxShadow: '0 0 60px rgba(79, 195, 255, 0.4), 0 0 120px rgba(185, 74, 255, 0.2)'
+              }}
+            />
           </div>
         </div>
       </section>
