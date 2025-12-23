@@ -40,3 +40,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 DEPLOYMENT_SECRETS.md
+public/Nanokit-Home.mp4
