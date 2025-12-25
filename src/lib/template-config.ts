@@ -724,23 +724,14 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         label: 'Ticket URL',
         type: 'url',
         placeholder: 'https://your-event.com/tickets',
-        description: 'Where users go to get tickets',
-        required: true
-      },
-      eventDescription: {
-        id: 'eventDescription',
-        label: 'Event Description',
-        type: 'textarea',
-        placeholder: 'Join us for an unforgettable night of music and entertainment...',
-        description: 'Detailed description of the event',
-        required: false
+        required: false,
+        isPremium: true
       },
       videoBackground: {
         id: 'videoBackground',
         label: '🎥 Background Video URL',
         type: 'url',
         placeholder: 'https://example.com/video.mp4',
-        description: 'Background video for hero section',
         required: false,
         isPremium: true
       },
@@ -749,7 +740,6 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         label: '🖼️ Fallback Image URL',
         type: 'url',
         placeholder: 'https://example.com/image.jpg',
-        description: 'Fallback image if video fails to load',
         required: false,
         isPremium: true
       },
@@ -758,7 +748,6 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         label: '🎨 Background Color',
         type: 'color',
         placeholder: '#1a1a2e',
-        description: 'Solid background color (hex code)',
         required: false,
         isPremium: true
       }
