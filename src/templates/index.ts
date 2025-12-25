@@ -6,6 +6,7 @@ import { Template15 } from './t15'
 import { Template16 } from './t16'
 import { Template17 } from './t17'
 import { Template18 } from './t18'
+import { Template19 } from './t19'
 import { renderTemplate as renderT14 } from './t14/server'
 import { renderTemplate as renderT15 } from './t15/server'
 import { renderTemplate as renderT16 } from './t16/server'
@@ -13,7 +14,7 @@ import { renderTemplate as renderT17 } from './t17/server'
 import { renderTemplate as renderT18 } from './t18/server'
 import { TemplateDefinition } from '@/lib/types'
 
-export const templates: Record<'t6' | 't7' | 't9' | 't14' | 't15' | 't16' | 't17' | 't18', TemplateDefinition> = {
+export const templates: Record<'t6' | 't7' | 't9' | 't14' | 't15' | 't16' | 't17' | 't18' | 't19', TemplateDefinition> = {
   t6: {
     id: 't6',
     name: 'Cyber Casino',

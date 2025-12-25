@@ -60,27 +60,7 @@ export default function LoginPage() {
         {/* Deep Space Gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-950/30 to-black"></div>
         
-        {/* Floating geometric shapes */}
-        <div className="absolute inset-0">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute opacity-20"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
-                animationDelay: `${Math.random() * 2}s`
-              }}
-            >
-              {i % 4 === 0 && <div className="w-6 h-6 border border-cyan-400/30 rotate-45"></div>}
-              {i % 4 === 1 && <div className="w-4 h-4 border border-pink-400/30 rounded-full"></div>}
-              {i % 4 === 2 && <div className="w-8 h-1 bg-gradient-to-r from-cyan-400/20 to-pink-400/20"></div>}
-              {i % 4 === 3 && <div className="w-2 h-6 bg-gradient-to-b from-purple-400/20 to-transparent"></div>}
-            </div>
-          ))}
-        </div>
-        
+                
         {/* Subtle grid pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="w-full h-full" style={{

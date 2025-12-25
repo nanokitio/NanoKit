@@ -10,9 +10,11 @@ import { Menu, X, ArrowUp, Sparkles, Palette, Rocket } from 'lucide-react'
 export default function Home() {
   const [stars, setStars] = useState<Array<{size: number, brightness: number, top: number, left: number, color: string}>>([]);
   const [constellations, setConstellations] = useState<Array<{x1: number, y1: number, x2: number, y2: number}>>([]);
+  const [particles, setParticles] = useState<Array<{top: number, left: number, animationDelay: string, animationDuration: string}>>([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     // Vintage color palette for stars
@@ -63,9 +65,19 @@ export default function Home() {
     }
     setConstellations(constellationLines);
 
+    // Generate particles on client-side only
+    const particleArray = [...Array(15)].map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      animationDelay: `${Math.random() * 5}s`,
+      animationDuration: `${2 + Math.random() * 3}s`
+    }));
+    setParticles(particleArray);
+
     const handleScroll = () => {
       setScrollY(window.scrollY);
       setShowBackToTop(window.scrollY > 400);
+      setScrolled(window.scrollY > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -78,24 +90,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden relative" style={{ fontFamily: 'Space Grotesk, system-ui, sans-serif' }}>
-      {/* Vintage Black Background with Retro Effects */}
+      {/* Dugem Nightlife Background - Sin Video */}
       <div className="fixed inset-0" style={{ zIndex: -2 }}>
-        {/* Base black background */}
-        <div className="absolute inset-0 bg-black" />
+        {/* Dugem Gradient Overlay - Más Oscuro */}
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-950/90 via-blue-950/90 to-pink-950/90" />
         
-        {/* Vintage gradient overlay - subtle deep blue and purple tones */}
-        <div 
-          className="absolute inset-0" 
-          style={{
-            background: 'radial-gradient(ellipse at center, rgba(25, 25, 60, 0.3) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 1) 100%)',
-          }}
-        />
+        {/* Glassmorphism Effect */}
+        <div className="absolute inset-0 backdrop-blur-[2px]" />
         
-        {/* Subtle color tint for vintage feel */}
+        {/* Animated Gradient Overlay */}
         <div 
-          className="absolute inset-0" 
+          className="absolute inset-0 opacity-30" 
           style={{
-            background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.2) 0%, rgba(0, 0, 0, 0) 100%)',
+            background: 'linear-gradient(45deg, rgba(255, 0, 255, 0.3), rgba(0, 255, 255, 0.3), rgba(255, 20, 147, 0.3))',
+            animation: 'gradient 4s ease infinite',
+            backgroundSize: '400% 400%'
           }}
         />
         
@@ -107,14 +116,22 @@ export default function Home() {
           }}
         />
         
-        {/* Film grain texture overlay */}
-        <div 
-          className="absolute inset-0 opacity-[0.03]" 
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-            backgroundRepeat: 'repeat',
-          }}
-        />
+        {/* Particle Effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          {particles.map((particle, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+              style={{
+                top: `${particle.top}%`,
+                left: `${particle.left}%`,
+                animationDelay: particle.animationDelay,
+                animationDuration: particle.animationDuration,
+                boxShadow: '0 0 10px rgba(255, 255, 255, 0.8)'
+              }}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Vintage Starfield background with constellations */}
@@ -156,100 +173,7 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Header */}
-      <header className="sticky top-0 z-[100] border-0" style={{ borderBottom: 'none', boxShadow: 'none' }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20 border-0" style={{ borderBottom: 'none' }}>
-            <NanoKitLogo size="header" href="/" />
-            <div className="flex items-center gap-3">
-              <Link href="/login">
-                <Button variant="ghost" className="text-white hover:text-[#4FC3FF] border border-[#4FC3FF]/30 hover:border-[#4FC3FF] transition-all px-5 py-2 rounded-xl">
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/signup">
-                <Button className="relative overflow-hidden px-6 py-2 rounded-xl font-bold transition-all hover:scale-105 group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF]" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#4FC3FF] to-[#B94AFF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <span className="relative text-white">Get Started</span>
-                </Button>
-              </Link>
-              <button
-                onClick={() => setMenuOpen(!menuOpen)}
-                className="text-white hover:text-[#4FC3FF] transition-colors p-2 hover:bg-white/10 rounded-lg"
-                aria-label="Toggle menu"
-              >
-                <Menu className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Burger Menu Sidebar */}
-      <div
-        className={`fixed top-0 right-0 h-screen w-80 bg-black/95 border-l border-[#4FC3FF]/30 z-[150] transform transition-transform duration-300 ease-in-out overflow-y-auto ${
-          menuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-        style={{
-          boxShadow: '-10px 0 50px rgba(79, 195, 255, 0.3)'
-        }}
-      >
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-12">
-            <h2 className="text-2xl font-black text-white">Menu</h2>
-            <button
-              onClick={() => setMenuOpen(false)}
-              className="text-white hover:text-[#4FC3FF] transition-colors p-2"
-              aria-label="Close menu"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
-          <nav className="space-y-4">
-            {[
-              { name: 'Home', href: '#home' },
-              { name: 'Video', href: '#video' },
-              { name: 'Features', href: '#features' },
-              { name: 'Pricing', href: '#pricing' },
-            ].map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                onClick={() => setMenuOpen(false)}
-                className="block text-lg font-semibold text-white/80 hover:text-white hover:translate-x-2 transition-all duration-200 py-3 px-4 rounded-xl hover:bg-[#4FC3FF]/10"
-              >
-                {item.name}
-              </a>
-            ))}
-          </nav>
-
-          <div className="mt-12 pt-12 border-t border-[#4FC3FF]/30 flex flex-col gap-6">
-            <Link href="/login" onClick={() => setMenuOpen(false)}>
-              <Button variant="ghost" className="w-full text-white hover:text-[#4FC3FF] border border-[#4FC3FF]/30 hover:border-[#4FC3FF] transition-all px-5 py-3 rounded-xl">
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/signup" onClick={() => setMenuOpen(false)}>
-              <Button className="w-full relative group overflow-hidden px-6 py-3 rounded-xl text-base font-bold transition-all hover:scale-105 shadow-lg shadow-[#4FC3FF]/30">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF]" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#4FC3FF] to-[#B94AFF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <span className="relative text-white font-black">Get Started</span>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Overlay */}
-      {menuOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-[140]"
-          onClick={() => setMenuOpen(false)}
-        />
-      )}
-
+      
       {/* Animated Vertical Lines - Decorative edges only */}
       <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
         {/* Hide on small screens where they interfere */}
@@ -329,30 +253,55 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section id="home" className="relative z-10 pt-20 pb-24 px-6">
+      {/* Floating Navigation */}
+      <div className={`fixed top-0 left-0 right-0 z-[100] flex justify-between items-center px-6 lg:px-8 h-20 transition-all duration-300 ${
+        scrolled ? 'bg-black/80 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'
+      }`}>
+        <NanoKitLogo size="header" href="/" />
+        <div className="flex items-center gap-3">
+          <Link href="/login">
+            <Button variant="ghost" className={`transition-all px-5 py-2 rounded-xl backdrop-blur-sm ${
+              scrolled 
+                ? 'text-white/80 hover:text-white border border-white/20 hover:border-white/40 hover:bg-white/10' 
+                : 'text-white/80 hover:text-white border border-white/20 hover:border-white/40 hover:bg-white/10'
+            }`}>
+              Sign In
+            </Button>
+          </Link>
+          <Link href="/signup">
+            <Button className="relative overflow-hidden px-6 py-2 rounded-xl font-bold transition-all hover:scale-105 group shadow-lg shadow-purple-500/30 hover:shadow-cyan-500/50">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600" />
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <span className="relative text-white">Get Started</span>
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Hero Section with Enhanced Dugem Effects - Sin Header */}
+      <section id="home" className="relative z-10 pt-32 pb-24 px-6">
         <div className="relative max-w-6xl mx-auto text-center z-10">
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight mb-8 animate-fadeInUp" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-            <span className="block text-white drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
+            <span className="block text-white drop-shadow-[0_0_30px_rgba(255,0,255,0.8)] animate-pulse">
               Where AI-crafted
             </span>
-            <span className="block text-white drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
+            <span className="block text-white drop-shadow-[0_0_30px_rgba(0,255,255,0.8)] animate-pulse" style={{ animationDelay: '0.2s' }}>
               visions
             </span>
-            <span className="block text-white drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
+            <span className="block text-white drop-shadow-[0_0_30px_rgba(255,20,147,0.8)] animate-pulse" style={{ animationDelay: '0.4s' }}>
               go live effortlessly
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-[#EAF1FF]/80 max-w-4xl mx-auto mb-10 leading-relaxed animate-fadeInUp" style={{ animationDelay: '0.2s', fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-xl md:text-2xl text-[#EAF1FF]/90 max-w-4xl mx-auto mb-10 leading-relaxed animate-fadeInUp backdrop-blur-sm bg-white/5 px-6 py-3 rounded-2xl border border-white/10" style={{ animationDelay: '0.2s', fontFamily: 'Inter, sans-serif' }}>
             From Idea to Live Page in 60 Seconds
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-12 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
             <Link href="/signup">
-              <Button className="group relative overflow-hidden px-14 py-7 rounded-2xl text-xl font-black transition-all duration-300 hover:scale-105 hover:-translate-y-1 shadow-[0_0_60px_rgba(185,74,255,0.5)] hover:shadow-[0_0_80px_rgba(79,195,255,0.6)]">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#B94AFF] to-[#4FC3FF]" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#4FC3FF] to-[#FF76FF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Button className="group relative overflow-hidden px-14 py-7 rounded-2xl text-xl font-black transition-all duration-300 hover:scale-105 hover:-translate-y-1 shadow-[0_0_60px_rgba(255,0,255,0.8)] hover:shadow-[0_0_80px_rgba(0,255,255,0.8)] backdrop-blur-sm border border-white/20">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FF00FF] to-[#00FFFF]" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#00FFFF] to-[#FF1493] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <span className="relative text-white flex items-center gap-3 drop-shadow-lg">
                   Start Creating Free
                   <span className="text-2xl group-hover:translate-x-2 transition-transform duration-300">→</span>
@@ -526,7 +475,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 py-32 px-6 border-t border-white/10 backdrop-blur-2xl bg-black/20">
+      <footer className="relative z-10 py-8 px-6 border-t border-white/10 backdrop-blur-2xl bg-black/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center text-white/40 text-sm">
             <p>2025 <a href="https://nanokit.io" className="hover:text-white transition-colors">Nanokit.io</a></p>
