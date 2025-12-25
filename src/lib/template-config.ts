@@ -689,71 +689,7 @@ export const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
         isPremium: false // Testing phase - will be true later
       }
     }
-  },
-
-  t19: {
-    id: 't19',
-    name: 'Dugem Nightlife',
-    fields: {
-      headline: {
-        id: 'headline',
-        label: 'Event Title',
-        type: 'text',
-        placeholder: 'Global Fridays Glow Up 4.20',
-        description: 'Main event title displayed prominently',
-        required: true
-      },
-      subheadline: {
-        id: 'subheadline',
-        label: 'Event Date',
-        type: 'text',
-        placeholder: '26 SEPTEMBER 2021',
-        description: 'Event date displayed below title',
-        required: true
-      },
-      cta: {
-        id: 'cta',
-        label: 'Primary Button Text',
-        type: 'text',
-        placeholder: 'GET TICKETS',
-        description: 'Main call-to-action button text',
-        required: true
-      },
-      ctaUrl: {
-        id: 'ctaUrl',
-        label: 'Ticket URL',
-        type: 'url',
-        placeholder: 'https://your-event.com/tickets',
-        required: false,
-        isPremium: true
-      },
-      videoBackground: {
-        id: 'videoBackground',
-        label: '🎥 Background Video URL',
-        type: 'url',
-        placeholder: 'https://example.com/video.mp4',
-        required: false,
-        isPremium: true
-      },
-      backgroundImage: {
-        id: 'backgroundImage',
-        label: '🖼️ Fallback Image URL',
-        type: 'url',
-        placeholder: 'https://example.com/image.jpg',
-        required: false,
-        isPremium: true
-      },
-      backgroundColor: {
-        id: 'backgroundColor',
-        label: '🎨 Background Color',
-        type: 'color',
-        placeholder: '#1a1a2e',
-        required: false,
-        isPremium: true
-      }
-    }
   }
-
 }
 
 /**
