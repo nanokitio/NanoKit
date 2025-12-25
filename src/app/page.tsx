@@ -327,7 +327,7 @@ export default function Home() {
           {/* Video - Nanokit-Home.mp4 */}
           <div className="relative w-full flex items-center justify-center">
             <video
-              src="/images/Ultrarealistic_cinematic_video_202510141609_.mp4"
+              src="https://landertag.com/videos/Nanokit-Home.mp4"
               autoPlay
               muted
               loop
@@ -343,7 +343,7 @@ export default function Home() {
                 video.style.display = 'none';
                 const fallback = document.createElement('div');
                 fallback.className = 'w-full max-w-4xl h-96 bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-2xl shadow-2xl shadow-[#4FC3FF]/30 flex items-center justify-center';
-                fallback.innerHTML = '<div class="text-center"><p class="text-white text-xl mb-4">🎬 Video Loading...</p><p class="text-white/60">The cinematic demo will appear here</p></div>';
+                fallback.innerHTML = '<div class="text-center"><p class="text-white text-xl mb-4">🎬 Video Loading...</p><p class="text-white/60">The Nanokit demo will appear here</p></div>';
                 video.parentNode?.insertBefore(fallback, video.nextSibling);
               }}
               onLoadStart={() => console.log('Video loading started')}
