@@ -332,10 +332,22 @@ export default function Home() {
               muted
               loop
               playsInline
+              poster="/api/placeholder/1920/1080"
               className="w-full max-w-4xl rounded-2xl shadow-2xl shadow-[#4FC3FF]/30"
               style={{
                 boxShadow: '0 0 60px rgba(79, 195, 255, 0.4), 0 0 120px rgba(185, 74, 255, 0.2)'
               }}
+              onError={(e) => {
+                console.error('Video failed to load:', e);
+                const video = e.currentTarget;
+                video.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.className = 'w-full max-w-4xl h-96 bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-2xl shadow-2xl shadow-[#4FC3FF]/30 flex items-center justify-center';
+                fallback.innerHTML = '<div class="text-center"><p class="text-white text-xl mb-4">🎬 Video Loading...</p><p class="text-white/60">The cinematic demo will appear here</p></div>';
+                video.parentNode?.insertBefore(fallback, video.nextSibling);
+              }}
+              onLoadStart={() => console.log('Video loading started')}
+              onCanPlay={() => console.log('Video ready to play')}
             />
           </div>
         </div>
