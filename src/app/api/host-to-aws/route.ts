@@ -80,8 +80,10 @@ export async function POST(request: NextRequest) {
     // Generate unique S3 key and public URL
     const timestamp = Date.now()
     const uniqueId = nanoid(8) // Generate 8-character unique ID
-    const s3Key = `${user.id}/${slug}-${timestamp}/index.html`
-    const s3KeyCSS = `${user.id}/${slug}-${timestamp}/style.css`
+    
+    // Update S3 key structure to match new URL format
+    const s3Key = `prelanders/${uniqueId}/index.html`
+    const s3KeyCSS = `prelanders/${uniqueId}/style.css`
     
     // Base URL configuration - use landertag.com for custom domain
     const bucketName = process.env.AWS_S3_BUCKET || 'landertag-hosting'
@@ -126,17 +128,6 @@ const config: any = {
 
 const { html: rawHtml } = renderFunction(config)
 let html = rawHtml
-    
-    // Update S3 key structure to match new URL format
-    const s3Key = `prelanders/${uniqueId}/index.html`
-    const s3KeyCSS = `prelanders/${uniqueId}/style.css`
-    
-    const bucketName = process.env.AWS_S3_BUCKET || 'landertag-hosting'
-    const awsRegion = process.env.AWS_REGION || 'us-east-1'
-    const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN || 'landertag.com'
-    
-    // Generate clean public URL with unique ID
-    const hostedUrl = `https://${cloudFrontDomain}/${uniqueId}`
     
     // Fix iframe and resource paths to point to production (now publicly accessible)
     const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.nanokit.io'
