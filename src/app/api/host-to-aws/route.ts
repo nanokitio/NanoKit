@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import fs from 'fs/promises'
 import path from 'path'
+import { nanoid } from 'nanoid'
 // @ts-ignore - javascript-obfuscator doesn't have perfect types
 import JavaScriptObfuscator from 'javascript-obfuscator'
 import { renderTemplate as renderT6 } from '@/templates/t6/server'
@@ -76,10 +77,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Site not found' }, { status: 404 })
     }
 
-    // Generate unique S3 key
+    // Generate unique S3 key and public URL
     const timestamp = Date.now()
+    const uniqueId = nanoid(8) // Generate 8-character unique ID
     const s3Key = `${user.id}/${slug}-${timestamp}/index.html`
     const s3KeyCSS = `${user.id}/${slug}-${timestamp}/style.css`
+    
+    // Base URL configuration - use landertag.com for custom domain
+    const bucketName = process.env.AWS_S3_BUCKET || 'landertag-hosting'
+    const awsRegion = process.env.AWS_REGION || 'us-east-1'
+    const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN || 'landertag.com'
+    
+    // Generate clean public URL with unique ID
+    const hostedUrl = `https://${cloudFrontDomain}/${uniqueId}`
 // Siempre usar el template seleccionado (currentData.templateId si existe)
 const activeTemplateId = (currentData?.templateId || site.template_id || 't17') as string
 const renderFunction = templateRenderers[activeTemplateId]
@@ -117,14 +127,16 @@ const config: any = {
 const { html: rawHtml } = renderFunction(config)
 let html = rawHtml
     
+    // Update S3 key structure to match new URL format
+    const s3Key = `prelanders/${uniqueId}/index.html`
+    const s3KeyCSS = `prelanders/${uniqueId}/style.css`
+    
     const bucketName = process.env.AWS_S3_BUCKET || 'landertag-hosting'
     const awsRegion = process.env.AWS_REGION || 'us-east-1'
-    const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN
+    const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN || 'landertag.com'
     
-    // Base URL for S3 hosted files
-    const baseUrl = cloudFrontDomain 
-      ? `https://${cloudFrontDomain}` 
-      : `https://${bucketName}.s3.${awsRegion}.amazonaws.com`
+    // Generate clean public URL with unique ID
+    const hostedUrl = `https://${cloudFrontDomain}/${uniqueId}`
     
     // Fix iframe and resource paths to point to production (now publicly accessible)
     const productionUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.nanokit.io'
@@ -148,10 +160,7 @@ let html = rawHtml
     // CSS is embedded in HTML for these templates, so we don't upload separately
     // (keeping this section for backward compatibility if needed in future)
 
-    // Generate public URLs - use S3 regional endpoint (no SSL issues)
-    const hostedUrl = `${baseUrl}/${s3Key}`
-
-    // Save deployment record to database
+    // Save deployment record to database with unique ID mapping
     const { data: deployment, error: deploymentError } = await supabase
       .from('prelander_deployments')
       .insert({
@@ -161,6 +170,7 @@ let html = rawHtml
         package_type: 'aws_hosted',
         hosted_url: hostedUrl,
         s3_key: s3Key,
+        unique_id: uniqueId, // Store the unique ID for mapping
         domain_lock: domainLock || null,
         ip_address: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || null,
         user_agent: request.headers.get('user-agent') || null,
