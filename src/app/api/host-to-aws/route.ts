@@ -38,9 +38,12 @@ const s3Client = new S3Client({
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('=== HOST-TO-AWS API CALLED ===')
     const { slug, email, domainLock, currentData } = await request.json()
+    console.log('Request data:', { slug, email, hasDomainLock: !!domainLock, hasCurrentData: !!currentData })
 
     if (!slug || !email) {
+      console.error('Missing required fields:', { slug, email })
       return NextResponse.json(
         { error: 'Missing required fields: slug and email' },
         { status: 400 }
@@ -48,7 +51,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate AWS credentials
+    console.log('AWS credentials check:', {
+      hasAccessKey: !!process.env.AWS_ACCESS_KEY_ID,
+      hasSecretKey: !!process.env.AWS_SECRET_ACCESS_KEY,
+      hasBucket: !!process.env.AWS_S3_BUCKET,
+      hasRegion: !!process.env.AWS_REGION,
+      bucket: process.env.AWS_S3_BUCKET,
+      region: process.env.AWS_REGION
+    })
+
     if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+      console.error('AWS credentials not configured')
       return NextResponse.json(
         { error: 'AWS credentials not configured' },
         { status: 500 }
@@ -80,19 +93,23 @@ export async function POST(request: NextRequest) {
     // Generate unique S3 key and public URL
     const timestamp = Date.now()
     const uniqueId = nanoid(8) // Generate 8-character unique ID
+    console.log('Generated unique ID:', uniqueId)
     
     // Update S3 key structure to match new URL format
     // Using root level like existing prelanders (e.g., landertag.com/abc12345)
     const s3Key = `${uniqueId}/index.html`
     const s3KeyCSS = `${uniqueId}/style.css`
+    console.log('S3 keys:', { s3Key, s3KeyCSS })
     
     // Base URL configuration - use landertag.com for custom domain
     const bucketName = process.env.AWS_S3_BUCKET || 'landertag.com'
     const awsRegion = process.env.AWS_REGION || 'us-east-1'
     const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN || 'landertag.com'
+    console.log('URL config:', { bucketName, awsRegion, cloudFrontDomain })
     
     // Generate clean public URL with unique ID
     const hostedUrl = `https://${cloudFrontDomain}/${uniqueId}`
+    console.log('Final hosted URL:', hostedUrl)
 // Siempre usar el template seleccionado (currentData.templateId si existe)
 const activeTemplateId = (currentData?.templateId || site.template_id || 't17') as string
 const renderFunction = templateRenderers[activeTemplateId]
@@ -139,6 +156,7 @@ let html = rawHtml
     html = html.replace(/src="\/FisherMan\s+Slot\//g, `src="${productionUrl}/FisherMan%20Slot/`)
 
     // Upload HTML to S3 (bucket policy makes it public)
+    console.log('Starting S3 upload...')
     await s3Client.send(
       new PutObjectCommand({
         Bucket: bucketName,
@@ -148,6 +166,7 @@ let html = rawHtml
         CacheControl: 'public, max-age=3600'
       })
     )
+    console.log('S3 upload successful!')
 
     // CSS is embedded in HTML for these templates, so we don't upload separately
     // (keeping this section for backward compatibility if needed in future)
