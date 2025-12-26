@@ -332,7 +332,8 @@ export default function Home() {
               muted
               loop
               playsInline
-              poster="/api/placeholder/1920/1080"
+              preload="metadata"
+              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:rgb(79,195,255);stop-opacity:0.5' /%3E%3Cstop offset='100%25' style='stop-color:rgb(185,74,255);stop-opacity:0.5' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1920' height='1080' fill='url(%23grad)' /%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='48' fill='white' text-anchor='middle' dy='.3em'%3E🎬 Loading Video...%3C/text%3E%3C/svg%3E"
               className="w-full max-w-4xl rounded-2xl shadow-2xl shadow-[#4FC3FF]/30"
               style={{
                 boxShadow: '0 0 60px rgba(79, 195, 255, 0.4), 0 0 120px rgba(185, 74, 255, 0.2)'
@@ -348,6 +349,12 @@ export default function Home() {
               }}
               onLoadStart={() => console.log('Video loading started')}
               onCanPlay={() => console.log('Video ready to play')}
+              onLoadedData={() => {
+                const video = document.querySelector('video');
+                if (video) {
+                  video.playbackRate = 1.0;
+                }
+              }}
             />
           </div>
         </div>
