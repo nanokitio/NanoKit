@@ -82,11 +82,12 @@ export async function POST(request: NextRequest) {
     const uniqueId = nanoid(8) // Generate 8-character unique ID
     
     // Update S3 key structure to match new URL format
-    const s3Key = `prelanders/${uniqueId}/index.html`
-    const s3KeyCSS = `prelanders/${uniqueId}/style.css`
+    // Using root level like existing prelanders (e.g., landertag.com/abc12345)
+    const s3Key = `${uniqueId}/index.html`
+    const s3KeyCSS = `${uniqueId}/style.css`
     
     // Base URL configuration - use landertag.com for custom domain
-    const bucketName = process.env.AWS_S3_BUCKET || 'landertag-hosting'
+    const bucketName = process.env.AWS_S3_BUCKET || 'landertag.com'
     const awsRegion = process.env.AWS_REGION || 'us-east-1'
     const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN || 'landertag.com'
     
