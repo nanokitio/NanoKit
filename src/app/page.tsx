@@ -327,7 +327,7 @@ export default function Home() {
           {/* Video - Nanokit-Home.mp4 */}
           <div className="relative w-full flex items-center justify-center">
             <video
-              src="https://landertag.com/videos/Nanokit-Home.mp4"
+              src="https://s3.amazonaws.com/landertag.com/Videos/Nanokit-Home.mp4"
               autoPlay
               muted
               loop
