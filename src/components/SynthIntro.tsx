@@ -212,8 +212,8 @@ export function SynthIntro() {
           {/* Logo with enhanced contrast */}
           <div className="relative z-10">
             <Image
-              src="/images/nano-kit-logo.png"
-              alt="Nano Kit"
+              src="/NANOKIT.png"
+              alt="NanoKit"
               width={700}
               height={525}
               className="object-contain"
