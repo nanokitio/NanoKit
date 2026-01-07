@@ -260,14 +260,7 @@ export default function Home() {
       }`}>
         <NanoKitLogo size="header" href="/" />
         
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          <a href="#home" className="text-white/70 hover:text-white transition-colors text-sm font-medium">Home</a>
-          <a href="#video" className="text-white/70 hover:text-white transition-colors text-sm font-medium">Demo</a>
-          <a href="#features" className="text-white/70 hover:text-white transition-colors text-sm font-medium">Features</a>
-          <a href="#pricing" className="text-white/70 hover:text-white transition-colors text-sm font-medium">Pricing</a>
-        </div>
-
+        
         <div className="flex items-center gap-3">
           {/* Desktop Buttons */}
           <div className="hidden md:flex items-center gap-3">
