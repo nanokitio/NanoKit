@@ -97,34 +97,74 @@ export function InlineEditableText({
     setPortalContainer(document.body)
   }, [])
 
+  // Use refs to avoid stale closures in message handler
+  const localValueRef = useRef(localValue)
+  const textStylesRef = useRef(textStyles)
+  const isEditingRef = useRef(isEditing)
+  
+  useEffect(() => { localValueRef.current = localValue }, [localValue])
+  useEffect(() => { textStylesRef.current = textStyles }, [textStyles])
+  useEffect(() => { isEditingRef.current = isEditing }, [isEditing])
+
   // Listen for style updates from parent editor
   useEffect(() => {
     if (!isInIframe || !fieldName) return
     
     const handleParentMessage = (event: MessageEvent) => {
-      // Style update from parent toolbar
+      // Style update from parent toolbar - apply immediately without closing
       if (event.data?.type === 'UPDATE_FIELD_STYLE' && event.data.field === fieldName) {
-        const { styleKey, value, allStyles } = event.data
+        const { allStyles } = event.data
         if (allStyles) {
           setTextStyles(allStyles)
+          textStylesRef.current = allStyles
           onStyleChange?.(allStyles)
         }
       }
       
-      // Confirm edit from parent
+      // Confirm edit from parent - save and close
       if (event.data?.type === 'CONFIRM_FIELD_EDIT' && event.data.field === fieldName) {
-        handleSave()
+        setIsEditing(false)
+        setShowFontSizeDropdown(false)
+        setShowFontFamilyDropdown(false)
+        setShowColorPicker(false)
+        onChange(localValueRef.current)
+        
+        // Notify parent about final style changes
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: 'STYLE_CHANGE',
+            field: fieldName,
+            value: localValueRef.current,
+            styles: textStylesRef.current
+          }, '*')
+          
+          window.parent.postMessage({
+            type: 'FIELD_DESELECTED',
+            field: fieldName
+          }, '*')
+        }
       }
       
-      // Cancel edit from parent
+      // Cancel edit from parent - revert and close
       if (event.data?.type === 'CANCEL_FIELD_EDIT' && event.data.field === fieldName) {
-        handleCancel()
+        setIsEditing(false)
+        setShowFontSizeDropdown(false)
+        setShowFontFamilyDropdown(false)
+        setShowColorPicker(false)
+        setLocalValue(value)
+        
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: 'FIELD_DESELECTED',
+            field: fieldName
+          }, '*')
+        }
       }
     }
     
     window.addEventListener('message', handleParentMessage)
     return () => window.removeEventListener('message', handleParentMessage)
-  }, [isInIframe, fieldName, localValue, textStyles])
+  }, [isInIframe, fieldName, value, onChange, onStyleChange])
 
   // Detect mobile device
   useEffect(() => {
