@@ -81,15 +81,50 @@ export function InlineEditableText({
   const [showColorPicker, setShowColorPicker] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
+  const [isInIframe, setIsInIframe] = useState(false)
   
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const toolbarRef = useRef<HTMLDivElement>(null)
 
+  // Detect if we're in an iframe (editor mode)
+  useEffect(() => {
+    setIsInIframe(window.self !== window.top)
+  }, [])
+
   // Create portal container for toolbar to escape any transform containers
   useEffect(() => {
     setPortalContainer(document.body)
   }, [])
+
+  // Listen for style updates from parent editor
+  useEffect(() => {
+    if (!isInIframe || !fieldName) return
+    
+    const handleParentMessage = (event: MessageEvent) => {
+      // Style update from parent toolbar
+      if (event.data?.type === 'UPDATE_FIELD_STYLE' && event.data.field === fieldName) {
+        const { styleKey, value, allStyles } = event.data
+        if (allStyles) {
+          setTextStyles(allStyles)
+          onStyleChange?.(allStyles)
+        }
+      }
+      
+      // Confirm edit from parent
+      if (event.data?.type === 'CONFIRM_FIELD_EDIT' && event.data.field === fieldName) {
+        handleSave()
+      }
+      
+      // Cancel edit from parent
+      if (event.data?.type === 'CANCEL_FIELD_EDIT' && event.data.field === fieldName) {
+        handleCancel()
+      }
+    }
+    
+    window.addEventListener('message', handleParentMessage)
+    return () => window.removeEventListener('message', handleParentMessage)
+  }, [isInIframe, fieldName, localValue, textStyles])
 
   // Detect mobile device
   useEffect(() => {
@@ -119,9 +154,19 @@ export function InlineEditableText({
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
     e.preventDefault()
-    console.log('InlineEditableText clicked!', { value: localValue, isEditing })
+    console.log('InlineEditableText clicked!', { value: localValue, isEditing, fieldName })
     if (!isEditing) {
       setIsEditing(true)
+      
+      // Notify parent editor that this field is being edited
+      if (isInIframe && fieldName && window.parent) {
+        window.parent.postMessage({
+          type: 'FIELD_SELECTED',
+          field: fieldName,
+          value: localValue,
+          styles: textStyles
+        }, '*')
+      }
     }
   }
 
@@ -140,6 +185,12 @@ export function InlineEditableText({
         value: localValue,
         styles: textStyles
       }, '*')
+      
+      // Also notify that field is deselected
+      window.parent.postMessage({
+        type: 'FIELD_DESELECTED',
+        field: fieldName
+      }, '*')
     }
   }
 
@@ -149,6 +200,14 @@ export function InlineEditableText({
     setShowFontFamilyDropdown(false)
     setShowColorPicker(false)
     setLocalValue(value)
+    
+    // Notify parent that field is deselected
+    if (isInIframe && fieldName && window.parent) {
+      window.parent.postMessage({
+        type: 'FIELD_DESELECTED',
+        field: fieldName
+      }, '*')
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -428,8 +487,8 @@ export function InlineEditableText({
 
   return (
     <div ref={containerRef} className="relative" style={{ zIndex: 10 }}>
-      {/* Toolbar rendered via portal to document.body - escapes any transform containers */}
-      {isEditing && portalContainer && createPortal(toolbar, portalContainer)}
+      {/* Toolbar rendered via portal - only show if NOT in iframe (parent toolbar handles it) */}
+      {isEditing && portalContainer && !isInIframe && createPortal(toolbar, portalContainer)}
 
       {/* Display or Edit Mode */}
       {isEditing ? (

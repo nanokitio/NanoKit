@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Loader2, Save, Eye, ArrowLeft, Palette, Type, Image as ImageIcon, Link as LinkIcon, ChevronDown, ChevronUp, Layers, FileText, Scale, Download, Mail, Globe, Monitor, Smartphone, Undo2, Redo2, Edit3, X, ChevronLeft, ChevronRight, Dices, Trophy, TrendingUp, Bitcoin, ShoppingBag, DollarSign, Heart, MoreHorizontal, Users, Settings, Wallet, Gift } from 'lucide-react'
+import { Loader2, Save, Eye, ArrowLeft, Palette, Type, Image as ImageIcon, Link as LinkIcon, ChevronDown, ChevronUp, Layers, FileText, Scale, Download, Mail, Globe, Monitor, Smartphone, Undo2, Redo2, Edit3, X, ChevronLeft, ChevronRight, Dices, Trophy, TrendingUp, Bitcoin, ShoppingBag, DollarSign, Heart, MoreHorizontal, Users, Settings, Wallet, Gift, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Check } from 'lucide-react'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import { EditorTour } from '@/components/EditorTour'
 import { getTemplateConfig, templateSupportsField } from '@/lib/template-config'
@@ -97,6 +97,18 @@ export default function SiteEditorPage() {
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [customStyles, setCustomStyles] = useState<Record<string, any>>({})
+  
+  // Text formatting toolbar state
+  const [activeEditField, setActiveEditField] = useState<string | null>(null)
+  const [activeFieldStyles, setActiveFieldStyles] = useState({
+    fontSize: 16,
+    fontFamily: 'inherit',
+    fontWeight: 'normal' as 'normal' | 'bold',
+    fontStyle: 'normal' as 'normal' | 'italic',
+    textDecoration: 'none' as 'none' | 'underline',
+    textAlign: 'center' as 'left' | 'center' | 'right',
+    color: '#ffffff'
+  })
 
   // Listen for content AND style changes from iframe (inline editing)
   useEffect(() => {
@@ -140,6 +152,21 @@ export default function SiteEditorPage() {
           ...prev,
           [field]: { value, styles }
         }));
+      }
+      
+      // Handle field selection from iframe (for parent toolbar)
+      if (event.data?.type === 'FIELD_SELECTED') {
+        const { field, styles, value } = event.data;
+        console.log('Field selected:', field, styles);
+        setActiveEditField(field);
+        if (styles) {
+          setActiveFieldStyles(styles);
+        }
+      }
+      
+      // Handle field deselection
+      if (event.data?.type === 'FIELD_DESELECTED') {
+        setActiveEditField(null);
       }
     };
     window.addEventListener('message', handleMessage);
@@ -357,6 +384,46 @@ export default function SiteEditorPage() {
       return () => clearTimeout(timer)
     }
   }, [customStyles, templateId])
+
+  // Send style update to iframe
+  const sendStyleToIframe = (styleKey: string, value: any) => {
+    const iframe = document.querySelector('iframe') as HTMLIFrameElement
+    if (iframe && iframe.contentWindow && activeEditField) {
+      const newStyles = { ...activeFieldStyles, [styleKey]: value }
+      setActiveFieldStyles(newStyles)
+      iframe.contentWindow.postMessage({
+        type: 'UPDATE_FIELD_STYLE',
+        field: activeEditField,
+        styleKey,
+        value,
+        allStyles: newStyles
+      }, '*')
+    }
+  }
+
+  // Confirm and save current field edit
+  const confirmFieldEdit = () => {
+    const iframe = document.querySelector('iframe') as HTMLIFrameElement
+    if (iframe && iframe.contentWindow && activeEditField) {
+      iframe.contentWindow.postMessage({
+        type: 'CONFIRM_FIELD_EDIT',
+        field: activeEditField
+      }, '*')
+      setActiveEditField(null)
+    }
+  }
+
+  // Cancel current field edit
+  const cancelFieldEdit = () => {
+    const iframe = document.querySelector('iframe') as HTMLIFrameElement
+    if (iframe && iframe.contentWindow && activeEditField) {
+      iframe.contentWindow.postMessage({
+        type: 'CANCEL_FIELD_EDIT',
+        field: activeEditField
+      }, '*')
+      setActiveEditField(null)
+    }
+  }
 
   const loadSite = async () => {
     try {
@@ -2284,30 +2351,141 @@ export default function SiteEditorPage() {
         <div data-tour="preview" className="flex-1 bg-gray-950 p-3 overflow-auto">
           <div className="max-w-full mx-auto">
 
-            {/* View Mode Toggle */}
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <button
-                onClick={() => setViewMode('desktop')}
-                className={`p-3 rounded-lg transition-all ${
-                  viewMode === 'desktop'
-                    ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg'
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
-                }`}
-                title="Desktop View"
-              >
-                <Monitor size={20} />
-              </button>
-              <button
-                onClick={() => setViewMode('mobile')}
-                className={`p-3 rounded-lg transition-all ${
-                  viewMode === 'mobile'
-                    ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg'
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
-                }`}
-                title="Mobile View"
-              >
-                <Smartphone size={20} />
-              </button>
+            {/* View Mode Toggle + Text Formatting Toolbar */}
+            <div className="flex items-center justify-center gap-2 mb-4 flex-wrap">
+              {/* Desktop/Mobile Toggle */}
+              <div className="flex items-center gap-1 bg-gray-800 rounded-lg p-1">
+                <button
+                  onClick={() => setViewMode('desktop')}
+                  className={`p-2 rounded-md transition-all ${
+                    viewMode === 'desktop'
+                      ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg'
+                      : 'text-gray-400 hover:bg-gray-700'
+                  }`}
+                  title="Desktop View"
+                >
+                  <Monitor size={18} />
+                </button>
+                <button
+                  onClick={() => setViewMode('mobile')}
+                  className={`p-2 rounded-md transition-all ${
+                    viewMode === 'mobile'
+                      ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg'
+                      : 'text-gray-400 hover:bg-gray-700'
+                  }`}
+                  title="Mobile View"
+                >
+                  <Smartphone size={18} />
+                </button>
+              </div>
+
+              {/* Text Formatting Toolbar - Shows when a field is being edited */}
+              {activeEditField && (
+                <>
+                  <div className="w-px h-8 bg-gray-600 mx-1" />
+                  
+                  {/* Font Size */}
+                  <div className="flex items-center gap-1 bg-gray-800 rounded-lg px-2 py-1">
+                    <Type size={14} className="text-gray-400" />
+                    <select
+                      value={activeFieldStyles.fontSize}
+                      onChange={(e) => sendStyleToIframe('fontSize', parseInt(e.target.value))}
+                      className="bg-transparent text-white text-sm outline-none cursor-pointer"
+                    >
+                      {[12, 14, 16, 18, 20, 24, 28, 32, 36, 42, 48, 56, 64, 72].map(size => (
+                        <option key={size} value={size} className="bg-gray-800">{size}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Bold/Italic/Underline */}
+                  <div className="flex items-center gap-0.5 bg-gray-800 rounded-lg p-1">
+                    <button
+                      onClick={() => sendStyleToIframe('fontWeight', activeFieldStyles.fontWeight === 'bold' ? 'normal' : 'bold')}
+                      className={`p-1.5 rounded transition-all ${activeFieldStyles.fontWeight === 'bold' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-700'}`}
+                      title="Bold"
+                    >
+                      <Bold size={16} />
+                    </button>
+                    <button
+                      onClick={() => sendStyleToIframe('fontStyle', activeFieldStyles.fontStyle === 'italic' ? 'normal' : 'italic')}
+                      className={`p-1.5 rounded transition-all ${activeFieldStyles.fontStyle === 'italic' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-700'}`}
+                      title="Italic"
+                    >
+                      <Italic size={16} />
+                    </button>
+                    <button
+                      onClick={() => sendStyleToIframe('textDecoration', activeFieldStyles.textDecoration === 'underline' ? 'none' : 'underline')}
+                      className={`p-1.5 rounded transition-all ${activeFieldStyles.textDecoration === 'underline' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-700'}`}
+                      title="Underline"
+                    >
+                      <Underline size={16} />
+                    </button>
+                  </div>
+
+                  {/* Alignment */}
+                  <div className="flex items-center gap-0.5 bg-gray-800 rounded-lg p-1">
+                    <button
+                      onClick={() => sendStyleToIframe('textAlign', 'left')}
+                      className={`p-1.5 rounded transition-all ${activeFieldStyles.textAlign === 'left' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-700'}`}
+                      title="Align Left"
+                    >
+                      <AlignLeft size={16} />
+                    </button>
+                    <button
+                      onClick={() => sendStyleToIframe('textAlign', 'center')}
+                      className={`p-1.5 rounded transition-all ${activeFieldStyles.textAlign === 'center' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-700'}`}
+                      title="Align Center"
+                    >
+                      <AlignCenter size={16} />
+                    </button>
+                    <button
+                      onClick={() => sendStyleToIframe('textAlign', 'right')}
+                      className={`p-1.5 rounded transition-all ${activeFieldStyles.textAlign === 'right' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-700'}`}
+                      title="Align Right"
+                    >
+                      <AlignRight size={16} />
+                    </button>
+                  </div>
+
+                  {/* Color Picker */}
+                  <div className="flex items-center gap-1 bg-gray-800 rounded-lg px-2 py-1">
+                    <Palette size={14} className="text-gray-400" />
+                    <input
+                      type="color"
+                      value={activeFieldStyles.color}
+                      onChange={(e) => sendStyleToIframe('color', e.target.value)}
+                      className="w-6 h-6 rounded cursor-pointer border-0 bg-transparent"
+                      title="Text Color"
+                    />
+                  </div>
+
+                  <div className="w-px h-8 bg-gray-600 mx-1" />
+
+                  {/* Save/Cancel */}
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={confirmFieldEdit}
+                      className="p-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-all"
+                      title="Save (Enter)"
+                    >
+                      <Check size={16} />
+                    </button>
+                    <button
+                      onClick={cancelFieldEdit}
+                      className="p-2 bg-gray-700 hover:bg-red-600 text-gray-300 hover:text-white rounded-lg transition-all"
+                      title="Cancel (Esc)"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+
+                  {/* Active Field Indicator */}
+                  <span className="text-xs text-cyan-400 ml-2">
+                    Editing: {activeEditField}
+                  </span>
+                </>
+              )}
             </div>
 
             {previewMode === 'live' ? (
