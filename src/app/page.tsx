@@ -289,16 +289,16 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Hamburger Menu Button - Mobile */}
+          {/* Hamburger Menu Button - Always visible */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden relative w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 transition-all"
+            className="relative w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 hover:border-purple-400/50 transition-all"
             aria-label="Toggle menu"
           >
             {menuOpen ? (
-              <X className="w-6 h-6 text-white" />
+              <X className="w-5 h-5 md:w-6 md:h-6 text-white" />
             ) : (
-              <Menu className="w-6 h-6 text-white" />
+              <Menu className="w-5 h-5 md:w-6 md:h-6 text-white" />
             )}
           </button>
         </div>
