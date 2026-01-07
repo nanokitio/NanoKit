@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { NanoKitLogo } from '@/components/NanoKitLogo'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
-import { Menu, X, ArrowUp, Sparkles, Palette, Rocket } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { Menu, X, ArrowUp, Sparkles, Palette, Rocket, Home as HomeIcon, Play, Zap, DollarSign, Mail } from 'lucide-react'
 
 export default function Home() {
   const [stars, setStars] = useState<Array<{size: number, brightness: number, top: number, left: number, color: string}>>([]);
@@ -15,6 +15,7 @@ export default function Home() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     // Vintage color palette for stars
@@ -258,23 +259,124 @@ export default function Home() {
         scrolled ? 'bg-black/80 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'
       }`}>
         <NanoKitLogo size="header" href="/" />
+        
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-6">
+          <a href="#home" className="text-white/70 hover:text-white transition-colors text-sm font-medium">Home</a>
+          <a href="#video" className="text-white/70 hover:text-white transition-colors text-sm font-medium">Demo</a>
+          <a href="#features" className="text-white/70 hover:text-white transition-colors text-sm font-medium">Features</a>
+          <a href="#pricing" className="text-white/70 hover:text-white transition-colors text-sm font-medium">Pricing</a>
+        </div>
+
         <div className="flex items-center gap-3">
-          <Link href="/login">
-            <Button variant="ghost" className={`transition-all px-5 py-2 rounded-xl backdrop-blur-sm ${
-              scrolled 
-                ? 'text-white/80 hover:text-white border border-white/20 hover:border-white/40 hover:bg-white/10' 
-                : 'text-white/80 hover:text-white border border-white/20 hover:border-white/40 hover:bg-white/10'
-            }`}>
-              Sign In
-            </Button>
-          </Link>
-          <Link href="/signup">
-            <Button className="relative overflow-hidden px-6 py-2 rounded-xl font-bold transition-all hover:scale-105 group shadow-lg shadow-purple-500/30 hover:shadow-cyan-500/50">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600" />
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <span className="relative text-white">Get Started</span>
-            </Button>
-          </Link>
+          {/* Desktop Buttons */}
+          <div className="hidden md:flex items-center gap-3">
+            <Link href="/login">
+              <Button variant="ghost" className={`transition-all px-5 py-2 rounded-xl backdrop-blur-sm ${
+                scrolled 
+                  ? 'text-white/80 hover:text-white border border-white/20 hover:border-white/40 hover:bg-white/10' 
+                  : 'text-white/80 hover:text-white border border-white/20 hover:border-white/40 hover:bg-white/10'
+              }`}>
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/signup">
+              <Button className="relative overflow-hidden px-6 py-2 rounded-xl font-bold transition-all hover:scale-105 group shadow-lg shadow-purple-500/30 hover:shadow-cyan-500/50">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600" />
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <span className="relative text-white">Get Started</span>
+              </Button>
+            </Link>
+          </div>
+
+          {/* Hamburger Menu Button - Mobile */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden relative w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 transition-all"
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? (
+              <X className="w-6 h-6 text-white" />
+            ) : (
+              <Menu className="w-6 h-6 text-white" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <div className={`fixed inset-0 z-[99] transition-all duration-300 ${
+        menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      }`}>
+        {/* Backdrop */}
+        <div 
+          className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+          onClick={() => setMenuOpen(false)}
+        />
+        
+        {/* Menu Panel */}
+        <div className={`absolute top-20 right-4 left-4 sm:left-auto sm:w-80 bg-gradient-to-br from-purple-900/95 via-blue-900/95 to-pink-900/95 backdrop-blur-2xl rounded-2xl border border-white/20 shadow-2xl shadow-purple-500/20 transition-all duration-300 transform ${
+          menuOpen ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'
+        }`}>
+          {/* Menu Header */}
+          <div className="p-4 border-b border-white/10">
+            <p className="text-white/60 text-xs uppercase tracking-wider font-medium">Navigation</p>
+          </div>
+          
+          {/* Menu Items */}
+          <nav className="p-2">
+            <a 
+              href="#home" 
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all group"
+            >
+              <HomeIcon className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span className="font-medium">Home</span>
+            </a>
+            <a 
+              href="#video" 
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all group"
+            >
+              <Play className="w-5 h-5 text-pink-400 group-hover:scale-110 transition-transform" />
+              <span className="font-medium">Watch Demo</span>
+            </a>
+            <a 
+              href="#features" 
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all group"
+            >
+              <Zap className="w-5 h-5 text-yellow-400 group-hover:scale-110 transition-transform" />
+              <span className="font-medium">Features</span>
+            </a>
+            <a 
+              href="#pricing" 
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all group"
+            >
+              <DollarSign className="w-5 h-5 text-green-400 group-hover:scale-110 transition-transform" />
+              <span className="font-medium">Pricing</span>
+            </a>
+          </nav>
+
+          {/* Divider */}
+          <div className="mx-4 border-t border-white/10" />
+
+          {/* Auth Buttons */}
+          <div className="p-4 space-y-3">
+            <Link href="/login" onClick={() => setMenuOpen(false)}>
+              <Button variant="ghost" className="w-full justify-center py-3 rounded-xl text-white/80 hover:text-white border border-white/20 hover:border-white/40 hover:bg-white/10 transition-all">
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/signup" onClick={() => setMenuOpen(false)}>
+              <Button className="w-full justify-center py-3 rounded-xl font-bold relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600" />
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <span className="relative text-white">Get Started Free</span>
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -327,32 +429,24 @@ export default function Home() {
           {/* Video - Nanokit-Home.mp4 */}
           <div className="relative w-full flex items-center justify-center">
             <video
+              ref={videoRef}
               src="https://s3.amazonaws.com/landertag.com/Videos/Nanokit-Home.mp4"
               autoPlay
               muted
               loop
               playsInline
-              preload="metadata"
-              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:rgb(79,195,255);stop-opacity:0.5' /%3E%3Cstop offset='100%25' style='stop-color:rgb(185,74,255);stop-opacity:0.5' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1920' height='1080' fill='url(%23grad)' /%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='48' fill='white' text-anchor='middle' dy='.3em'%3E🎬 Loading Video...%3C/text%3E%3C/svg%3E"
+              preload="auto"
               className="w-full max-w-4xl rounded-2xl shadow-2xl shadow-[#4FC3FF]/30"
               style={{
                 boxShadow: '0 0 60px rgba(79, 195, 255, 0.4), 0 0 120px rgba(185, 74, 255, 0.2)'
               }}
-              onError={(e) => {
-                console.error('Video failed to load:', e);
-                const video = e.currentTarget;
-                video.style.display = 'none';
-                const fallback = document.createElement('div');
-                fallback.className = 'w-full max-w-4xl h-96 bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-2xl shadow-2xl shadow-[#4FC3FF]/30 flex items-center justify-center';
-                fallback.innerHTML = '<div class="text-center"><p class="text-white text-xl mb-4">🎬 Video Loading...</p><p class="text-white/60">The Nanokit demo will appear here</p></div>';
-                video.parentNode?.insertBefore(fallback, video.nextSibling);
-              }}
-              onLoadStart={() => console.log('Video loading started')}
-              onCanPlay={() => console.log('Video ready to play')}
               onLoadedData={() => {
-                const video = document.querySelector('video');
-                if (video) {
-                  video.playbackRate = 1.0;
+                // Force play on load for browsers that block autoplay
+                if (videoRef.current) {
+                  videoRef.current.play().catch(() => {
+                    // If autoplay fails, it's likely due to browser policy
+                    // The video will still be playable on user interaction
+                  });
                 }
               }}
             />
