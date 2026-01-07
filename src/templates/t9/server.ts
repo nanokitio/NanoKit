@@ -193,10 +193,8 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
     
     .game-container {
       position: relative;
-      width: 960px;
-      max-width: 100vw;
-      height: 540px;
-      max-height: calc(100vh - 150px);
+      flex: 1;
+      width: 100%;
       background: transparent;
       display: flex;
       align-items: stretch;
@@ -210,6 +208,13 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
       height: 100%;
       background: transparent;
       overflow: hidden;
+    }
+    
+    .game-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
     }
     
     
@@ -600,9 +605,8 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .game-container {
-        width: 100vw;
-        height: auto;
-        aspect-ratio: 960 / 540;
+        flex: 1;
+        width: 100%;
       }
       
       .game-title {
@@ -690,9 +694,8 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
     
     @media (max-width: 480px) {
       .game-container {
-        width: 100vw;
-        height: auto;
-        aspect-ratio: 960 / 540;
+        flex: 1;
+        width: 100%;
       }
       
       .game-title {

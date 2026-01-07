@@ -326,6 +326,16 @@ function Template9({ brand }: Template9Props) {
           border: none;
           position: relative;
           min-height: 0;
+          display: flex;
+          align-items: stretch;
+          justify-content: center;
+        }
+        
+        .game-iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+          display: block;
         }
         
         .footer {
