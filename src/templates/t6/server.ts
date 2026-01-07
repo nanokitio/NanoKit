@@ -14,6 +14,14 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
   const ctaUrl = brand.ctaUrl || 'https://your-casino-url.com'
   const backgroundColor = brand.backgroundColor || '#000000'
   const backgroundImage = brand.backgroundImage || ''
+  
+  // Extra fields from inline editing
+  const maxWinText = (brand as any).maxWinText || 'MAX WIN\n$5,000'
+  const minWinText = (brand as any).minWinText || 'MIN WIN\n$1,000'
+  const feature1 = (brand as any).feature1 || 'INSTANT\nPAYOUTS'
+  const feature2 = (brand as any).feature2 || 'WELCOME\nBONUS'
+  const feature3 = (brand as any).feature3 || '24/7\nSUPPORT'
+  const disclaimerText = (brand as any).disclaimerText || '18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY'
 
   const css = `
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -681,11 +689,11 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
                 <div class="prize-display">
                     <div class="prize-item">
                         <div class="prize-icon">$</div>
-                        <div class="prize-text">MAX WIN<br>$5,000</div>
+                        <div class="prize-text">${maxWinText.replace(/\n/g, '<br>')}</div>
                     </div>
                     <div class="prize-item">
                         <div class="prize-icon">*</div>
-                        <div class="prize-text">MIN WIN<br>$1,000</div>
+                        <div class="prize-text">${minWinText.replace(/\n/g, '<br>')}</div>
                     </div>
                 </div>
                 <div class="slot-game">
@@ -706,26 +714,26 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
                             <div class="rollover-symbol" id="slot8"><div class="rollover-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20" font-weight="bold" fill="#fde047">7</text></svg></div></div>
                         </div>
                     </div>
-                    <button class="spin-button" id="spinButton"><span>SPIN TO WIN</span></button>
+                    <button class="spin-button" id="spinButton"><span>${cta}</span></button>
                 </div>
             </div>
             <div class="features">
                 <div class="feature-item">
                     <div class="feature-icon">$</div>
-                    <div class="feature-text">INSTANT<br>PAYOUTS</div>
+                    <div class="feature-text">${feature1.replace(/\n/g, '<br>')}</div>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">+</div>
-                    <div class="feature-text">WELCOME<br>BONUS</div>
+                    <div class="feature-text">${feature2.replace(/\n/g, '<br>')}</div>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">*</div>
-                    <div class="feature-text">24/7<br>SUPPORT</div>
+                    <div class="feature-text">${feature3.replace(/\n/g, '<br>')}</div>
                 </div>
             </div>
             <div class="cta-section">
                 <a href="${ctaUrl}" target="_blank" class="cta-button" id="playNowBtn"><span>${cta}</span></a>
-                <p class="disclaimer">18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY</p>
+                <p class="disclaimer">${disclaimerText}</p>
             </div>
         </div>
         <div id="winModal" class="modal">
@@ -832,7 +840,7 @@ export function renderTemplate(brand: BrandConfig): { html: string; css: string 
                 
                 updateSlotSymbols();
                 
-                buttonText.textContent = 'SPIN TO WIN';
+                buttonText.textContent = '${cta}';
                 button.disabled = false;
                 isSpinning = false;
                 

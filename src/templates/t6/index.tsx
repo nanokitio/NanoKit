@@ -53,6 +53,13 @@ export function Template6({ brand }: Template6Props) {
               case 'headline': setHeadline(data.value); break;
               case 'subheadline': setSubheadline(data.value); break;
               case 'cta': setCtaText(data.value); break;
+              case 'maxWin': setMaxWinText(data.value); break;
+              case 'minWin': setMinWinText(data.value); break;
+              case 'feature1': setFeature1(data.value); break;
+              case 'feature2': setFeature2(data.value); break;
+              case 'feature3': setFeature3(data.value); break;
+              case 'disclaimer': setDisclaimerText(data.value); break;
+              case 'playNow': setPlayNowText(data.value); break;
             }
           }
         });

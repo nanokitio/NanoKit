@@ -123,13 +123,16 @@ if (!renderFunction) {
   )
 }
 
+// Extract customStyles from sections (inline editing data)
+const customStyles = site.sections?.customStyles || {}
+
 // Build config con prioridad a currentData
 const config: any = {
   brandName: currentData?.brandName || site.brand_name,
   copy: {
-    headline: currentData?.headline || site.headline,
-    subheadline: currentData?.subheadline || site.subheadline,
-    cta: currentData?.cta || site.cta,
+    headline: customStyles.headline?.value || currentData?.headline || site.headline,
+    subheadline: customStyles.subheadline?.value || currentData?.subheadline || site.subheadline,
+    cta: customStyles.cta?.value || currentData?.cta || site.cta,
   },
   ctaUrl: currentData?.ctaUrl || site.cta_url,
   logoUrl: currentData?.logoUrl || site.logo_url,
@@ -144,6 +147,13 @@ const config: any = {
   wheelValues: currentData?.wheelValues || site.wheel_values,
   backgroundColor: currentData?.backgroundColor || site.background_color,
   backgroundImage: currentData?.backgroundImage || site.background_image,
+  // Extra fields from customStyles (inline editing)
+  maxWinText: customStyles.maxWin?.value || 'MAX WIN\n$5,000',
+  minWinText: customStyles.minWin?.value || 'MIN WIN\n$1,000',
+  feature1: customStyles.feature1?.value || 'INSTANT\nPAYOUTS',
+  feature2: customStyles.feature2?.value || 'WELCOME\nBONUS',
+  feature3: customStyles.feature3?.value || '24/7\nSUPPORT',
+  disclaimerText: customStyles.disclaimer?.value || '18+ ONLY • DIGITAL RESPONSIBILITY • TERMS APPLY',
 }
 
 const { html: rawHtml } = renderFunction(config)
