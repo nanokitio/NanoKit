@@ -539,7 +539,13 @@ export function InlineEditableText({
           onChange={(e) => setLocalValue(e.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={(e) => {
-            // Don't close if clicking on toolbar
+            // If in iframe, don't auto-close on blur - parent toolbar controls the edit
+            // Only close via explicit CONFIRM_FIELD_EDIT or CANCEL_FIELD_EDIT messages
+            if (isInIframe && fieldName) {
+              return
+            }
+            
+            // For non-iframe mode, check if clicking on toolbar
             const toolbar = toolbarRef.current
             if (toolbar && e.relatedTarget && toolbar.contains(e.relatedTarget as Node)) {
               return
