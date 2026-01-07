@@ -285,6 +285,7 @@ export function Template6({ brand }: Template6Props) {
                 initialStyles={{ fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#86efac' }}
                 showPositionControls={false}
                 showDuplicateButton={false}
+                fieldName="maxWin"
               />
             </div>
             <div className="prize-item bg-gradient-to-br from-purple-400/20 to-pink-400/20 border border-purple-400/60 rounded-lg p-4 text-center backdrop-blur-sm synth-prize animate-prize-glow-2">
@@ -297,6 +298,7 @@ export function Template6({ brand }: Template6Props) {
                 initialStyles={{ fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#d8b4fe' }}
                 showPositionControls={false}
                 showDuplicateButton={false}
+                fieldName="minWin"
               />
             </div>
           </div>
@@ -350,6 +352,7 @@ export function Template6({ brand }: Template6Props) {
               initialStyles={{ fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#67e8f9' }}
               showPositionControls={false}
               showDuplicateButton={false}
+              fieldName="feature1"
             />
           </div>
           <div className="feature-item bg-gradient-to-br from-pink-900/30 to-purple-900/30 backdrop-blur-sm border border-pink-400/50 rounded-lg p-4 text-center min-w-[140px] synth-feature animate-feature-glow-2">
@@ -362,6 +365,7 @@ export function Template6({ brand }: Template6Props) {
               initialStyles={{ fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#f9a8d4' }}
               showPositionControls={false}
               showDuplicateButton={false}
+              fieldName="feature2"
             />
           </div>
           <div className="feature-item bg-gradient-to-br from-yellow-900/30 to-orange-900/30 backdrop-blur-sm border border-yellow-400/50 rounded-lg p-4 text-center min-w-[140px] synth-feature animate-feature-glow-3">
@@ -374,6 +378,7 @@ export function Template6({ brand }: Template6Props) {
               initialStyles={{ fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#fde047' }}
               showPositionControls={false}
               showDuplicateButton={false}
+              fieldName="feature3"
             />
           </div>
         </div>
@@ -405,6 +410,7 @@ export function Template6({ brand }: Template6Props) {
               initialStyles={{ fontSize: 14, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#a5f3fc' }}
               showPositionControls={false}
               showDuplicateButton={false}
+              fieldName="disclaimer"
             />
           </div>
         </div>
