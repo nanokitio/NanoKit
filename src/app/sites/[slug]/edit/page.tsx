@@ -1801,44 +1801,6 @@ export default function SiteEditorPage() {
                       )}
                     </div>
 
-                    {/* Team Members Section - Simple fields */}
-                    <div className="border-t border-gray-700 pt-6 space-y-4">
-                      <div className="flex items-center gap-2 mb-4">
-                        <Users size={20} className="text-blue-400" style={{ filter: 'drop-shadow(0 0 6px rgba(96, 165, 250, 0.6))' }} />
-                        <h4 className="text-sm font-bold text-white">Team Members</h4>
-                      </div>
-                      
-                      {/* Featured Player */}
-                      <div>
-                        <label className="block text-sm font-medium text-white mb-2">
-                          Featured Player
-                        </label>
-                        <input
-                          type="text"
-                          value={featuredPlayer}
-                          onChange={(e) => setFeaturedPlayer(e.target.value)}
-                          className="w-full px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                          placeholder="e.g., Ale Miranda"
-                        />
-                        <p className="text-xs text-gray-500 mt-1.5">Name of featured player (optional)</p>
-                      </div>
-
-                      {/* Sport Director */}
-                      <div>
-                        <label className="block text-sm font-medium text-white mb-2">
-                          Sport Director
-                        </label>
-                        <input
-                          type="text"
-                          value={sportDirector}
-                          onChange={(e) => setSportDirector(e.target.value)}
-                          className="w-full px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                          placeholder="e.g., Nicolás Cantudo"
-                        />
-                        <p className="text-xs text-gray-500 mt-1.5">Name of sport director (optional)</p>
-                      </div>
-                    </div>
-
                     {/* Custom Logo for Fortune Wheel */}
                     {fields.logoUrl && (
                       <div className="border-t border-gray-700 pt-6">
