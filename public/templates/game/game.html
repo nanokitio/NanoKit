@@ -165,34 +165,6 @@
             font-size: 1.5em;
         }
 
-        /* Nano Kit Logo */
-        .nanokit-logo {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1000;
-            opacity: 0.8;
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-
-        .nanokit-logo img {
-            width: 100px;
-            height: auto;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.4));
-        }
-
-        @media (max-width: 600px) {
-            .nanokit-logo {
-                bottom: 10px;
-                left: 10px;
-            }
-            
-            .nanokit-logo img {
-                width: 70px;
-            }
-        }
-
         /* Underwater animated background */
         .water-background {
             position: fixed;
@@ -416,11 +388,6 @@
     <script src="js/phaser.js"></script>
 </head>
 <body>
-    <!-- Nano Kit Logo (or Custom Logo) -->
-    <div class="nanokit-logo" id="customLogoContainer">
-        <img src="/images/nano-kit-logo.png" alt="Powered by Nano Kit" id="logoImage">
-    </div>
-
     <!-- Spin Counter Display -->
     <div class="spin-counter" id="spinCounter">
         Spins: <span id="spinCount">0</span>/3
@@ -464,22 +431,6 @@
             popupPrize: popupPrize
         };
         
-        // Apply custom logo if provided
-        if (customLogoUrl && customLogoUrl.trim() !== '') {
-            document.addEventListener('DOMContentLoaded', () => {
-                const logoImage = document.getElementById('logoImage');
-                if (logoImage) {
-                    logoImage.src = customLogoUrl;
-                    logoImage.alt = 'Custom Logo';
-                    logoImage.onerror = function() {
-                        // If custom logo fails to load, keep Nano Kit logo
-                        this.src = '/images/nano-kit-logo.png';
-                        this.alt = 'Powered by Nano Kit';
-                    };
-                }
-            });
-        }
-
         // Hide spin counter in preview mode
         if (isPreviewMode) {
             document.addEventListener('DOMContentLoaded', () => {
