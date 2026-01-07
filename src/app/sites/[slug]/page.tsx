@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { renderTemplate as renderT6 } from '@/templates/t6/server'
 import { renderTemplate as renderT7 } from '@/templates/t7/server'
+import { renderTemplate as renderT8 } from '@/templates/t8/server'
 import { renderTemplate as renderT9 } from '@/templates/t9/server'
 import { renderTemplate as renderT14 } from '@/templates/t14/server'
 import { renderTemplate as renderT15 } from '@/templates/t15/server'
@@ -116,6 +117,9 @@ export default async function SitePage({
         break;
       case 't7':
         rendered = renderT7(brandConfig);
+        break;
+      case 't8':
+        rendered = renderT8(brandConfig);
         break;
       case 't9':
       case 't4': // Legacy support for t4 as t9

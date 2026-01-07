@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { Template1 } from '@/templates/t1'
 import { Template6 } from '@/templates/t6'
 import { Template7 } from '@/templates/t7'
+import { Template8 } from '@/templates/t8'
+import { Template9 } from '@/templates/t9'
 import { Template14 } from '@/templates/t14'
 import { Template15 } from '@/templates/t15'
 import { Template16 } from '@/templates/t16'
@@ -48,6 +50,10 @@ export default function SiteClientWrapper({ templateId, brand }: SiteClientWrapp
         return <Template6 brand={brand} />
       case 't7':
         return <Template7 brand={brand} />
+      case 't8':
+        return <Template8 brand={brand} />
+      case 't9':
+        return <Template9 brand={brand} />
       case 't14':
         return <Template14 brand={brand} />
       case 't15':
