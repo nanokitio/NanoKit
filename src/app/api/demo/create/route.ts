@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { renderTemplate as renderT6 } from '@/templates/t6/server'
 import { renderTemplate as renderT7 } from '@/templates/t7/server'
+import { renderTemplate as renderT8 } from '@/templates/t8/server'
 import { renderTemplate as renderT9 } from '@/templates/t9/server'
 
 export async function POST(request: NextRequest) {
@@ -60,6 +61,9 @@ export async function POST(request: NextRequest) {
         break
       case 't7':
         rendered = renderT7(brandConfig)
+        break
+      case 't8':
+        rendered = renderT8(brandConfig)
         break
       case 't9':
         rendered = renderT9(brandConfig)

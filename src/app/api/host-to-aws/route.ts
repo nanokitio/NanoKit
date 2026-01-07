@@ -14,11 +14,13 @@ import { renderTemplate as renderT15 } from '@/templates/t15/server'
 import { renderTemplate as renderT16 } from '@/templates/t16/server'
 import { renderTemplate as renderT17 } from '@/templates/t17/server'
 import { renderTemplate as renderT18 } from '@/templates/t18/server'
+import { renderTemplate as renderT8 } from '@/templates/t8/server'
 
 // Map of template renderers
 const templateRenderers: Record<string, (config: any) => { html: string; css?: string }> = {
   t6: renderT6,
   t7: renderT7,
+  t8: renderT8,
   t9: renderT9,
   t14: renderT14,
   t15: renderT15,

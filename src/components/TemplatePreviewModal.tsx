@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { TemplateId } from '@/lib/types'
 import { Template6 } from '@/templates/t6'
 import { Template7 } from '@/templates/t7'
+import { Template8 } from '@/templates/t8'
 import { Template9 } from '@/templates/t9'
 import { Template14 } from '@/templates/t14'
 import { Template15 } from '@/templates/t15'
@@ -112,6 +113,7 @@ const getSampleBrandConfig = (templateId: TemplateId) => {
 const templateComponents = {
   t6: Template6,
   t7: Template7,
+  t8: Template8,
   t9: Template9,
   t14: Template14,
   t15: Template15,
