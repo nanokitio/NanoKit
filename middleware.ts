@@ -93,9 +93,10 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - Static files (images, videos, fonts, etc.)
      * Include CastleSlot and game files for proper MIME type handling
      */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.svg$|.*\\.webp$|.*\\.mp4$|.*\\.webm$|.*\\.mp3$|.*\\.ogg$|.*\\.woff$|.*\\.woff2$|.*\\.ttf$|.*\\.ico$).*)',
     '/CastleSlot/:path*',
     '/FisherMan Slot/:path*',
     '/templates/game/:path*',
