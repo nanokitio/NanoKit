@@ -440,7 +440,7 @@ export default function Home() {
                 }
               }}
             >
-              <source src="https://s3.amazonaws.com/landertag.com/Videos/Nanokit-Home.mp4" type="video/mp4" />
+              <source src="/Nanokit-Home.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
