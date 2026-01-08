@@ -419,30 +419,24 @@ export default function Home() {
             </span>
           </h2>
           
-          {/* Video - Nanokit-Home.mp4 */}
+          {/* Video Demo Placeholder */}
           <div className="relative w-full flex items-center justify-center">
-            <video
-              ref={videoRef}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              controls
-              className="w-full max-w-4xl rounded-2xl shadow-2xl shadow-[#4FC3FF]/30"
+            <div 
+              className="w-full max-w-4xl aspect-video rounded-2xl shadow-2xl shadow-[#4FC3FF]/30 bg-gradient-to-br from-slate-900/90 via-purple-900/50 to-slate-900/90 border border-white/10 flex flex-col items-center justify-center gap-6 backdrop-blur-xl"
               style={{
                 boxShadow: '0 0 60px rgba(79, 195, 255, 0.4), 0 0 120px rgba(185, 74, 255, 0.2)'
               }}
-              onCanPlay={() => {
-                // Force play when video is ready
-                if (videoRef.current) {
-                  videoRef.current.play().catch(() => {});
-                }
-              }}
             >
-              <source src="/Nanokit-Home.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+              <div className="w-20 h-20 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center animate-pulse">
+                <svg className="w-10 h-10 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </div>
+              <div className="text-center px-4">
+                <p className="text-white text-xl font-bold mb-2">Demo Video Coming Soon</p>
+                <p className="text-white/60 text-sm">See NanoKit in action - from idea to live page</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
