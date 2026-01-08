@@ -255,7 +255,7 @@ export default function Home() {
       </div>
 
       {/* Floating Navigation */}
-      <div className={`fixed top-0 left-0 right-0 z-[100] flex justify-between items-center px-6 lg:px-8 h-20 transition-all duration-300 ${
+      <div className={`fixed top-0 left-0 right-0 z-[100] flex justify-between items-center px-16 lg:px-24 h-20 transition-all duration-300 ${
         scrolled ? 'bg-black/80 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'
       }`}>
         <NanoKitLogo size="header" href="/" />
