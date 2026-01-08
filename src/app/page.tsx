@@ -423,26 +423,26 @@ export default function Home() {
           <div className="relative w-full flex items-center justify-center">
             <video
               ref={videoRef}
-              src="https://s3.amazonaws.com/landertag.com/Videos/Nanokit-Home.mp4"
               autoPlay
               muted
               loop
               playsInline
               preload="auto"
+              controls
               className="w-full max-w-4xl rounded-2xl shadow-2xl shadow-[#4FC3FF]/30"
               style={{
                 boxShadow: '0 0 60px rgba(79, 195, 255, 0.4), 0 0 120px rgba(185, 74, 255, 0.2)'
               }}
-              onLoadedData={() => {
-                // Force play on load for browsers that block autoplay
+              onCanPlay={() => {
+                // Force play when video is ready
                 if (videoRef.current) {
-                  videoRef.current.play().catch(() => {
-                    // If autoplay fails, it's likely due to browser policy
-                    // The video will still be playable on user interaction
-                  });
+                  videoRef.current.play().catch(() => {});
                 }
               }}
-            />
+            >
+              <source src="https://s3.amazonaws.com/landertag.com/Videos/Nanokit-Home.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
       </section>

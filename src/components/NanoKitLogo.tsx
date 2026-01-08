@@ -13,7 +13,7 @@ export function NanoKitLogo({ size = 'md', href, className = '' }: NanoKitLogoPr
     sm: { width: 80, height: 32 },
     md: { width: 120, height: 48 },
     lg: { width: 180, height: 72 },
-    header: { width: 280, height: 84 }
+    header: { width: 420, height: 126 }
   }
 
   const logoElement = (
