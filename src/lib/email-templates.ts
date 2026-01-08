@@ -31,7 +31,7 @@ const createEmailHTML = (header: string, content: string) => `
 </html>
 `
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://app.landertag.com'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://app.landertab.com'
 
 export function welcome(data: any) {
   const html = createEmailHTML(

@@ -187,7 +187,7 @@ async function sendPrelanderEmail({ to, siteName, slug, zipBuffer }: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Prelander Platform <noreply@landertag.com>',
+        from: 'Prelander Platform <noreply@landertab.com>',
         to: [to],
         subject: `🎉 Your Protected Prelander is Ready - ${siteName}`,
         html: `

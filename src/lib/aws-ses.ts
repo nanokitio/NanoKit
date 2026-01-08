@@ -22,7 +22,7 @@ export async function sendHostingEmail({
   hostedUrl,
   domainLock,
 }: SendHostingEmailParams) {
-  const senderEmail = process.env.AWS_SES_SENDER_EMAIL || 'noreply@landertag.com'
+  const senderEmail = process.env.AWS_SES_SENDER_EMAIL || 'noreply@landertab.com'
 
   const htmlBody = generateHostingEmailHTML(brandName, hostedUrl, domainLock)
   const textBody = generateHostingEmailText(brandName, hostedUrl, domainLock)
@@ -185,7 +185,7 @@ function generateHostingEmailHTML(
                     <tr>
                         <td style="text-align: center; padding: 0 20px;">
                             <p style="margin: 0; font-size: 12px; color: #999999; line-height: 1.6;">
-                                Need help? Contact us at support@landertag.com<br>
+                                Need help? Contact us at support@landertab.com<br>
                                 © 2025 PrelanderAI. All rights reserved.
                             </p>
                         </td>
@@ -240,7 +240,7 @@ Powered by PrelanderAI
 This prelander is protected by advanced security measures.
 Unauthorized reproduction or distribution is prohibited.
 
-Need help? Contact us at support@landertag.com
+Need help? Contact us at support@landertab.com
 © 2025 PrelanderAI. All rights reserved.
   `.trim()
 }
@@ -255,7 +255,7 @@ export async function sendSimpleNotification({
   subject: string
   message: string
 }) {
-  const senderEmail = process.env.AWS_SES_SENDER_EMAIL || 'noreply@landertag.com'
+  const senderEmail = process.env.AWS_SES_SENDER_EMAIL || 'noreply@landertab.com'
 
   try {
     const command = new SendEmailCommand({

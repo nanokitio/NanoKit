@@ -2,7 +2,7 @@ import sgMail from '@sendgrid/mail'
 
 // Initialize SendGrid
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || ''
-const SENDER_EMAIL = process.env.SENDGRID_SENDER_EMAIL || 'noreply@landertag.com'
+const SENDER_EMAIL = process.env.SENDGRID_SENDER_EMAIL || 'noreply@landertab.com'
 const SENDER_NAME = process.env.SENDGRID_SENDER_NAME || 'PrelanderAI'
 
 if (SENDGRID_API_KEY) {

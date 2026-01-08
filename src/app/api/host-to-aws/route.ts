@@ -98,15 +98,15 @@ export async function POST(request: NextRequest) {
     console.log('Generated unique ID:', uniqueId)
     
     // Update S3 key structure to match new URL format
-    // Using root level like existing prelanders (e.g., landertag.com/abc12345)
+    // Using root level like existing prelanders (e.g., landertab.com/abc12345)
     const s3Key = `${uniqueId}/index.html`
     const s3KeyCSS = `${uniqueId}/style.css`
     console.log('S3 keys:', { s3Key, s3KeyCSS })
     
-    // Base URL configuration - use landertag.com for custom domain
-    const bucketName = process.env.AWS_S3_BUCKET || 'landertag.com'
+    // Base URL configuration - use landertab.com for custom domain
+    const bucketName = process.env.AWS_S3_BUCKET || 'landertab.com'
     const awsRegion = process.env.AWS_REGION || 'us-east-1'
-    const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN || 'landertag.com'
+    const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN || 'landertab.com'
     console.log('URL config:', { bucketName, awsRegion, cloudFrontDomain })
     
     // Generate clean public URL with unique ID
