@@ -58,6 +58,7 @@ export function Template2({ brand }: Template2Props) {
                   className="text-6xl lg:text-7xl font-black leading-tight text-white"
                   placeholder="Enter headline..."
                   initialStyles={{ fontSize: 72, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'left' }}
+                  fieldName="headline"
                 />
               </div>
               <div className="mb-10">
@@ -67,6 +68,7 @@ export function Template2({ brand }: Template2Props) {
                   className="text-xl lg:text-2xl opacity-90 leading-relaxed max-w-lg text-white"
                   placeholder="Enter subheadline..."
                   initialStyles={{ fontSize: 24, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'left' }}
+                  fieldName="subheadline"
                 />
               </div>
               
@@ -79,6 +81,7 @@ export function Template2({ brand }: Template2Props) {
                       onChange={(val) => { setCtaText(val); notifyChange('cta', val); }}
                       placeholder="Button text..."
                       initialStyles={{ fontSize: 18, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+                      fieldName="cta"
                     />
                     <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />

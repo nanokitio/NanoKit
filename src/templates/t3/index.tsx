@@ -43,6 +43,7 @@ export function Template3({ brand }: Template3Props) {
                   className="text-4xl font-bold text-white"
                   placeholder="Enter headline..."
                   initialStyles={{ fontSize: 36, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'left' }}
+                  fieldName="headline"
                 />
               </div>
               <div className="mb-6">
@@ -52,6 +53,7 @@ export function Template3({ brand }: Template3Props) {
                   className="text-lg opacity-90 text-white"
                   placeholder="Enter subheadline..."
                   initialStyles={{ fontSize: 18, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'left' }}
+                  fieldName="subheadline"
                 />
               </div>
               <div className="flex items-center space-x-4 text-sm">

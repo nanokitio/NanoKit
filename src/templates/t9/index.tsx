@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { BrandConfig } from '@/lib/types'
-import { EditableText } from '@/components/EditableText'
+import { InlineEditableText } from '@/components/InlineEditableText'
 import { useInlineEdit } from '@/hooks/useInlineEdit'
 
 interface Template9Props {
@@ -107,11 +107,13 @@ function Template9({ brand }: Template9Props) {
       {/* Editable Title */}
       <div className="game-title">
         {isEditMode ? (
-          <EditableText
+          <InlineEditableText
             value={brand.copy?.headline || 'YOUR TITLE HERE'}
             onChange={(value) => notifyChange('headline', value)}
-            className="editable-headline"
-            as="h1"
+            className="editable-headline text-white font-bold"
+            placeholder="Enter headline..."
+            initialStyles={{ fontSize: 32, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#ffffff' }}
+            fieldName="headline"
           />
         ) : (
           <h1>{brand.copy?.headline || 'YOUR TITLE HERE'}</h1>
@@ -170,11 +172,15 @@ function Template9({ brand }: Template9Props) {
               <span className="prize-amount">$1,000 + 50 FREE SPINS</span>
             </div>
             {isEditMode ? (
-              <EditableText
+              <InlineEditableText
                 value={brand.copy?.cta || 'CLAIM BONUS NOW!'}
                 onChange={(value) => notifyChange('cta', value)}
-                className="editable-cta"
-                as="button"
+                className="editable-cta text-white font-bold"
+                placeholder="Button text..."
+                initialStyles={{ fontSize: 18, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#ffffff' }}
+                fieldName="cta"
+                showPositionControls={false}
+                showDuplicateButton={false}
               />
             ) : (
               <button className="claim-bonus-btn" onClick={handleClaimBonus}>

@@ -71,6 +71,7 @@ export function Template1({ brand }: Template1Props) {
             className="text-5xl font-bold text-gray-900 mb-6"
             placeholder="Enter your headline..."
             initialStyles={{ fontSize: 48, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+            fieldName="headline"
           />
           <InlineEditableText
             value={subheadline}
@@ -78,6 +79,7 @@ export function Template1({ brand }: Template1Props) {
             className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto"
             placeholder="Enter your subheadline..."
             initialStyles={{ fontSize: 20, fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+            fieldName="subheadline"
           />
           <div className="cta-section text-center mt-12">
             <div 
@@ -88,6 +90,7 @@ export function Template1({ brand }: Template1Props) {
                 onChange={(val) => { setCtaText(val); notifyChange('cta', val); }}
                 placeholder="Button text..."
                 initialStyles={{ fontSize: 20, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+                fieldName="cta"
               />
             </div>
           </div>

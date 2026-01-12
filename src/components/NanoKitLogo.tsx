@@ -1,6 +1,5 @@
-'use client'
-
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface NanoKitLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'header'
@@ -18,8 +17,8 @@ export function NanoKitLogo({ size = 'md', href, className = '' }: NanoKitLogoPr
 
   const logoElement = (
     <div className={`flex items-center ${className}`}>
-      <img
-        src="/NANOKIT.png"
+      <Image
+        src="/NANOKIT.webp"
         alt="NanoKit Logo"
         width={dimensions[size].width}
         height={dimensions[size].height}
@@ -30,6 +29,7 @@ export function NanoKitLogo({ size = 'md', href, className = '' }: NanoKitLogoPr
           width: 'auto',
           height: 'auto'
         }}
+        priority={size === 'header'}
       />
     </div>
   )

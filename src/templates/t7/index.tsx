@@ -293,6 +293,7 @@ export function Template7({ brand }: TemplateProps) {
             placeholder="Brand name..."
             initialStyles={{ fontSize: 48, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
             showDuplicateButton={false}
+            fieldName="brandName"
           />
           <span className="text-6xl">💎</span>
         </h1>
@@ -306,6 +307,7 @@ export function Template7({ brand }: TemplateProps) {
             className="font-bold text-cyan-300"
             placeholder="Enter headline..."
             initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#22d3ee' }}
+            fieldName="headline"
           />
           <span className="text-3xl">⭐</span>
         </div>
@@ -344,6 +346,7 @@ export function Template7({ brand }: TemplateProps) {
               initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
               showPositionControls={false}
               showDuplicateButton={false}
+              fieldName="slotTitle"
             />
             <InlineEditableText
               value={slotSubtitle}
@@ -353,6 +356,7 @@ export function Template7({ brand }: TemplateProps) {
               initialStyles={{ fontSize: 20, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
               showPositionControls={false}
               showDuplicateButton={false}
+              fieldName="slotSubtitle"
             />
           </div>
 
@@ -381,6 +385,7 @@ export function Template7({ brand }: TemplateProps) {
               initialStyles={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
               showPositionControls={false}
               showDuplicateButton={false}
+              fieldName="gameControlsTitle"
             />
           </div>
 
@@ -394,6 +399,7 @@ export function Template7({ brand }: TemplateProps) {
               initialStyles={{ fontSize: 18, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
               showPositionControls={false}
               showDuplicateButton={false}
+              fieldName="betText"
             />
           </div>
 
@@ -407,6 +413,7 @@ export function Template7({ brand }: TemplateProps) {
               initialStyles={{ fontSize: 18, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#facc15' }}
               showPositionControls={false}
               showDuplicateButton={false}
+              fieldName="balanceText"
             />
           </div>
 
@@ -431,6 +438,7 @@ export function Template7({ brand }: TemplateProps) {
                 initialStyles={{ fontSize: 20, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center', color: '#ffffff' }}
                 showPositionControls={false}
                 showDuplicateButton={false}
+                fieldName="spinButtonText"
               />
             )}
           </button>
@@ -464,6 +472,7 @@ export function Template7({ brand }: TemplateProps) {
                 onChange={(val) => { setCtaText(val); notifyChange('cta', val); }}
                 placeholder="Button text..."
                 initialStyles={{ fontSize: 18, fontWeight: 'bold', fontStyle: 'normal', textDecoration: 'none', textAlign: 'center' }}
+                fieldName="cta"
               />
             </div>
             <button 

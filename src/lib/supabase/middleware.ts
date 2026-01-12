@@ -46,6 +46,8 @@ export async function updateSession(request: NextRequest) {
 
   if (
     !user &&
+    request.nextUrl.pathname !== '/robots.txt' &&
+    request.nextUrl.pathname !== '/sitemap.xml' &&
     !request.nextUrl.pathname.startsWith('/login') &&
     !request.nextUrl.pathname.startsWith('/signup') &&
     !request.nextUrl.pathname.startsWith('/forgot-password') &&
