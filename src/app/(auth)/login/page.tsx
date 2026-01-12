@@ -58,20 +58,6 @@ export default function LoginPage() {
       
       {/* Footer */}
       <Footer />
-      
-      {/* CSS Animations */}
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { 
-            transform: translateY(0px) rotate(0deg);
-            opacity: 0.7;
-          }
-          50% { 
-            transform: translateY(-10px) rotate(180deg);
-            opacity: 1;
-          }
-        }
-      `}</style>
     </div>
   )
 }
